@@ -1,0 +1,52 @@
+name: Genera indici JSON
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "data/compagnie/**"
+      - "data/eventi/**"
+      - "data/annunci/**"
+
+permissions:
+  contents: write
+
+jobs:
+  genera-indici:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Scarica repository
+        uses: actions/checkout@v4
+
+      - name: Genera compagnie.json
+        run: |
+          jq -s '.' data/compagnie/*.json > data/compagnie.tmp.json
+          mv data/compagnie.tmp.json data/compagnie.json
+
+      - name: Genera eventi.json
+        run: |
+          jq -s '.' data/eventi/*.json > data/eventi.tmp.json
+          mv data/eventi.tmp.json data/eventi.json
+
+      - name: Genera annunci.json
+        run: |
+          jq -s '.' data/annunci/*.json > data/annunci.tmp.json
+          mv data/annunci.tmp.json data/annunci.json
+
+      - name: Pubblica indici aggiornati
+        run: |
+          git config user.name "Corriere Teatrale Bot"
+          git config user.email "actions@github.com"
+
+          git add data/compagnie.json
+          git add data/eventi.json
+          git add data/annunci.json
+
+          if git diff --cached --quiet; then
+            echo "Nessun indice da aggiornare."
+          else
+            git commit -m "Aggiorna automaticamente gli indici JSON"
+            git push
+          fi
