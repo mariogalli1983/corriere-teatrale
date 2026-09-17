@@ -1890,3 +1890,231 @@
     }
 
 }
+/* =========================================================
+   CHI SIAMO
+   ========================================================= */
+
+.chi-siamo-hero {
+    padding: 55px 0 45px;
+    border-bottom: 1px solid #d8d8d8;
+}
+
+.chi-siamo-hero .section-label {
+    display: inline-block;
+    margin-bottom: 18px;
+    padding-top: 8px;
+    border-top: 4px solid #b30000;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    color: #b30000;
+}
+
+.chi-siamo-hero h1 {
+    max-width: 950px;
+    margin: 0 0 25px;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(42px, 5vw, 72px);
+    line-height: 0.98;
+    letter-spacing: -2px;
+    color: #111;
+}
+
+.chi-siamo-lead {
+    max-width: 900px;
+    margin: 0;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 23px;
+    line-height: 1.5;
+    color: #444;
+}
+
+
+/* CORPO PAGINA */
+
+.chi-siamo-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(280px, 0.8fr);
+    gap: 65px;
+    padding: 50px 0 70px;
+}
+
+.chi-siamo-main {
+    max-width: 850px;
+}
+
+.chi-siamo-main h2 {
+    margin: 45px 0 18px;
+    padding-top: 16px;
+    border-top: 4px solid #111;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 32px;
+    line-height: 1.15;
+    color: #111;
+}
+
+.chi-siamo-main h2:first-child {
+    margin-top: 0;
+}
+
+.chi-siamo-main p {
+    margin: 0 0 20px;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 19px;
+    line-height: 1.7;
+    color: #282828;
+}
+
+.chi-siamo-main strong {
+    color: #111;
+}
+
+
+/* CALL TO ACTION */
+
+.chi-siamo-cta {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 15px 20px;
+    background: #b30000;
+    color: #fff;
+    text-decoration: none;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    transition: background 0.2s ease;
+}
+
+.chi-siamo-cta:hover {
+    background: #111;
+}
+
+
+/* COLONNA DESTRA */
+
+.chi-siamo-sidebar {
+    border-left: 1px solid #d8d8d8;
+    padding-left: 35px;
+}
+
+.chi-siamo-box {
+    margin-bottom: 40px;
+    padding-top: 14px;
+    border-top: 4px solid #111;
+}
+
+.chi-siamo-box:first-child {
+    border-top-color: #b30000;
+}
+
+.chi-siamo-box .section-label {
+    margin-bottom: 12px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1.3px;
+    color: #b30000;
+}
+
+.chi-siamo-box h3 {
+    margin: 0 0 15px;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 25px;
+    line-height: 1.1;
+}
+
+.chi-siamo-box p {
+    margin: 0 0 14px;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #444;
+}
+
+.chi-siamo-box ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.chi-siamo-box li {
+    padding: 10px 0;
+    border-bottom: 1px solid #e4e4e4;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.chi-siamo-box li::before {
+    content: "— ";
+    color: #b30000;
+}
+
+
+/* FOOTER CHI SIAMO */
+
+.footer-inner {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+}
+
+footer a {
+    color: inherit;
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 900px) {
+
+    .chi-siamo-hero {
+        padding: 35px 0;
+    }
+
+    .chi-siamo-hero h1 {
+        font-size: 44px;
+        letter-spacing: -1px;
+    }
+
+    .chi-siamo-lead {
+        font-size: 20px;
+    }
+
+    .chi-siamo-grid {
+        grid-template-columns: 1fr;
+        gap: 45px;
+        padding-top: 35px;
+    }
+
+    .chi-siamo-sidebar {
+        border-left: 0;
+        padding-left: 0;
+    }
+
+    .footer-inner {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+@media (max-width: 600px) {
+
+    .chi-siamo-hero h1 {
+        font-size: 36px;
+    }
+
+    .chi-siamo-lead {
+        font-size: 18px;
+    }
+
+    .chi-siamo-main h2 {
+        font-size: 27px;
+    }
+
+    .chi-siamo-main p {
+        font-size: 17px;
+    }
+}
