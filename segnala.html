@@ -1278,7 +1278,86 @@ document.addEventListener("DOMContentLoaded", () => {
 
             }
         );
+/*
+   ANTEPRIMA LOGO COMPAGNIA
+*/
 
+const inputLogo =
+    document.getElementById("logo-compagnia");
+
+const anteprimaLogo =
+    document.getElementById("logo-preview");
+
+
+inputLogo.addEventListener("change", () => {
+
+    const file =
+        inputLogo.files[0];
+
+    anteprimaLogo.innerHTML = "";
+
+    if (!file) {
+        return;
+    }
+
+
+    /* LIMITE 5 MB */
+
+    if (file.size > 5 * 1024 * 1024) {
+
+        alert(
+            "Il logo supera il limite di 5 MB."
+        );
+
+        inputLogo.value = "";
+
+        return;
+    }
+
+
+    /* FORMATI CONSENTITI */
+
+    const formatiConsentiti = [
+        "image/jpeg",
+        "image/png",
+        "image/webp"
+    ];
+
+    if (!formatiConsentiti.includes(file.type)) {
+
+        alert(
+            "Formato non supportato. Usa JPG, PNG o WebP."
+        );
+
+        inputLogo.value = "";
+
+        return;
+    }
+
+
+    /* ANTEPRIMA */
+
+    const url =
+        URL.createObjectURL(file);
+
+    anteprimaLogo.innerHTML = `
+
+        <div class="logo-preview-frame">
+
+            <img
+                src="${url}"
+                alt="Anteprima logo compagnia"
+            >
+
+        </div>
+
+        <span>
+            Anteprima del logo nella scheda compagnia
+        </span>
+
+    `;
+
+});
     });
 /*
    ANTEPRIMA LOCANDINA SPETTACOLO
