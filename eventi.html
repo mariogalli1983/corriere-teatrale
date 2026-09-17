@@ -3,17 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Spettacoli ed eventi | Corriere Teatrale</title>
+
+    <meta name="description"
+          content="Spettacoli, corsi, laboratori e appuntamenti del teatro amatoriale romano.">
+
     <link rel="icon" href="logo-corriere-teatrale.jpg">
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
+
 <body>
 
-<h1>Spettacoli ed eventi</h1>
+<div class="topbar">
+    ROMA · CORRIERE TEATRALE
+</div>
 
-<p>
-Spettacoli, corsi, laboratori, audizioni e appuntamenti
-del teatro amatoriale romano.
-</p>
+<header class="masthead">
+
+    <div class="brand">
+
+        <a href="index.html">
+            <img src="logo-corriere-teatrale.jpg"
+                 alt="Corriere Teatrale">
+        </a>
+
+        <div>
+            <a href="index.html">
+                <h1>
+                    CORRIERE
+                    <span>TEATRALE</span>
+                </h1>
+            </a>
+
+            <p>Il giornale del teatro amatoriale romano</p>
+        </div>
+
+    </div>
+
+    <div class="official">
+        Organo ufficiale di<br>
+        <strong>I FATTI IN CASA APS</strong>
+    </div>
+
+</header>
+
+<nav>
+    <div class="nav-inner">
+        <a href="index.html">Home</a>
+        <a href="notizie.html">Notizie</a>
+        <a href="eventi.html">Spettacoli</a>
+        <a href="compagnie.html">Compagnie</a>
+        <a href="interviste.html">Interviste</a>
+        <a href="bacheca.html">Bacheca</a>
+        <a href="segnala.html" class="segnala">Segnala</a>
+    </div>
+</nav>
+
+<main>
+
+    <section>
+
+        <div class="section-header">
+            <h2>Spettacoli ed eventi</h2>
+        </div>
+
+        <p>
+            Scopri cosa va in scena a Roma: spettacoli,
+            corsi, laboratori, audizioni, rassegne e appuntamenti
+            delle compagnie teatrali.
+        </p>
+
+        <div id="elenco-eventi"
+             class="event-grid"
+             style="margin-top: 30px;">
+        </div>
+
+    </section>
+
+</main>
+
+<footer>
+
+    <div class="footer-inner">
+
+        <div>
+            <strong>CORRIERE TEATRALE</strong>
+            <p>Il giornale del teatro amatoriale romano.</p>
+        </div>
+
+        <div>
+            <p>
+                Organo ufficiale di<br>
+                <strong>I FATTI IN CASA APS</strong>
+            </p>
+        </div>
+
+    </div>
+
+</footer>
+
+<script src="assets/js/app.js"></script>
 
 </body>
 </html>
