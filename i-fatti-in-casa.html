@@ -124,46 +124,14 @@
 
 
             <div class="section-label sezione-spettacoli-label">
-                IN SCENA
-            </div>
+    PROSSIMAMENTE
+</div>
 
-            <h2>I nostri spettacoli</h2>
+<h2>Prossimamente</h2>
 
-            <div class="produzione-teatrale">
-
-                <a href="evento.html?id=scusi-vuol-sposare-mio-marito-ottobre-2026"
-                   class="produzione-locandina">
-
-                    <img src="scusi-vuol-sposare-mio-marito-2026.jpg"
-                         alt="Scusi, vuol sposare mio marito?">
-
-                </a>
-
-                <div class="produzione-info">
-
-                    <span class="produzione-tag">
-                        SPETTACOLO
-                    </span>
-
-                    <h3>
-                        <a href="evento.html?id=scusi-vuol-sposare-mio-marito-ottobre-2026">
-                            Scusi, vuol sposare mio marito?
-                        </a>
-                    </h3>
-
-                    <p>
-                        Una commedia della compagnia I FATTI IN CASA APS.
-                    </p>
-
-                    <a href="evento.html?id=scusi-vuol-sposare-mio-marito-ottobre-2026"
-                       class="produzione-link">
-                        SCOPRI LO SPETTACOLO →
-                    </a>
-
-                </div>
-
-            </div>
-
+<div id="prossimamente-compagnia">
+    <p>Caricamento dei prossimi spettacoli...</p>
+</div>
         </article>
 
 
@@ -259,6 +227,199 @@
     </div>
 
 </footer>
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
 
+    const contenitore = document.getElementById("prossimamente-compagnia");
+
+    if (!contenitore) return;
+
+    try {
+
+        const risposta = await fetch("data/eventi.json");
+        const eventi = await risposta.json();
+
+        const adesso = new Date();
+
+        const eventiFuturi = eventi
+            .filter(evento => {
+
+                if (!evento.pubblicato) return false;
+
+                // In questa pagina mostriamo soltanto
+                // gli spettacoli de I FATTI IN CASA APS.
+                if (evento.compagnia_id !== "i-fatti-in-casa") return false;
+
+                if (!Array.isArray(evento.date) || evento.date.length === 0) {
+                    return false;
+                }
+
+                return evento.date.some(replica => {
+
+                    if (!replica.data) return false;
+
+                    const ora = replica.ora || "23:59";
+
+                    const dataReplica = new Date(
+                        `${replica.data}T${ora}:00`
+                    );
+
+                    return dataReplica >= adesso;
+                });
+            })
+            .sort((a, b) => {
+
+                const primaDataA = a.date
+                    .map(replica =>
+                        new Date(
+                            `${replica.data}T${replica.ora || "23:59"}:00`
+                        )
+                    )
+                    .filter(data => data >= adesso)
+                    .sort((x, y) => x - y)[0];
+
+                const primaDataB = b.date
+                    .map(replica =>
+                        new Date(
+                            `${replica.data}T${replica.ora || "23:59"}:00`
+                        )
+                    )
+                    .filter(data => data >= adesso)
+                    .sort((x, y) => x - y)[0];
+
+                return primaDataA - primaDataB;
+            });
+
+        if (eventiFuturi.length === 0) {
+
+            contenitore.innerHTML = `
+                <div class="prossimamente-vuoto">
+                    <h3>Stiamo preparando il prossimo spettacolo...</h3>
+                    <p>Stay tuned.</p>
+                </div>
+            `;
+
+            return;
+        }
+
+        contenitore.innerHTML = eventiFuturi.map(evento => {
+
+            const dateFuture = evento.date
+                .filter(replica => {
+
+                    const ora = replica.ora || "23:59";
+
+                    return new Date(
+                        `${replica.data}T${ora}:00`
+                    ) >= adesso;
+
+                })
+                .sort((a, b) => {
+
+                    return new Date(
+                        `${a.data}T${a.ora || "23:59"}:00`
+                    ) - new Date(
+                        `${b.data}T${b.ora || "23:59"}:00`
+                    );
+
+                });
+
+            const dateHTML = dateFuture.map(replica => {
+
+                const data = new Date(
+                    `${replica.data}T12:00:00`
+                );
+
+                const dataFormattata = data.toLocaleDateString(
+                    "it-IT",
+                    {
+                        day: "numeric",
+                        month: "long",
+                        year: "numeric"
+                    }
+                );
+
+                return `
+                    <div class="produzione-data">
+                        ${dataFormattata}
+                        ${replica.ora ? ` · ore ${replica.ora}` : ""}
+                    </div>
+                `;
+
+            }).join("");
+
+            const immagine = evento.locandina
+                ? `<a
+                       href="evento.html?id=${encodeURIComponent(evento.id)}"
+                       class="produzione-locandina"
+                   >
+                       <img
+                           src="${evento.locandina}"
+                           alt="${evento.titolo}"
+                       >
+                   </a>`
+                : "";
+
+            return `
+                <div class="produzione-teatrale">
+
+                    ${immagine}
+
+                    <div class="produzione-info">
+
+                        <span class="produzione-tag">
+                            ${evento.tipo
+                                ? evento.tipo.toUpperCase()
+                                : "SPETTACOLO"}
+                        </span>
+
+                        <h3>
+                            <a href="evento.html?id=${encodeURIComponent(evento.id)}">
+                                ${evento.titolo}
+                            </a>
+                        </h3>
+
+                        <div class="produzione-date">
+                            ${dateHTML}
+                        </div>
+
+                        ${
+                            evento.descrizione
+                                ? `<p>${evento.descrizione}</p>`
+                                : ""
+                        }
+
+                        <a
+                            href="evento.html?id=${encodeURIComponent(evento.id)}"
+                            class="produzione-link"
+                        >
+                            SCOPRI LO SPETTACOLO →
+                        </a>
+
+                    </div>
+
+                </div>
+            `;
+
+        }).join("");
+
+    } catch (errore) {
+
+        console.error(
+            "Errore nel caricamento degli spettacoli:",
+            errore
+        );
+
+        contenitore.innerHTML = `
+            <div class="prossimamente-vuoto">
+                <h3>Stiamo preparando il prossimo spettacolo...</h3>
+                <p>Stay tuned.</p>
+            </div>
+        `;
+
+    }
+
+});
+</script>
 </body>
 </html>
