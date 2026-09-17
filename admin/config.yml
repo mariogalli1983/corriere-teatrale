@@ -33,11 +33,10 @@ collections:
 
     fields:
 
-      - label: "ID"
+           - label: "ID"
         name: "id"
-        widget: "string"
-        hint: "Identificativo univoco. Esempio: i-fatti-in-casa"
-
+        widget: "hidden"
+        default: "{{slug}}"
       - label: "Nome compagnia"
         name: "nome"
         widget: "string"
