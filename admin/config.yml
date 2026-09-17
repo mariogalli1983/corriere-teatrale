@@ -13,15 +13,374 @@ media_folder: "uploads"
 public_folder: "/uploads"
 
 collections:
-  - name: "redazione"
-    label: "Redazione"
-    files:
-      - name: "compagnie"
-        label: "Compagnie"
-        file: "data/compagnie.json"
-        format: "json"
+
+  # =========================================================
+  # COMPAGNIE
+  # =========================================================
+
+  - name: "compagnie"
+    label: "Compagnie"
+    label_singular: "Compagnia"
+    description: "Archivio delle compagnie teatrali"
+    folder: "data/compagnie"
+    create: true
+    delete: true
+    extension: "json"
+    format: "json"
+    identifier_field: "nome"
+    slug: "{{slug}}"
+    summary: "{{nome}} — {{citta}}"
+
+    fields:
+
+      - label: "ID"
+        name: "id"
+        widget: "string"
+        hint: "Identificativo univoco. Esempio: i-fatti-in-casa"
+
+      - label: "Nome compagnia"
+        name: "nome"
+        widget: "string"
+
+      - label: "Città"
+        name: "citta"
+        widget: "string"
+        default: "Roma"
+
+      - label: "Zona"
+        name: "zona"
+        widget: "string"
+        required: false
+
+      - label: "Municipio"
+        name: "municipio"
+        widget: "select"
+        required: false
+        options:
+          - "I"
+          - "II"
+          - "III"
+          - "IV"
+          - "V"
+          - "VI"
+          - "VII"
+          - "VIII"
+          - "IX"
+          - "X"
+          - "XI"
+          - "XII"
+          - "XIII"
+          - "XIV"
+          - "XV"
+
+      - label: "Tipologia"
+        name: "tipologia"
+        widget: "string"
+        default: "Compagnia teatrale amatoriale"
+
+      - label: "Generi"
+        name: "generi"
+        widget: "list"
+        required: false
+        field:
+          label: "Genere"
+          name: "genere"
+          widget: "string"
+
+      - label: "Descrizione"
+        name: "descrizione"
+        widget: "text"
+
+      - label: "Logo"
+        name: "logo"
+        widget: "string"
+        required: false
+        hint: "Nome del file oppure URL completo dell'immagine"
+
+      - label: "Email"
+        name: "email"
+        widget: "string"
+        required: false
+
+      - label: "Telefono"
+        name: "telefono"
+        widget: "string"
+        required: false
+
+      - label: "Sito web"
+        name: "sito"
+        widget: "string"
+        required: false
+
+      - label: "Facebook"
+        name: "facebook"
+        widget: "string"
+        required: false
+
+      - label: "Instagram"
+        name: "instagram"
+        widget: "string"
+        required: false
+
+      - label: "Compagnia attiva"
+        name: "attiva"
+        widget: "boolean"
+        default: true
+
+
+  # =========================================================
+  # SPETTACOLI / EVENTI
+  # =========================================================
+
+  - name: "eventi"
+    label: "Spettacoli"
+    label_singular: "Spettacolo"
+    description: "Spettacoli, corsi, laboratori ed eventi teatrali"
+    folder: "data/eventi"
+    create: true
+    delete: true
+    extension: "json"
+    format: "json"
+    identifier_field: "titolo"
+    slug: "{{slug}}"
+    summary: "{{titolo}} — {{luogo}}"
+
+    fields:
+
+      - label: "ID"
+        name: "id"
+        widget: "string"
+        hint: "Identificativo univoco. Esempio: rumori-fuori-scena-roma-2026"
+
+      - label: "Titolo"
+        name: "titolo"
+        widget: "string"
+
+      - label: "Tipo"
+        name: "tipo"
+        widget: "select"
+        default: "spettacolo"
+        options:
+          - label: "Spettacolo"
+            value: "spettacolo"
+          - label: "Corso"
+            value: "corso"
+          - label: "Laboratorio"
+            value: "laboratorio"
+          - label: "Evento"
+            value: "evento"
+
+      - label: "ID compagnia"
+        name: "compagnia_id"
+        widget: "string"
+        required: false
+        hint: "Esempio: i-fatti-in-casa"
+
+      - label: "Descrizione"
+        name: "descrizione"
+        widget: "text"
+
+      - label: "Date e orari"
+        name: "date"
+        widget: "list"
+        summary: "{{fields.data}} — {{fields.ora}}"
+
         fields:
-          - label: "Compagnie registrate"
-            name: "compagnie"
-            widget: "hidden"
-            required: false
+
+          - label: "Data"
+            name: "data"
+            widget: "date"
+            format: "YYYY-MM-DD"
+
+          - label: "Ora"
+            name: "ora"
+            widget: "string"
+            hint: "Formato HH:MM, ad esempio 21:00"
+
+      - label: "Luogo"
+        name: "luogo"
+        widget: "string"
+
+      - label: "Indirizzo"
+        name: "indirizzo"
+        widget: "string"
+        required: false
+
+      - label: "Città"
+        name: "citta"
+        widget: "string"
+        default: "Roma"
+
+      - label: "Quartiere"
+        name: "quartiere"
+        widget: "string"
+        required: false
+
+      - label: "Municipio"
+        name: "municipio"
+        widget: "select"
+        required: false
+        options:
+          - "I"
+          - "II"
+          - "III"
+          - "IV"
+          - "V"
+          - "VI"
+          - "VII"
+          - "VIII"
+          - "IX"
+          - "X"
+          - "XI"
+          - "XII"
+          - "XIII"
+          - "XIV"
+          - "XV"
+
+      - label: "Prezzo intero"
+        name: "prezzo_intero"
+        widget: "string"
+        required: false
+
+      - label: "Prezzo ridotto"
+        name: "prezzo_ridotto"
+        widget: "string"
+        required: false
+
+      - label: "Prenotazioni"
+        name: "prenotazioni"
+        widget: "string"
+        required: false
+
+      - label: "Locandina"
+        name: "locandina"
+        widget: "string"
+        required: false
+        hint: "Nome del file oppure URL Cloudinary completo"
+
+      - label: "Link"
+        name: "link"
+        widget: "string"
+        required: false
+
+      - label: "Pubblicato"
+        name: "pubblicato"
+        widget: "boolean"
+        default: true
+
+
+  # =========================================================
+  # BACHECA
+  # =========================================================
+
+  - name: "annunci"
+    label: "Bacheca"
+    label_singular: "Annuncio"
+    description: "Casting, collaborazioni, sale prova e annunci teatrali"
+    folder: "data/annunci"
+    create: true
+    delete: true
+    extension: "json"
+    format: "json"
+    identifier_field: "titolo"
+    slug: "{{slug}}"
+    summary: "{{categoria}} — {{titolo}}"
+
+    fields:
+
+      - label: "ID"
+        name: "id"
+        widget: "string"
+        hint: "Identificativo univoco. Esempio: cercasi-attore-roma-ottobre-2026"
+
+      - label: "Categoria"
+        name: "categoria"
+        widget: "select"
+        options:
+          - "CASTING"
+          - "COLLABORAZIONI"
+          - "SALE PROVA"
+          - "CORSI"
+          - "CERCO COMPAGNIA"
+          - "TECNICI"
+          - "ALTRO"
+
+      - label: "Titolo"
+        name: "titolo"
+        widget: "string"
+
+      - label: "Descrizione"
+        name: "descrizione"
+        widget: "text"
+
+      - label: "ID compagnia"
+        name: "compagnia_id"
+        widget: "string"
+        required: false
+
+      - label: "Autore"
+        name: "autore"
+        widget: "string"
+        required: false
+
+      - label: "Città"
+        name: "citta"
+        widget: "string"
+        default: "Roma"
+
+      - label: "Zona"
+        name: "zona"
+        widget: "string"
+        required: false
+
+      - label: "Municipio"
+        name: "municipio"
+        widget: "select"
+        required: false
+        options:
+          - "I"
+          - "II"
+          - "III"
+          - "IV"
+          - "V"
+          - "VI"
+          - "VII"
+          - "VIII"
+          - "IX"
+          - "X"
+          - "XI"
+          - "XII"
+          - "XIII"
+          - "XIV"
+          - "XV"
+
+      - label: "Data pubblicazione"
+        name: "data_pubblicazione"
+        widget: "date"
+        format: "YYYY-MM-DD"
+
+      - label: "Data scadenza"
+        name: "data_scadenza"
+        widget: "date"
+        format: "YYYY-MM-DD"
+        required: false
+
+      - label: "Email"
+        name: "email"
+        widget: "string"
+        required: false
+
+      - label: "Telefono"
+        name: "telefono"
+        widget: "string"
+        required: false
+
+      - label: "Link"
+        name: "link"
+        widget: "string"
+        required: false
+
+      - label: "Pubblicato"
+        name: "pubblicato"
+        widget: "boolean"
+        default: true
