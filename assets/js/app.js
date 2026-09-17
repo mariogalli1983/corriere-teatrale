@@ -12,6 +12,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const schedaEvento =
         document.getElementById("scheda-evento");
 
+    const elencoAnnunci =
+        document.getElementById("elenco-annunci");
+
 
     if (elencoCompagnie) {
         caricaCompagnie();
@@ -29,7 +32,52 @@ document.addEventListener("DOMContentLoaded", () => {
         caricaSchedaEvento();
     }
 
+    if (elencoAnnunci) {
+        caricaAnnunci();
+    }
+
 });
+
+
+/* =========================================================
+   FUNZIONI UTILI
+   ========================================================= */
+
+function formattaData(dataISO, opzioni = {}) {
+
+    if (!dataISO) {
+        return "";
+    }
+
+    const data =
+        new Date(dataISO + "T12:00:00");
+
+    return data.toLocaleDateString(
+        "it-IT",
+        opzioni
+    );
+}
+
+
+function annuncioScaduto(dataScadenza) {
+
+    if (!dataScadenza) {
+        return false;
+    }
+
+    /*
+       La scadenza resta valida per tutta la giornata indicata.
+       L'annuncio scompare dalla mezzanotte successiva.
+    */
+
+    const fineScadenza =
+        new Date(dataScadenza + "T23:59:59");
+
+    const adesso =
+        new Date();
+
+    return adesso > fineScadenza;
+}
 
 
 /* =========================================================
@@ -84,11 +132,13 @@ async function caricaCompagnie() {
                         ${compagnia.logo ? `
 
                             <a href="compagnia.html?id=${compagnia.id}">
+
                                 <img
                                     src="${compagnia.logo}"
                                     alt="Logo ${compagnia.nome}"
                                     class="company-logo"
                                 >
+
                             </a>
 
                         ` : ""}
@@ -98,12 +148,15 @@ async function caricaCompagnie() {
                         </div>
 
                         <h3>
+
                             <a href="compagnia.html?id=${compagnia.id}">
                                 ${compagnia.nome}
                             </a>
+
                         </h3>
 
                         <p>
+
                             ${compagnia.citta}
 
                             ${compagnia.zona
@@ -113,6 +166,7 @@ async function caricaCompagnie() {
                             ${compagnia.municipio
                                 ? " · Municipio " + compagnia.municipio
                                 : ""}
+
                         </p>
 
                         <p>
@@ -120,12 +174,15 @@ async function caricaCompagnie() {
                         </p>
 
                         ${generi ? `
+
                             <p>
                                 <strong>${generi}</strong>
                             </p>
+
                         ` : ""}
 
                     </article>
+
                 `;
 
             }).join("");
@@ -167,9 +224,11 @@ async function caricaEventi() {
             !rispostaEventi.ok ||
             !rispostaCompagnie.ok
         ) {
+
             throw new Error(
                 "Impossibile caricare gli eventi"
             );
+
         }
 
         const eventi =
@@ -209,15 +268,9 @@ async function caricaEventi() {
                 const dateHTML =
                     evento.date.map(replica => {
 
-                        const data =
-                            new Date(
-                                replica.data +
-                                "T12:00:00"
-                            );
-
                         const dataFormattata =
-                            data.toLocaleDateString(
-                                "it-IT",
+                            formattaData(
+                                replica.data,
                                 {
                                     day: "numeric",
                                     month: "long",
@@ -226,12 +279,17 @@ async function caricaEventi() {
                             );
 
                         return `
+
                             <div>
+
                                 <strong>
                                     ${dataFormattata}
                                 </strong>
+
                                 · ${replica.ora}
+
                             </div>
+
                         `;
 
                     }).join("");
@@ -243,11 +301,13 @@ async function caricaEventi() {
                         ${evento.locandina ? `
 
                             <a href="evento.html?id=${evento.id}">
+
                                 <img
                                     src="${evento.locandina}"
                                     alt="Locandina ${evento.titolo}"
                                     class="event-poster"
                                 >
+
                             </a>
 
                         ` : ""}
@@ -257,15 +317,19 @@ async function caricaEventi() {
                         </div>
 
                         <h3>
+
                             <a href="evento.html?id=${evento.id}">
                                 ${evento.titolo}
                             </a>
+
                         </h3>
 
                         <p>
+
                             <strong>
                                 ${nomeCompagnia}
                             </strong>
+
                         </p>
 
                         <div style="margin: 12px 0;">
@@ -347,9 +411,11 @@ async function caricaSchedaCompagnia() {
             !rispostaCompagnie.ok ||
             !rispostaEventi.ok
         ) {
+
             throw new Error(
                 "Errore nel caricamento dei dati"
             );
+
         }
 
         const compagnie =
@@ -395,15 +461,9 @@ async function caricaSchedaCompagnia() {
                     const date =
                         evento.date.map(replica => {
 
-                            const data =
-                                new Date(
-                                    replica.data +
-                                    "T12:00:00"
-                                );
-
                             const dataFormattata =
-                                data.toLocaleDateString(
-                                    "it-IT",
+                                formattaData(
+                                    replica.data,
                                     {
                                         day: "numeric",
                                         month: "long",
@@ -412,12 +472,17 @@ async function caricaSchedaCompagnia() {
                                 );
 
                             return `
+
                                 <div>
+
                                     <strong>
                                         ${dataFormattata}
                                     </strong>
+
                                     · ${replica.ora}
+
                                 </div>
+
                             `;
 
                         }).join("");
@@ -429,11 +494,13 @@ async function caricaSchedaCompagnia() {
                             ${evento.locandina ? `
 
                                 <a href="evento.html?id=${evento.id}">
+
                                     <img
                                         src="${evento.locandina}"
                                         alt="Locandina ${evento.titolo}"
                                         class="event-poster"
                                     >
+
                                 </a>
 
                             ` : ""}
@@ -443,9 +510,11 @@ async function caricaSchedaCompagnia() {
                             </div>
 
                             <h3>
+
                                 <a href="evento.html?id=${evento.id}">
                                     ${evento.titolo}
                                 </a>
+
                             </h3>
 
                             <div style="margin: 12px 0;">
@@ -508,7 +577,9 @@ async function caricaSchedaCompagnia() {
                             font-size: clamp(36px, 5vw, 55px);
                             margin: 10px 0;
                         ">
+
                             ${compagnia.nome}
+
                         </h1>
 
                         <p style="
@@ -533,14 +604,21 @@ async function caricaSchedaCompagnia() {
                             max-width: 750px;
                             font-size: 17px;
                         ">
+
                             ${compagnia.descrizione}
+
                         </p>
 
                         ${generi ? `
 
                             <p style="margin-top: 15px;">
-                                <strong>Generi:</strong>
+
+                                <strong>
+                                    Generi:
+                                </strong>
+
                                 ${generi}
+
                             </p>
 
                         ` : ""}
@@ -548,11 +626,13 @@ async function caricaSchedaCompagnia() {
                         ${compagnia.email ? `
 
                             <p style="margin-top: 15px;">
+
                                 <strong>Email:</strong>
 
                                 <a href="mailto:${compagnia.email}">
                                     ${compagnia.email}
                                 </a>
+
                             </p>
 
                         ` : ""}
@@ -560,8 +640,11 @@ async function caricaSchedaCompagnia() {
                         ${compagnia.telefono ? `
 
                             <p>
+
                                 <strong>Telefono:</strong>
+
                                 ${compagnia.telefono}
+
                             </p>
 
                         ` : ""}
@@ -569,6 +652,7 @@ async function caricaSchedaCompagnia() {
                         ${compagnia.sito ? `
 
                             <p>
+
                                 <a
                                     href="${compagnia.sito}"
                                     target="_blank"
@@ -576,6 +660,7 @@ async function caricaSchedaCompagnia() {
                                 >
                                     Sito ufficiale
                                 </a>
+
                             </p>
 
                         ` : ""}
@@ -586,16 +671,21 @@ async function caricaSchedaCompagnia() {
 
             </section>
 
+
             <section style="margin-top: 50px;">
 
                 <div class="section-header">
+
                     <h2>
                         Prossimi spettacoli
                     </h2>
+
                 </div>
 
                 <div class="event-grid">
+
                     ${eventiHTML}
+
                 </div>
 
             </section>
@@ -653,9 +743,11 @@ async function caricaSchedaEvento() {
             !rispostaEventi.ok ||
             !rispostaCompagnie.ok
         ) {
+
             throw new Error(
                 "Errore nel caricamento dello spettacolo"
             );
+
         }
 
         const eventi =
@@ -689,19 +781,12 @@ async function caricaSchedaEvento() {
             evento.titolo +
             " | Corriere Teatrale";
 
-
         const dateHTML =
             evento.date.map(replica => {
 
-                const data =
-                    new Date(
-                        replica.data +
-                        "T12:00:00"
-                    );
-
                 const dataFormattata =
-                    data.toLocaleDateString(
-                        "it-IT",
+                    formattaData(
+                        replica.data,
                         {
                             weekday: "long",
                             day: "numeric",
@@ -728,7 +813,6 @@ async function caricaSchedaEvento() {
 
             }).join("");
 
-
         contenitore.innerHTML = `
 
             <article class="event-detail">
@@ -748,7 +832,6 @@ async function caricaSchedaEvento() {
 
                     </div>
 
-
                     <div class="event-detail-content">
 
                         <div class="categoria">
@@ -758,7 +841,6 @@ async function caricaSchedaEvento() {
                         <h1>
                             ${evento.titolo}
                         </h1>
-
 
                         ${compagnia ? `
 
@@ -774,7 +856,6 @@ async function caricaSchedaEvento() {
 
                         ` : ""}
 
-
                         ${evento.descrizione ? `
 
                             <p class="event-detail-description">
@@ -782,7 +863,6 @@ async function caricaSchedaEvento() {
                             </p>
 
                         ` : ""}
-
 
                         <div class="event-detail-block">
 
@@ -793,7 +873,6 @@ async function caricaSchedaEvento() {
                             ${dateHTML}
 
                         </div>
-
 
                         <div class="event-detail-block">
 
@@ -827,7 +906,6 @@ async function caricaSchedaEvento() {
 
                         </div>
 
-
                         ${
                             evento.prezzo_intero ||
                             evento.prezzo_ridotto
@@ -841,17 +919,31 @@ async function caricaSchedaEvento() {
                                     </h2>
 
                                     ${evento.prezzo_intero ? `
+
                                         <p>
-                                            <strong>Intero:</strong>
+
+                                            <strong>
+                                                Intero:
+                                            </strong>
+
                                             ${evento.prezzo_intero}
+
                                         </p>
+
                                     ` : ""}
 
                                     ${evento.prezzo_ridotto ? `
+
                                         <p>
-                                            <strong>Ridotto:</strong>
+
+                                            <strong>
+                                                Ridotto:
+                                            </strong>
+
                                             ${evento.prezzo_ridotto}
+
                                         </p>
+
                                     ` : ""}
 
                                 </div>
@@ -860,7 +952,6 @@ async function caricaSchedaEvento() {
 
                             : ""
                         }
-
 
                         ${evento.prenotazioni ? `
 
@@ -877,7 +968,6 @@ async function caricaSchedaEvento() {
                             </div>
 
                         ` : ""}
-
 
                         ${evento.link ? `
 
@@ -910,6 +1000,330 @@ async function caricaSchedaEvento() {
 
         contenitore.innerHTML =
             "<p>Si è verificato un problema nel caricamento dello spettacolo.</p>";
+
+    }
+
+}
+
+
+/* =========================================================
+   BACHECA
+   ========================================================= */
+
+async function caricaAnnunci() {
+
+    const contenitore =
+        document.getElementById("elenco-annunci");
+
+    try {
+
+        const [
+            rispostaAnnunci,
+            rispostaCompagnie
+        ] = await Promise.all([
+
+            fetch("data/annunci.json"),
+            fetch("data/compagnie.json")
+
+        ]);
+
+        if (
+            !rispostaAnnunci.ok ||
+            !rispostaCompagnie.ok
+        ) {
+
+            throw new Error(
+                "Impossibile caricare la Bacheca"
+            );
+
+        }
+
+        const annunci =
+            await rispostaAnnunci.json();
+
+        const compagnie =
+            await rispostaCompagnie.json();
+
+
+        /*
+           Manteniamo soltanto:
+           - annunci pubblicati
+           - annunci non ancora scaduti
+        */
+
+        const annunciVisibili =
+            annunci
+                .filter(
+                    annuncio =>
+                        annuncio.pubblicato === true &&
+                        !annuncioScaduto(
+                            annuncio.data_scadenza
+                        )
+                )
+                .sort(
+                    (a, b) =>
+                        new Date(b.data_pubblicazione) -
+                        new Date(a.data_pubblicazione)
+                );
+
+
+        function mostraAnnunci(categoria = "tutti") {
+
+            const filtrati =
+                categoria === "tutti"
+
+                    ? annunciVisibili
+
+                    : annunciVisibili.filter(
+                        annuncio =>
+                            annuncio.categoria === categoria
+                    );
+
+
+            if (filtrati.length === 0) {
+
+                contenitore.innerHTML = `
+
+                    <div class="bacheca-vuota">
+
+                        <h3>
+                            Nessun annuncio
+                        </h3>
+
+                        <p>
+                            Al momento non ci sono annunci
+                            in questa categoria.
+                        </p>
+
+                    </div>
+
+                `;
+
+                return;
+            }
+
+
+            contenitore.innerHTML =
+                filtrati.map(annuncio => {
+
+                    const compagnia =
+                        compagnie.find(
+                            c =>
+                                c.id ===
+                                annuncio.compagnia_id
+                        );
+
+
+                    const dataPubblicazione =
+                        formattaData(
+                            annuncio.data_pubblicazione,
+                            {
+                                day: "numeric",
+                                month: "long",
+                                year: "numeric"
+                            }
+                        );
+
+
+                    const dataScadenza =
+                        annuncio.data_scadenza
+
+                            ? formattaData(
+                                annuncio.data_scadenza,
+                                {
+                                    day: "numeric",
+                                    month: "long",
+                                    year: "numeric"
+                                }
+                            )
+
+                            : "";
+
+
+                    return `
+
+                        <article class="annuncio-card">
+
+                            <div class="annuncio-categoria">
+                                ${annuncio.categoria}
+                            </div>
+
+
+                            <h3>
+                                ${annuncio.titolo}
+                            </h3>
+
+
+                            ${compagnia ? `
+
+                                <div class="annuncio-compagnia">
+
+                                    <a href="compagnia.html?id=${compagnia.id}">
+                                        ${compagnia.nome}
+                                    </a>
+
+                                </div>
+
+                            ` : annuncio.autore ? `
+
+                                <div class="annuncio-compagnia">
+                                    ${annuncio.autore}
+                                </div>
+
+                            ` : ""}
+
+
+                            <p class="annuncio-descrizione">
+                                ${annuncio.descrizione}
+                            </p>
+
+
+                            <div class="annuncio-meta">
+
+                                ${annuncio.citta ? `
+                                    ${annuncio.citta}
+                                ` : ""}
+
+                                ${annuncio.zona ? `
+                                    · ${annuncio.zona}
+                                ` : ""}
+
+                                ${annuncio.municipio ? `
+                                    · Municipio ${annuncio.municipio}
+                                ` : ""}
+
+                                <br>
+
+                                Pubblicato il
+                                ${dataPubblicazione}
+
+                                ${dataScadenza ? `
+
+                                    <br>
+
+                                    Scadenza:
+                                    <strong>
+                                        ${dataScadenza}
+                                    </strong>
+
+                                ` : ""}
+
+
+                                ${annuncio.email ? `
+
+                                    <br><br>
+
+                                    <a href="mailto:${annuncio.email}">
+                                        Contatta via email
+                                    </a>
+
+                                ` : ""}
+
+
+                                ${annuncio.telefono ? `
+
+                                    <br>
+
+                                    <strong>
+                                        ${annuncio.telefono}
+                                    </strong>
+
+                                ` : ""}
+
+
+                                ${annuncio.link ? `
+
+                                    <br>
+
+                                    <a
+                                        href="${annuncio.link}"
+                                        target="_blank"
+                                        rel="noopener"
+                                    >
+                                        Maggiori informazioni
+                                    </a>
+
+                                ` : ""}
+
+                            </div>
+
+                        </article>
+
+                    `;
+
+                }).join("");
+
+        }
+
+
+        /*
+           Visualizzazione iniziale:
+           tutti gli annunci.
+        */
+
+        mostraAnnunci("tutti");
+
+
+        /*
+           FILTRI
+        */
+
+        const pulsanti =
+            document.querySelectorAll(
+                ".bacheca-filter"
+            );
+
+
+        pulsanti.forEach(pulsante => {
+
+            pulsante.addEventListener(
+                "click",
+                () => {
+
+                    pulsanti.forEach(
+                        bottone =>
+                            bottone.classList.remove(
+                                "active"
+                            )
+                    );
+
+                    pulsante.classList.add(
+                        "active"
+                    );
+
+                    const categoria =
+                        pulsante.dataset.categoria;
+
+                    mostraAnnunci(
+                        categoria
+                    );
+
+                }
+            );
+
+        });
+
+
+    } catch (errore) {
+
+        console.error(errore);
+
+        contenitore.innerHTML = `
+
+            <div class="bacheca-vuota">
+
+                <h3>
+                    Bacheca non disponibile
+                </h3>
+
+                <p>
+                    Si è verificato un problema
+                    nel caricamento degli annunci.
+                </p>
+
+            </div>
+
+        `;
 
     }
 
