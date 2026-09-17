@@ -1,0 +1,32 @@
+{
+  "id": "scusi-vuol-sposare-mio-marito-ottobre-2026",
+  "titolo": "Scusi, vuol sposare mio marito?",
+  "tipo": "spettacolo",
+  "compagnia_id": "i-fatti-in-casa",
+  "descrizione": "Una commedia della compagnia I FATTI IN CASA APS.",
+  "date": [
+    {
+      "data": "2026-10-02",
+      "ora": "21:00"
+    },
+    {
+      "data": "2026-10-03",
+      "ora": "21:00"
+    },
+    {
+      "data": "2026-10-04",
+      "ora": "18:00"
+    }
+  ],
+  "luogo": "Teatro San Giustino",
+  "indirizzo": "Viale Alessandrino 144",
+  "citta": "Roma",
+  "quartiere": "Alessandrino",
+  "municipio": "V",
+  "prezzo_intero": "12 €",
+  "prezzo_ridotto": "7 €",
+  "prenotazioni": "339 363 0604",
+  "locandina": "scusi-vuol-sposare-mio-marito-2026.jpg",
+  "link": "",
+  "pubblicato": true
+}
