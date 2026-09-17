@@ -1,19 +1,19 @@
 {
-  "id": "i-fatti-in-casa",
-  "nome": "I FATTI IN CASA APS",
-  "citta": "Roma",
+  "facebook": "",
+  "tipologia": "Compagnia teatrale amatoriale romana, attiva nella produzione di commedie.",
   "zona": "Roma Est",
-  "municipio": "V",
-  "tipologia": "Compagnia teatrale amatoriale",
+  "logo": "i-fatti-in-casa.jpg",
   "generi": [
     "Commedia"
   ],
+  "municipio": "V",
   "descrizione": "Compagnia teatrale amatoriale romana.",
-  "logo": "i-fatti-in-casa.jpg",
-  "email": "",
-  "telefono": "",
   "sito": "",
-  "facebook": "",
   "instagram": "",
-  "attiva": true
+  "attiva": true,
+  "telefono": "",
+  "nome": "I FATTI IN CASA APS",
+  "id": "i-fatti-in-casa",
+  "citta": "Roma",
+  "email": ""
 }
