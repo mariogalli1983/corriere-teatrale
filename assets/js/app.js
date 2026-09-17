@@ -55,7 +55,15 @@ async function caricaCompagnie() {
 
             return `
                 <article class="company-card">
-
+${compagnia.logo ? `
+    <a href="compagnia.html?id=${compagnia.id}">
+        <img
+            src="${compagnia.logo}"
+            alt="Logo ${compagnia.nome}"
+            class="company-logo"
+        >
+    </a>
+` : ""}
                     <div class="categoria">
                         ${compagnia.tipologia}
                     </div>
