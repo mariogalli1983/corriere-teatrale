@@ -495,3 +495,51 @@
         height: 240px;
     }
 }
+/* SCHEDA COMPAGNIA */
+
+.company-profile {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 40px;
+    align-items: center;
+    padding: 30px 0 40px;
+}
+
+.company-profile-logo img {
+    width: 100%;
+    max-width: 280px;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.company-profile-content {
+    max-width: 760px;
+}
+
+
+/* LOCANDINE EVENTI */
+
+.event-poster {
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+    object-position: top;
+    margin-bottom: 18px;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 800px) {
+
+    .company-profile {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+
+    .company-profile-logo img {
+        max-width: 220px;
+    }
+
+}
