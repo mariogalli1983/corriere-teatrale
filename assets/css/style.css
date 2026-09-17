@@ -649,3 +649,245 @@
     }
 
 }
+/* =========================================================
+   BACHECA
+   ========================================================= */
+
+.section-intro {
+    max-width: 760px;
+    margin: 18px 0 28px;
+    font-size: 18px;
+    line-height: 1.6;
+    color: #555;
+}
+
+
+/* FILTRI */
+
+.bacheca-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0 0 35px;
+    padding-bottom: 25px;
+    border-bottom: 1px solid #d8d8d8;
+}
+
+.bacheca-filter {
+    appearance: none;
+    border: 1px solid #c7c7c7;
+    background: #fff;
+    color: #222;
+    padding: 9px 14px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .4px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all .2s ease;
+}
+
+.bacheca-filter:hover {
+    border-color: #a71920;
+    color: #a71920;
+}
+
+.bacheca-filter.active {
+    background: #a71920;
+    border-color: #a71920;
+    color: #fff;
+}
+
+
+/* GRIGLIA ANNUNCI */
+
+.bacheca-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 22px;
+    margin-bottom: 55px;
+}
+
+
+/* SINGOLO ANNUNCIO */
+
+.annuncio-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 290px;
+    padding: 25px;
+    background: #f7f6f4;
+    border-top: 4px solid #a71920;
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease;
+}
+
+.annuncio-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, .08);
+}
+
+.annuncio-categoria {
+    margin-bottom: 16px;
+    color: #a71920;
+    font-size: 11px;
+    line-height: 1;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.annuncio-card h3 {
+    margin: 0 0 14px;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 25px;
+    line-height: 1.12;
+}
+
+.annuncio-card h3 a {
+    color: #111;
+    text-decoration: none;
+}
+
+.annuncio-card h3 a:hover {
+    color: #a71920;
+}
+
+.annuncio-descrizione {
+    margin: 0 0 20px;
+    color: #444;
+    font-size: 15px;
+    line-height: 1.55;
+}
+
+.annuncio-meta {
+    margin-top: auto;
+    padding-top: 17px;
+    border-top: 1px solid #d5d2ce;
+    color: #666;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.annuncio-compagnia {
+    margin-bottom: 7px;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.annuncio-compagnia a {
+    color: #111;
+    text-decoration: none;
+}
+
+.annuncio-compagnia a:hover {
+    color: #a71920;
+}
+
+
+/* =========================================================
+   CTA BACHECA
+   ========================================================= */
+
+.bacheca-cta {
+    width: 100%;
+    margin-top: 25px;
+    padding: 50px 20px;
+    background: #a71920;
+    color: #fff;
+    text-align: center;
+}
+
+.bacheca-cta > div {
+    width: min(100%, 1000px);
+    margin: 0 auto;
+}
+
+.bacheca-cta h2 {
+    margin: 0 0 10px;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 32px;
+}
+
+.bacheca-cta p {
+    margin: 0 auto 22px;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.bacheca-cta a {
+    display: inline-block;
+    padding: 12px 20px;
+    background: #fff;
+    border: 1px solid #fff;
+    color: #a71920;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: .7px;
+    transition: all .2s ease;
+}
+
+.bacheca-cta a:hover {
+    background: #111;
+    border-color: #111;
+    color: #fff;
+}
+
+
+/* =========================================================
+   BACHECA - TABLET
+   ========================================================= */
+
+@media (max-width: 1000px) {
+
+    .bacheca-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+
+/* =========================================================
+   BACHECA - MOBILE
+   ========================================================= */
+
+@media (max-width: 650px) {
+
+    .section-intro {
+        font-size: 16px;
+    }
+
+    .bacheca-filters {
+        gap: 6px;
+    }
+
+    .bacheca-filter {
+        padding: 8px 10px;
+        font-size: 10px;
+    }
+
+    .bacheca-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .annuncio-card {
+        min-height: auto;
+        padding: 20px;
+    }
+
+    .bacheca-cta {
+        padding: 38px 20px;
+    }
+
+    .bacheca-cta h2 {
+        font-size: 27px;
+    }
+
+}
