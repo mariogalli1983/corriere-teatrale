@@ -6,12 +6,19 @@ document.addEventListener("DOMContentLoaded", () => {
     const elencoEventi =
         document.getElementById("elenco-eventi");
 
+    const schedaCompagnia =
+        document.getElementById("scheda-compagnia");
+
     if (elencoCompagnie) {
         caricaCompagnie();
     }
 
     if (elencoEventi) {
         caricaEventi();
+    }
+
+    if (schedaCompagnia) {
+        caricaSchedaCompagnia();
     }
 
 });
@@ -53,7 +60,11 @@ async function caricaCompagnie() {
                         ${compagnia.tipologia}
                     </div>
 
-                    <h3>${compagnia.nome}</h3>
+                    <h3>
+    <a href="compagnia.html?id=${compagnia.id}">
+        ${compagnia.nome}
+    </a>
+</h3>
 
                     <p>
                         ${compagnia.citta}
@@ -181,5 +192,189 @@ async function caricaEventi() {
 
         contenitore.innerHTML =
             "<p>Si è verificato un problema nel caricamento degli eventi.</p>";
+    }
+}
+async function caricaSchedaCompagnia() {
+
+    const contenitore =
+        document.getElementById("scheda-compagnia");
+
+    const parametri =
+        new URLSearchParams(window.location.search);
+
+    const idCompagnia =
+        parametri.get("id");
+
+    if (!idCompagnia) {
+        contenitore.innerHTML =
+            "<p>Compagnia non specificata.</p>";
+        return;
+    }
+
+    try {
+
+        const [rispostaCompagnie, rispostaEventi] =
+            await Promise.all([
+                fetch("data/compagnie.json"),
+                fetch("data/eventi.json")
+            ]);
+
+        if (!rispostaCompagnie.ok || !rispostaEventi.ok) {
+            throw new Error("Errore nel caricamento dei dati");
+        }
+
+        const compagnie =
+            await rispostaCompagnie.json();
+
+        const eventi =
+            await rispostaEventi.json();
+
+        const compagnia =
+            compagnie.find(
+                c => c.id === idCompagnia
+            );
+
+        if (!compagnia) {
+            contenitore.innerHTML =
+                "<h2>Compagnia non trovata</h2>";
+            return;
+        }
+
+        const eventiCompagnia =
+            eventi.filter(
+                evento =>
+                    evento.compagnia_id === compagnia.id &&
+                    evento.pubblicato === true
+            );
+
+        document.title =
+            compagnia.nome + " | Corriere Teatrale";
+
+        const generi =
+            compagnia.generi
+                ? compagnia.generi.join(" · ")
+                : "";
+
+        const eventiHTML =
+            eventiCompagnia.length > 0
+                ? eventiCompagnia.map(evento => {
+
+                    const date =
+                        evento.date.map(replica => {
+
+                            const data =
+                                new Date(
+                                    replica.data + "T12:00:00"
+                                );
+
+                            const dataFormattata =
+                                data.toLocaleDateString(
+                                    "it-IT",
+                                    {
+                                        day: "numeric",
+                                        month: "long",
+                                        year: "numeric"
+                                    }
+                                );
+
+                            return `
+                                <div>
+                                    <strong>${dataFormattata}</strong>
+                                    · ${replica.ora}
+                                </div>
+                            `;
+
+                        }).join("");
+
+                    return `
+                        <article class="event-card">
+
+                            <div class="categoria">
+                                ${evento.tipo}
+                            </div>
+
+                            <h3>${evento.titolo}</h3>
+
+                            <div style="margin: 12px 0;">
+                                ${date}
+                            </div>
+
+                            <p>
+                                ${evento.luogo}<br>
+                                ${evento.quartiere}
+                            </p>
+
+                        </article>
+                    `;
+
+                }).join("")
+                : "<p>Nessun evento in programma.</p>";
+
+        contenitore.innerHTML = `
+
+            <section>
+
+                <div class="categoria">
+                    ${compagnia.tipologia}
+                </div>
+
+                <h1 style="
+                    font-family: Georgia, 'Times New Roman', serif;
+                    font-size: clamp(36px, 5vw, 55px);
+                    margin: 10px 0;
+                ">
+                    ${compagnia.nome}
+                </h1>
+
+                <p style="
+                    color: #666;
+                    font-size: 17px;
+                    margin-bottom: 20px;
+                ">
+                    ${compagnia.citta}
+                    ${compagnia.zona ? " · " + compagnia.zona : ""}
+                    ${compagnia.municipio
+                        ? " · Municipio " + compagnia.municipio
+                        : ""}
+                </p>
+
+                <p style="
+                    max-width: 750px;
+                    font-size: 17px;
+                ">
+                    ${compagnia.descrizione}
+                </p>
+
+                ${
+                    generi
+                        ? `
+                        <p style="margin-top: 15px;">
+                            <strong>Generi:</strong> ${generi}
+                        </p>
+                        `
+                        : ""
+                }
+
+            </section>
+
+            <section style="margin-top: 50px;">
+
+                <div class="section-header">
+                    <h2>Prossimi spettacoli</h2>
+                </div>
+
+                <div class="event-grid">
+                    ${eventiHTML}
+                </div>
+
+            </section>
+        `;
+
+    } catch (errore) {
+
+        console.error(errore);
+
+        contenitore.innerHTML =
+            "<p>Si è verificato un problema nel caricamento della compagnia.</p>";
     }
 }
