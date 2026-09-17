@@ -1581,85 +1581,93 @@ document.addEventListener("DOMContentLoaded", () => {
        UPLOAD SU CLOUDINARY
        ========================================================= */
 
-    async function caricaSuCloudinary(file) {
+   async function caricaSuCloudinary(file, sottocartella) {
 
-        const dati =
-            new FormData();
+    const dati =
+        new FormData();
 
-        dati.append(
-            "file",
-            file
+    dati.append(
+        "file",
+        file
+    );
+
+    dati.append(
+        "upload_preset",
+        CLOUDINARY_UPLOAD_PRESET
+    );
+
+    /*
+       Organizzazione automatica delle immagini
+    */
+
+    dati.append(
+        "asset_folder",
+        `corriere-teatrale/segnalazioni/${sottocartella}`
+    );
+
+
+    const risposta =
+        await fetch(
+            CLOUDINARY_UPLOAD_URL,
+            {
+                method: "POST",
+                body: dati
+            }
         );
 
-        dati.append(
-            "upload_preset",
-            CLOUDINARY_UPLOAD_PRESET
-        );
 
+    if (!risposta.ok) {
 
-        const risposta =
-            await fetch(
-                CLOUDINARY_UPLOAD_URL,
-                {
-                    method: "POST",
-                    body: dati
-                }
-            );
+        let messaggioErrore =
+            "Errore durante il caricamento dell'immagine.";
 
+        try {
 
-        if (!risposta.ok) {
+            const errore =
+                await risposta.json();
 
-            let messaggioErrore =
-                "Errore durante il caricamento dell'immagine.";
+            if (
+                errore &&
+                errore.error &&
+                errore.error.message
+            ) {
 
-            try {
-
-                const errore =
-                    await risposta.json();
-
-                if (
-                    errore &&
-                    errore.error &&
-                    errore.error.message
-                ) {
-
-                    messaggioErrore =
-                        errore.error.message;
-
-                }
-
-            } catch (erroreLettura) {
-
-                /*
-                   Mantiene il messaggio generico
-                */
+                messaggioErrore =
+                    errore.error.message;
 
             }
 
+        } catch (erroreLettura) {
 
-            throw new Error(
-                messaggioErrore
-            );
-
-        }
-
-
-        const risultato =
-            await risposta.json();
-
-
-        if (!risultato.secure_url) {
-
-            throw new Error(
-                "Cloudinary non ha restituito l'indirizzo dell'immagine."
-            );
+            /*
+               Mantiene il messaggio generico
+            */
 
         }
 
-
-        return risultato.secure_url;
+        throw new Error(
+            messaggioErrore
+        );
 
     }
+
+
+    const risultato =
+        await risposta.json();
+
+
+    if (!risultato.secure_url) {
+
+        throw new Error(
+            "Cloudinary non ha restituito l'indirizzo dell'immagine."
+        );
+
+    }
+
+
+    return risultato.secure_url;
+
+}
 
 
     /* =========================================================
@@ -1748,9 +1756,10 @@ document.addEventListener("DOMContentLoaded", () => {
                Determina quale immagine deve essere caricata
             */
 
-            let fileDaCaricare = null;
-            let nomeCampoWeb3Forms = "";
-            let descrizioneFile = "";
+           let fileDaCaricare = null;
+let nomeCampoWeb3Forms = "";
+let descrizioneFile = "";
+let sottocartellaCloudinary = "";
 
 
             if (tipo === "evento") {
@@ -1767,7 +1776,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     descrizioneFile =
                         "La locandina";
-
+sottocartellaCloudinary =
+    "locandine";
                 }
 
             }
@@ -1787,7 +1797,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     descrizioneFile =
                         "Il logo";
-
+sottocartellaCloudinary =
+    "loghi";
                 }
 
             }
@@ -1807,7 +1818,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     descrizioneFile =
                         "L'immagine";
-
+sottocartellaCloudinary =
+    "bacheca";
                 }
 
             }
@@ -1854,10 +1866,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 if (fileDaCaricare) {
 
-                    const urlImmagine =
-                        await caricaSuCloudinary(
-                            fileDaCaricare
-                        );
+                   const urlImmagine =
+    await caricaSuCloudinary(
+        fileDaCaricare,
+        sottocartellaCloudinary
+    );
 
 
                     /*
