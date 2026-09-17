@@ -1205,11 +1205,30 @@
     </div>
 
 </footer>
-
-
 <script>
 
 document.addEventListener("DOMContentLoaded", () => {
+
+    /* =========================================================
+       CONFIGURAZIONE CLOUDINARY
+       ========================================================= */
+
+    const CLOUDINARY_CLOUD_NAME = "mjbha9dx";
+    const CLOUDINARY_UPLOAD_PRESET = "corriere_teatrale";
+
+    const CLOUDINARY_UPLOAD_URL =
+        `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`;
+
+
+    /* =========================================================
+       ELEMENTI PRINCIPALI
+       ========================================================= */
+
+    const form =
+        document.getElementById("form-segnala");
+
+    const submitButton =
+        form.querySelector(".submit-segnala");
 
     const scelte =
         document.querySelectorAll(
@@ -1222,228 +1241,284 @@ document.addEventListener("DOMContentLoaded", () => {
         );
 
 
-    /*
-       Nasconde inizialmente
-       tutte le sezioni dinamiche
-    */
+    /* =========================================================
+       CAMPI IMMAGINE
+       ========================================================= */
+
+    const inputLocandina =
+        document.getElementById("locandina-evento");
+
+    const anteprimaLocandina =
+        document.getElementById("poster-preview");
+
+
+    const inputLogo =
+        document.getElementById("logo-compagnia");
+
+    const anteprimaLogo =
+        document.getElementById("logo-preview");
+
+
+    const inputImmagine =
+        document.getElementById("immagine-annuncio");
+
+    const anteprimaImmagine =
+        document.getElementById("image-preview");
+
+
+    /* =========================================================
+       NASCONDI LE SEZIONI DINAMICHE ALL'AVVIO
+       ========================================================= */
 
     sezioni.forEach(sezione => {
+
         sezione.style.display = "none";
+
     });
 
 
-    /*
-       Cambio tipologia
-    */
+    /* =========================================================
+       CAMBIO TIPOLOGIA
+       ========================================================= */
 
     scelte.forEach(scelta => {
 
-        scelta.addEventListener(
-            "change",
-            () => {
+        scelta.addEventListener("change", () => {
 
-                sezioni.forEach(sezione => {
-                    sezione.style.display = "none";
-                });
+            /*
+               Nasconde tutte le sezioni
+            */
 
+            sezioni.forEach(sezione => {
 
-                const tipo =
-                    scelta.dataset.tipo;
+                sezione.style.display = "none";
 
-                const sezione =
-                    document.getElementById(
-                        "campi-" + tipo
-                    );
+            });
 
 
-                if (sezione) {
-                    sezione.style.display = "block";
-                }
+            /*
+               Mostra quella selezionata
+            */
 
+            const tipo =
+                scelta.dataset.tipo;
 
-                /*
-                   Evidenzia la card selezionata
-                */
+            const sezione =
+                document.getElementById(
+                    "campi-" + tipo
+                );
 
-                document
-                    .querySelectorAll(".tipo-card")
-                    .forEach(card => {
-                        card.classList.remove("selected");
-                    });
+            if (sezione) {
 
-
-                scelta
-                    .closest(".tipo-card")
-                    .classList.add("selected");
+                sezione.style.display = "block";
 
             }
-        );
-/*
-   ANTEPRIMA LOGO COMPAGNIA
-*/
-
-const inputLogo =
-    document.getElementById("logo-compagnia");
-
-const anteprimaLogo =
-    document.getElementById("logo-preview");
 
 
-inputLogo.addEventListener("change", () => {
+            /*
+               Evidenzia graficamente la card
+            */
 
-    const file =
-        inputLogo.files[0];
+            document
+                .querySelectorAll(".tipo-card")
+                .forEach(card => {
 
-    anteprimaLogo.innerHTML = "";
+                    card.classList.remove("selected");
 
-    if (!file) {
-        return;
-    }
+                });
 
+            scelta
+                .closest(".tipo-card")
+                .classList.add("selected");
 
-    /* LIMITE 5 MB */
+        });
 
-    if (file.size > 5 * 1024 * 1024) {
-
-        alert(
-            "Il logo supera il limite di 5 MB."
-        );
-
-        inputLogo.value = "";
-
-        return;
-    }
-
-
-    /* FORMATI CONSENTITI */
-
-    const formatiConsentiti = [
-        "image/jpeg",
-        "image/png",
-        "image/webp"
-    ];
-
-    if (!formatiConsentiti.includes(file.type)) {
-
-        alert(
-            "Formato non supportato. Usa JPG, PNG o WebP."
-        );
-
-        inputLogo.value = "";
-
-        return;
-    }
-
-
-    /* ANTEPRIMA */
-
-    const url =
-        URL.createObjectURL(file);
-
-    anteprimaLogo.innerHTML = `
-
-        <div class="logo-preview-frame">
-
-            <img
-                src="${url}"
-                alt="Anteprima logo compagnia"
-            >
-
-        </div>
-
-        <span>
-            Anteprima del logo nella scheda compagnia
-        </span>
-
-    `;
-
-});
     });
-/*
-   ANTEPRIMA LOCANDINA SPETTACOLO
-*/
-
-const inputLocandina =
-    document.getElementById("locandina-evento");
-
-const anteprimaLocandina =
-    document.getElementById("poster-preview");
 
 
-inputLocandina.addEventListener("change", () => {
+    /* =========================================================
+       CONTROLLO FILE
+       ========================================================= */
 
-    const file =
-        inputLocandina.files[0];
+    function controllaFile(file, descrizione) {
 
-    anteprimaLocandina.innerHTML = "";
+        if (!file) {
 
-    if (!file) {
-        return;
+            return true;
+
+        }
+
+
+        /*
+           Massimo 5 MB
+        */
+
+        const dimensioneMassima =
+            5 * 1024 * 1024;
+
+        if (file.size > dimensioneMassima) {
+
+            alert(
+                `${descrizione} supera il limite massimo di 5 MB.`
+            );
+
+            return false;
+
+        }
+
+
+        /*
+           Formati ammessi
+        */
+
+        const formatiConsentiti = [
+            "image/jpeg",
+            "image/png",
+            "image/webp"
+        ];
+
+        if (
+            !formatiConsentiti.includes(file.type)
+        ) {
+
+            alert(
+                `${descrizione}: formato non supportato. Usa JPG, PNG o WebP.`
+            );
+
+            return false;
+
+        }
+
+
+        return true;
+
     }
 
-    if (file.size > 5 * 1024 * 1024) {
 
-        alert(
-            "La locandina supera il limite di 5 MB."
-        );
+    /* =========================================================
+       ANTEPRIMA LOCANDINA
+       ========================================================= */
 
-        inputLocandina.value = "";
-        return;
-    }
+    inputLocandina.addEventListener(
+        "change",
+        () => {
 
-    const formatiConsentiti = [
-        "image/jpeg",
-        "image/png",
-        "image/webp"
-    ];
+            const file =
+                inputLocandina.files[0];
 
-    if (!formatiConsentiti.includes(file.type)) {
+            anteprimaLocandina.innerHTML = "";
 
-        alert(
-            "Formato non supportato. Usa JPG, PNG o WebP."
-        );
 
-        inputLocandina.value = "";
-        return;
-    }
+            if (!file) {
 
-    const url =
-        URL.createObjectURL(file);
+                return;
 
-    anteprimaLocandina.innerHTML = `
+            }
 
-        <div class="poster-preview-frame">
 
-            <img
-                src="${url}"
-                alt="Anteprima locandina"
-            >
+            if (
+                !controllaFile(
+                    file,
+                    "La locandina"
+                )
+            ) {
 
-        </div>
+                inputLocandina.value = "";
 
-        <span>
-            Anteprima della locandina
-            nella proporzione utilizzata dal sito
-        </span>
+                return;
 
-    `;
+            }
 
-});
 
-    /*
+            const url =
+                URL.createObjectURL(file);
+
+
+            anteprimaLocandina.innerHTML = `
+
+                <div class="poster-preview-frame">
+
+                    <img
+                        src="${url}"
+                        alt="Anteprima locandina"
+                    >
+
+                </div>
+
+                <span>
+                    Anteprima della locandina
+                    nella proporzione utilizzata dal sito
+                </span>
+
+            `;
+
+        }
+    );
+
+
+    /* =========================================================
+       ANTEPRIMA LOGO COMPAGNIA
+       ========================================================= */
+
+    inputLogo.addEventListener(
+        "change",
+        () => {
+
+            const file =
+                inputLogo.files[0];
+
+            anteprimaLogo.innerHTML = "";
+
+
+            if (!file) {
+
+                return;
+
+            }
+
+
+            if (
+                !controllaFile(
+                    file,
+                    "Il logo"
+                )
+            ) {
+
+                inputLogo.value = "";
+
+                return;
+
+            }
+
+
+            const url =
+                URL.createObjectURL(file);
+
+
+            anteprimaLogo.innerHTML = `
+
+                <div class="logo-preview-frame">
+
+                    <img
+                        src="${url}"
+                        alt="Anteprima logo compagnia"
+                    >
+
+                </div>
+
+                <span>
+                    Anteprima del logo nella scheda compagnia
+                </span>
+
+            `;
+
+        }
+    );
+
+
+    /* =========================================================
        ANTEPRIMA IMMAGINE BACHECA
-    */
-
-    const inputImmagine =
-        document.getElementById(
-            "immagine-annuncio"
-        );
-
-    const anteprima =
-        document.getElementById(
-            "image-preview"
-        );
-
+       ========================================================= */
 
     inputImmagine.addEventListener(
         "change",
@@ -1452,70 +1527,35 @@ inputLocandina.addEventListener("change", () => {
             const file =
                 inputImmagine.files[0];
 
-
-            anteprima.innerHTML = "";
+            anteprimaImmagine.innerHTML = "";
 
 
             if (!file) {
+
                 return;
+
             }
 
 
-            /*
-               Limite 5 MB
-            */
-
             if (
-                file.size >
-                5 * 1024 * 1024
-            ) {
-
-                alert(
-                    "L'immagine supera il limite di 5 MB."
-                );
-
-                inputImmagine.value = "";
-
-                return;
-            }
-
-
-            /*
-               Controllo formato
-            */
-
-            const formatiConsentiti = [
-                "image/jpeg",
-                "image/png",
-                "image/webp"
-            ];
-
-
-            if (
-                !formatiConsentiti.includes(
-                    file.type
+                !controllaFile(
+                    file,
+                    "L'immagine"
                 )
             ) {
 
-                alert(
-                    "Formato non supportato. Usa JPG, PNG o WebP."
-                );
-
                 inputImmagine.value = "";
 
                 return;
+
             }
 
-
-            /*
-               Crea anteprima
-            */
 
             const url =
                 URL.createObjectURL(file);
 
 
-            anteprima.innerHTML = `
+            anteprimaImmagine.innerHTML = `
 
                 <div class="preview-frame">
 
@@ -1536,9 +1576,383 @@ inputLocandina.addEventListener("change", () => {
         }
     );
 
+
+    /* =========================================================
+       UPLOAD SU CLOUDINARY
+       ========================================================= */
+
+    async function caricaSuCloudinary(file) {
+
+        const dati =
+            new FormData();
+
+        dati.append(
+            "file",
+            file
+        );
+
+        dati.append(
+            "upload_preset",
+            CLOUDINARY_UPLOAD_PRESET
+        );
+
+
+        const risposta =
+            await fetch(
+                CLOUDINARY_UPLOAD_URL,
+                {
+                    method: "POST",
+                    body: dati
+                }
+            );
+
+
+        if (!risposta.ok) {
+
+            let messaggioErrore =
+                "Errore durante il caricamento dell'immagine.";
+
+            try {
+
+                const errore =
+                    await risposta.json();
+
+                if (
+                    errore &&
+                    errore.error &&
+                    errore.error.message
+                ) {
+
+                    messaggioErrore =
+                        errore.error.message;
+
+                }
+
+            } catch (erroreLettura) {
+
+                /*
+                   Mantiene il messaggio generico
+                */
+
+            }
+
+
+            throw new Error(
+                messaggioErrore
+            );
+
+        }
+
+
+        const risultato =
+            await risposta.json();
+
+
+        if (!risultato.secure_url) {
+
+            throw new Error(
+                "Cloudinary non ha restituito l'indirizzo dell'immagine."
+            );
+
+        }
+
+
+        return risultato.secure_url;
+
+    }
+
+
+    /* =========================================================
+       CREA / AGGIORNA CAMPO NASCOSTO
+       ========================================================= */
+
+    function impostaCampoNascosto(
+        nome,
+        valore
+    ) {
+
+        let campo =
+            form.querySelector(
+                `input[name="${nome}"]`
+            );
+
+
+        if (!campo) {
+
+            campo =
+                document.createElement("input");
+
+            campo.type = "hidden";
+            campo.name = nome;
+
+            form.appendChild(campo);
+
+        }
+
+
+        campo.value = valore;
+
+    }
+
+
+    /* =========================================================
+       INVIO DEL MODULO
+       ========================================================= */
+
+    form.addEventListener(
+        "submit",
+        async (evento) => {
+
+            /*
+               Blocca temporaneamente l'invio normale
+            */
+
+            evento.preventDefault();
+
+
+            /*
+               Controllo HTML standard
+            */
+
+            if (!form.checkValidity()) {
+
+                form.reportValidity();
+
+                return;
+
+            }
+
+
+            const tipologiaSelezionata =
+                document.querySelector(
+                    'input[name="tipologia"]:checked'
+                );
+
+
+            if (!tipologiaSelezionata) {
+
+                alert(
+                    "Seleziona cosa vuoi segnalare."
+                );
+
+                return;
+
+            }
+
+
+            const tipo =
+                tipologiaSelezionata.dataset.tipo;
+
+
+            /*
+               Determina quale immagine deve essere caricata
+            */
+
+            let fileDaCaricare = null;
+            let nomeCampoWeb3Forms = "";
+            let descrizioneFile = "";
+
+
+            if (tipo === "evento") {
+
+                if (
+                    inputLocandina.files.length > 0
+                ) {
+
+                    fileDaCaricare =
+                        inputLocandina.files[0];
+
+                    nomeCampoWeb3Forms =
+                        "locandina_spettacolo";
+
+                    descrizioneFile =
+                        "La locandina";
+
+                }
+
+            }
+
+
+            if (tipo === "compagnia") {
+
+                if (
+                    inputLogo.files.length > 0
+                ) {
+
+                    fileDaCaricare =
+                        inputLogo.files[0];
+
+                    nomeCampoWeb3Forms =
+                        "logo_compagnia";
+
+                    descrizioneFile =
+                        "Il logo";
+
+                }
+
+            }
+
+
+            if (tipo === "bacheca") {
+
+                if (
+                    inputImmagine.files.length > 0
+                ) {
+
+                    fileDaCaricare =
+                        inputImmagine.files[0];
+
+                    nomeCampoWeb3Forms =
+                        "immagine_bacheca";
+
+                    descrizioneFile =
+                        "L'immagine";
+
+                }
+
+            }
+
+
+            /*
+               Ricontrolla il file prima dell'upload
+            */
+
+            if (
+                fileDaCaricare &&
+                !controllaFile(
+                    fileDaCaricare,
+                    descrizioneFile
+                )
+            ) {
+
+                return;
+
+            }
+
+
+            /*
+               Stato pulsante
+            */
+
+            const testoOriginale =
+                submitButton.textContent;
+
+            submitButton.disabled = true;
+
+            submitButton.textContent =
+                fileDaCaricare
+                    ? "Caricamento immagine..."
+                    : "Invio in corso...";
+
+
+            try {
+
+
+                /* =================================================
+                   UPLOAD IMMAGINE
+                   ================================================= */
+
+                if (fileDaCaricare) {
+
+                    const urlImmagine =
+                        await caricaSuCloudinary(
+                            fileDaCaricare
+                        );
+
+
+                    /*
+                       Inserisce URL nel modulo Web3Forms
+                    */
+
+                    impostaCampoNascosto(
+                        nomeCampoWeb3Forms,
+                        urlImmagine
+                    );
+
+
+                    /*
+                       Campo generico utile alla redazione
+                    */
+
+                    impostaCampoNascosto(
+                        "immagine_cloudinary",
+                        urlImmagine
+                    );
+
+                }
+
+
+                /*
+                   Segnala alla redazione che l'immagine
+                   è già stata caricata
+                */
+
+                if (fileDaCaricare) {
+
+                    impostaCampoNascosto(
+                        "stato_immagine",
+                        "Immagine caricata correttamente su Cloudinary"
+                    );
+
+                } else {
+
+                    impostaCampoNascosto(
+                        "stato_immagine",
+                        "Nessuna immagine allegata"
+                    );
+
+                }
+
+
+                /*
+                   Cambia testo prima dell'invio
+                */
+
+                submitButton.textContent =
+                    "Invio alla redazione...";
+
+
+                /*
+                   IMPORTANTE:
+                   usa submit() nativo per evitare di
+                   riattivare questo stesso listener
+                */
+
+                form.submit();
+
+
+            } catch (errore) {
+
+
+                console.error(
+                    "Errore invio:",
+                    errore
+                );
+
+
+                alert(
+                    "Non è stato possibile caricare l'immagine.\n\n" +
+                    "La segnalazione non è stata inviata.\n\n" +
+                    "Dettaglio: " +
+                    errore.message
+                );
+
+
+                submitButton.disabled = false;
+
+                submitButton.textContent =
+                    testoOriginale;
+
+            }
+
+        }
+    );
+
 });
 
 </script>
+
+
 
 
 </body>
