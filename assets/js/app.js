@@ -79,7 +79,53 @@ function annuncioScaduto(dataScadenza) {
     return adesso > fineScadenza;
 }
 
+/* =========================================================
+   GESTIONE COMPAGNIE SPECIALI
+   ========================================================= */
 
+function datiCompagniaEvento(evento, compagnie) {
+
+    /*
+       I FATTI IN CASA APS è l'editore di Corriere Teatrale
+       e quindi non compare nella directory pubblica delle
+       compagnie.
+
+       Gli spettacoli possono però continuare ad avere:
+       compagnia_id: "i-fatti-in-casa"
+    */
+
+    if (evento.compagnia_id === "i-fatti-in-casa") {
+
+        return {
+            nome: "I FATTI IN CASA APS",
+            url: "i-fatti-in-casa.html",
+            speciale: true
+        };
+
+    }
+
+    const compagnia =
+        compagnie.find(
+            c => c.id === evento.compagnia_id
+        );
+
+    if (compagnia) {
+
+        return {
+            nome: compagnia.nome,
+            url: `compagnia.html?id=${compagnia.id}`,
+            speciale: false
+        };
+
+    }
+
+    return {
+        nome: "Compagnia teatrale",
+        url: "",
+        speciale: false
+    };
+
+}
 /* =========================================================
    DIRECTORY COMPAGNIE
    ========================================================= */
@@ -254,17 +300,11 @@ async function caricaEventi() {
         contenitore.innerHTML =
             eventiPubblicati.map(evento => {
 
-                const compagnia =
-                    compagnie.find(
-                        c =>
-                            c.id === evento.compagnia_id
-                    );
-
-                const nomeCompagnia =
-                    compagnia
-                        ? compagnia.nome
-                        : "Compagnia teatrale";
-
+                const datiCompagnia =
+    datiCompagniaEvento(
+        evento,
+        compagnie
+    );
                 const dateHTML =
                     evento.date.map(replica => {
 
@@ -324,13 +364,25 @@ async function caricaEventi() {
 
                         </h3>
 
-                        <p>
+                       <p>
 
-                            <strong>
-                                ${nomeCompagnia}
-                            </strong>
+    ${
+        datiCompagnia.url
+            ? `
+                <a href="${datiCompagnia.url}">
+                    <strong>
+                        ${datiCompagnia.nome}
+                    </strong>
+                </a>
+            `
+            : `
+                <strong>
+                    ${datiCompagnia.nome}
+                </strong>
+            `
+    }
 
-                        </p>
+</p>
 
                         <div style="margin: 12px 0;">
                             ${dateHTML}
@@ -771,11 +823,11 @@ async function caricaSchedaEvento() {
             return;
         }
 
-        const compagnia =
-            compagnie.find(
-                c =>
-                    c.id === evento.compagnia_id
-            );
+        const datiCompagnia =
+    datiCompagniaEvento(
+        evento,
+        compagnie
+    );
 
         document.title =
             evento.titolo +
@@ -842,19 +894,27 @@ async function caricaSchedaEvento() {
                             ${evento.titolo}
                         </h1>
 
-                        ${compagnia ? `
+                       ${datiCompagnia.nome ? `
 
-                            <p class="event-detail-company">
+    <p class="event-detail-company">
 
-                                di
+        di
 
-                                <a href="compagnia.html?id=${compagnia.id}">
-                                    ${compagnia.nome}
-                                </a>
+        ${
+            datiCompagnia.url
+                ? `
+                    <a href="${datiCompagnia.url}">
+                        ${datiCompagnia.nome}
+                    </a>
+                `
+                : `
+                    ${datiCompagnia.nome}
+                `
+        }
 
-                            </p>
+    </p>
 
-                        ` : ""}
+` : ""}
 
                         ${evento.descrizione ? `
 
