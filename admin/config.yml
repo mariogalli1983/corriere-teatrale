@@ -14,10 +14,6 @@ public_folder: "/uploads"
 
 collections:
 
-  # =========================================================
-  # COMPAGNIE
-  # =========================================================
-
   - name: "compagnie"
     label: "Compagnie"
     label_singular: "Compagnia"
@@ -32,11 +28,11 @@ collections:
     summary: "{{nome}} — {{citta}}"
 
     fields:
-
-           - label: "ID"
+      - label: "ID"
         name: "id"
-        widget: "hidden"
-        default: "{{slug}}"
+        widget: "string"
+        hint: "Identificativo univoco. Esempio: i-fatti-in-casa"
+
       - label: "Nome compagnia"
         name: "nome"
         widget: "string"
@@ -127,10 +123,6 @@ collections:
         default: true
 
 
-  # =========================================================
-  # SPETTACOLI / EVENTI
-  # =========================================================
-
   - name: "eventi"
     label: "Spettacoli"
     label_singular: "Spettacolo"
@@ -145,7 +137,6 @@ collections:
     summary: "{{titolo}} — {{luogo}}"
 
     fields:
-
       - label: "ID"
         name: "id"
         widget: "string"
@@ -189,9 +180,7 @@ collections:
         name: "date"
         widget: "list"
         summary: "{{fields.data}} — {{fields.ora}}"
-
         fields:
-
           - label: "Data"
             name: "data"
             widget: "date"
@@ -274,10 +263,6 @@ collections:
         default: true
 
 
-  # =========================================================
-  # BACHECA
-  # =========================================================
-
   - name: "annunci"
     label: "Bacheca"
     label_singular: "Annuncio"
@@ -292,7 +277,6 @@ collections:
     summary: "{{categoria}} — {{titolo}}"
 
     fields:
-
       - label: "ID"
         name: "id"
         widget: "string"
@@ -318,7 +302,7 @@ collections:
         name: "descrizione"
         widget: "text"
 
-            - label: "Compagnia"
+      - label: "Compagnia"
         name: "compagnia_id"
         widget: "relation"
         collection: "compagnie"
