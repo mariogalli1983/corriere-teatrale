@@ -170,11 +170,17 @@ collections:
           - label: "Evento"
             value: "evento"
 
-      - label: "ID compagnia"
+            - label: "Compagnia"
         name: "compagnia_id"
-        widget: "string"
+        widget: "relation"
+        collection: "compagnie"
+        search_fields:
+          - "nome"
+        value_field: "id"
+        display_fields:
+          - "nome"
         required: false
-        hint: "Esempio: i-fatti-in-casa"
+        hint: "Seleziona la compagnia che organizza o produce lo spettacolo"
 
       - label: "Descrizione"
         name: "descrizione"
