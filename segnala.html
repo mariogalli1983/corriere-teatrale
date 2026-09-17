@@ -1219,14 +1219,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const CLOUDINARY_CLOUD_NAME = "mjbha9dx";
 
-const CLOUDINARY_PRESETS = {
-    locandine: "corriere_teatrale_locandine",
-    loghi: "corriere_teatrale_loghi",
-    bacheca: "corriere_teatrale_bacheca"
-};
+    const CLOUDINARY_PRESETS = {
+        evento: "corriere_teatrale_locandine",
+        compagnia: "corriere_teatrale_loghi",
+        bacheca: "corriere_teatrale_bacheca"
+    };
 
-const CLOUDINARY_UPLOAD_URL =
-    `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`;
+    const CLOUDINARY_UPLOAD_URL =
+        `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`;
 
 
     /* =========================================================
@@ -1260,13 +1260,11 @@ const CLOUDINARY_UPLOAD_URL =
     const anteprimaLocandina =
         document.getElementById("poster-preview");
 
-
     const inputLogo =
         document.getElementById("logo-compagnia");
 
     const anteprimaLogo =
         document.getElementById("logo-preview");
-
 
     const inputImmagine =
         document.getElementById("immagine-annuncio");
@@ -1276,13 +1274,11 @@ const CLOUDINARY_UPLOAD_URL =
 
 
     /* =========================================================
-       NASCONDI LE SEZIONI DINAMICHE ALL'AVVIO
+       NASCONDE LE SEZIONI DINAMICHE ALL'AVVIO
        ========================================================= */
 
     sezioni.forEach(sezione => {
-
         sezione.style.display = "none";
-
     });
 
 
@@ -1294,23 +1290,11 @@ const CLOUDINARY_UPLOAD_URL =
 
         scelta.addEventListener("change", () => {
 
-            /*
-               Nasconde tutte le sezioni
-            */
-
             sezioni.forEach(sezione => {
-
                 sezione.style.display = "none";
-
             });
 
-
-            /*
-               Mostra quella selezionata
-            */
-
-            const tipo =
-                scelta.dataset.tipo;
+            const tipo = scelta.dataset.tipo;
 
             const sezione =
                 document.getElementById(
@@ -1318,22 +1302,13 @@ const CLOUDINARY_UPLOAD_URL =
                 );
 
             if (sezione) {
-
                 sezione.style.display = "block";
-
             }
-
-
-            /*
-               Evidenzia graficamente la card
-            */
 
             document
                 .querySelectorAll(".tipo-card")
                 .forEach(card => {
-
                     card.classList.remove("selected");
-
                 });
 
             scelta
@@ -1352,15 +1327,8 @@ const CLOUDINARY_UPLOAD_URL =
     function controllaFile(file, descrizione) {
 
         if (!file) {
-
             return true;
-
         }
-
-
-        /*
-           Massimo 5 MB
-        */
 
         const dimensioneMassima =
             5 * 1024 * 1024;
@@ -1372,13 +1340,7 @@ const CLOUDINARY_UPLOAD_URL =
             );
 
             return false;
-
         }
-
-
-        /*
-           Formati ammessi
-        */
 
         const formatiConsentiti = [
             "image/jpeg",
@@ -1386,21 +1348,16 @@ const CLOUDINARY_UPLOAD_URL =
             "image/webp"
         ];
 
-        if (
-            !formatiConsentiti.includes(file.type)
-        ) {
+        if (!formatiConsentiti.includes(file.type)) {
 
             alert(
                 `${descrizione}: formato non supportato. Usa JPG, PNG o WebP.`
             );
 
             return false;
-
         }
 
-
         return true;
-
     }
 
 
@@ -1408,268 +1365,243 @@ const CLOUDINARY_UPLOAD_URL =
        ANTEPRIMA LOCANDINA
        ========================================================= */
 
-    inputLocandina.addEventListener(
-        "change",
-        () => {
+    inputLocandina.addEventListener("change", () => {
 
-            const file =
-                inputLocandina.files[0];
+        const file =
+            inputLocandina.files[0];
 
-            anteprimaLocandina.innerHTML = "";
+        anteprimaLocandina.innerHTML = "";
 
-
-            if (!file) {
-
-                return;
-
-            }
-
-
-            if (
-                !controllaFile(
-                    file,
-                    "La locandina"
-                )
-            ) {
-
-                inputLocandina.value = "";
-
-                return;
-
-            }
-
-
-            const url =
-                URL.createObjectURL(file);
-
-
-            anteprimaLocandina.innerHTML = `
-
-                <div class="poster-preview-frame">
-
-                    <img
-                        src="${url}"
-                        alt="Anteprima locandina"
-                    >
-
-                </div>
-
-                <span>
-                    Anteprima della locandina
-                    nella proporzione utilizzata dal sito
-                </span>
-
-            `;
-
+        if (!file) {
+            return;
         }
-    );
+
+        if (!controllaFile(file, "La locandina")) {
+
+            inputLocandina.value = "";
+
+            return;
+        }
+
+        const url =
+            URL.createObjectURL(file);
+
+        anteprimaLocandina.innerHTML = `
+
+            <div class="poster-preview-frame">
+
+                <img
+                    src="${url}"
+                    alt="Anteprima locandina"
+                >
+
+            </div>
+
+            <span>
+                Anteprima della locandina
+                nella proporzione utilizzata dal sito
+            </span>
+
+        `;
+
+    });
 
 
     /* =========================================================
-       ANTEPRIMA LOGO COMPAGNIA
+       ANTEPRIMA LOGO
        ========================================================= */
 
-    inputLogo.addEventListener(
-        "change",
-        () => {
+    inputLogo.addEventListener("change", () => {
 
-            const file =
-                inputLogo.files[0];
+        const file =
+            inputLogo.files[0];
 
-            anteprimaLogo.innerHTML = "";
+        anteprimaLogo.innerHTML = "";
 
-
-            if (!file) {
-
-                return;
-
-            }
-
-
-            if (
-                !controllaFile(
-                    file,
-                    "Il logo"
-                )
-            ) {
-
-                inputLogo.value = "";
-
-                return;
-
-            }
-
-
-            const url =
-                URL.createObjectURL(file);
-
-
-            anteprimaLogo.innerHTML = `
-
-                <div class="logo-preview-frame">
-
-                    <img
-                        src="${url}"
-                        alt="Anteprima logo compagnia"
-                    >
-
-                </div>
-
-                <span>
-                    Anteprima del logo nella scheda compagnia
-                </span>
-
-            `;
-
+        if (!file) {
+            return;
         }
-    );
+
+        if (!controllaFile(file, "Il logo")) {
+
+            inputLogo.value = "";
+
+            return;
+        }
+
+        const url =
+            URL.createObjectURL(file);
+
+        anteprimaLogo.innerHTML = `
+
+            <div class="logo-preview-frame">
+
+                <img
+                    src="${url}"
+                    alt="Anteprima logo compagnia"
+                >
+
+            </div>
+
+            <span>
+                Anteprima del logo nella scheda compagnia
+            </span>
+
+        `;
+
+    });
 
 
     /* =========================================================
-       ANTEPRIMA IMMAGINE BACHECA
+       ANTEPRIMA BACHECA
        ========================================================= */
 
-    inputImmagine.addEventListener(
-        "change",
-        () => {
+    inputImmagine.addEventListener("change", () => {
 
-            const file =
-                inputImmagine.files[0];
+        const file =
+            inputImmagine.files[0];
 
-            anteprimaImmagine.innerHTML = "";
+        anteprimaImmagine.innerHTML = "";
 
-
-            if (!file) {
-
-                return;
-
-            }
-
-
-            if (
-                !controllaFile(
-                    file,
-                    "L'immagine"
-                )
-            ) {
-
-                inputImmagine.value = "";
-
-                return;
-
-            }
-
-
-            const url =
-                URL.createObjectURL(file);
-
-
-            anteprimaImmagine.innerHTML = `
-
-                <div class="preview-frame">
-
-                    <img
-                        src="${url}"
-                        alt="Anteprima immagine annuncio"
-                    >
-
-                </div>
-
-                <span>
-                    Anteprima del ritaglio utilizzato
-                    nella Bacheca
-                </span>
-
-            `;
-
+        if (!file) {
+            return;
         }
-    );
+
+        if (!controllaFile(file, "L'immagine")) {
+
+            inputImmagine.value = "";
+
+            return;
+        }
+
+        const url =
+            URL.createObjectURL(file);
+
+        anteprimaImmagine.innerHTML = `
+
+            <div class="preview-frame">
+
+                <img
+                    src="${url}"
+                    alt="Anteprima immagine annuncio"
+                >
+
+            </div>
+
+            <span>
+                Anteprima del ritaglio utilizzato
+                nella Bacheca
+            </span>
+
+        `;
+
+    });
 
 
     /* =========================================================
-       UPLOAD SU CLOUDINARY
+       UPLOAD CLOUDINARY
        ========================================================= */
 
-  async function caricaSuCloudinary(file, tipoImmagine) {
+    async function caricaSuCloudinary(file, tipo) {
 
-    const preset = CLOUDINARY_PRESETS[tipoImmagine];
+        const preset =
+            CLOUDINARY_PRESETS[tipo];
 
-    if (!preset) {
-        throw new Error(
-            "Non è stato configurato il preset Cloudinary per questo tipo di immagine."
+        if (!preset) {
+
+            throw new Error(
+                "Preset Cloudinary non configurato per: " + tipo
+            );
+        }
+
+        const dati =
+            new FormData();
+
+        dati.append(
+            "file",
+            file
         );
-    }
 
-    const dati = new FormData();
+        dati.append(
+            "upload_preset",
+            preset
+        );
 
-    dati.append(
-        "file",
-        file
-    );
+        /*
+           IMPORTANTE:
+           NON inviamo asset_folder dal browser.
 
-    dati.append(
-        "upload_preset",
-        preset
-    );
+           La cartella è stabilita direttamente
+           dal preset Cloudinary.
+        */
 
-    const risposta = await fetch(
-        CLOUDINARY_UPLOAD_URL,
-        {
-            method: "POST",
-            body: dati
-        }
-    );
+        const risposta =
+            await fetch(
+                CLOUDINARY_UPLOAD_URL,
+                {
+                    method: "POST",
+                    body: dati
+                }
+            );
 
-    if (!risposta.ok) {
-
-        let messaggioErrore =
-            "Errore durante il caricamento dell'immagine.";
+        let risultato;
 
         try {
 
-            const errore = await risposta.json();
+            risultato =
+                await risposta.json();
 
-            if (
-                errore &&
-                errore.error &&
-                errore.error.message
-            ) {
-                messaggioErrore =
-                    errore.error.message;
-            }
+        } catch (errore) {
 
-        } catch (erroreLettura) {
-            // Mantiene il messaggio generico
+            throw new Error(
+                "Risposta non valida ricevuta da Cloudinary."
+            );
         }
 
-        throw new Error(messaggioErrore);
-    }
+        if (!risposta.ok) {
 
-    const risultato = await risposta.json();
+            const messaggio =
+                risultato?.error?.message ||
+                "Errore durante il caricamento dell'immagine.";
 
-    if (!risultato.secure_url) {
-        throw new Error(
-            "Cloudinary non ha restituito l'indirizzo dell'immagine."
+            throw new Error(messaggio);
+        }
+
+        if (!risultato.secure_url) {
+
+            throw new Error(
+                "Cloudinary non ha restituito l'URL dell'immagine."
+            );
+        }
+
+        /*
+           Utile anche per verificare
+           quale preset è stato scelto.
+        */
+
+        console.log(
+            "Cloudinary:",
+            {
+                tipo: tipo,
+                preset: preset,
+                url: risultato.secure_url
+            }
         );
+
+        return risultato.secure_url;
     }
 
-    return risultato.secure_url;
-}
 
     /* =========================================================
-       CREA / AGGIORNA CAMPO NASCOSTO
+       CAMPI NASCOSTI WEB3FORMS
        ========================================================= */
 
-    function impostaCampoNascosto(
-        nome,
-        valore
-    ) {
+    function impostaCampoNascosto(nome, valore) {
 
         let campo =
             form.querySelector(
                 `input[name="${nome}"]`
             );
-
 
         if (!campo) {
 
@@ -1680,48 +1612,33 @@ const CLOUDINARY_UPLOAD_URL =
             campo.name = nome;
 
             form.appendChild(campo);
-
         }
 
-
         campo.value = valore;
-
     }
 
 
     /* =========================================================
-       INVIO DEL MODULO
+       INVIO MODULO
        ========================================================= */
 
     form.addEventListener(
         "submit",
         async (evento) => {
 
-            /*
-               Blocca temporaneamente l'invio normale
-            */
-
             evento.preventDefault();
-
-
-            /*
-               Controllo HTML standard
-            */
 
             if (!form.checkValidity()) {
 
                 form.reportValidity();
 
                 return;
-
             }
-
 
             const tipologiaSelezionata =
                 document.querySelector(
                     'input[name="tipologia"]:checked'
                 );
-
 
             if (!tipologiaSelezionata) {
 
@@ -1730,90 +1647,72 @@ const CLOUDINARY_UPLOAD_URL =
                 );
 
                 return;
-
             }
-
 
             const tipo =
                 tipologiaSelezionata.dataset.tipo;
 
 
-            /*
-               Determina quale immagine deve essere caricata
-            */
+            /* =================================================
+               DETERMINA IMMAGINE E PRESET
+               ================================================= */
 
-           let fileDaCaricare = null;
-let nomeCampoWeb3Forms = "";
-let descrizioneFile = "";
-let sottocartellaCloudinary = "";
+            let fileDaCaricare = null;
+            let nomeCampoWeb3Forms = "";
+            let descrizioneFile = "";
 
 
-            if (tipo === "evento") {
+            if (
+                tipo === "evento" &&
+                inputLocandina.files.length > 0
+            ) {
 
-                if (
-                    inputLocandina.files.length > 0
-                ) {
+                fileDaCaricare =
+                    inputLocandina.files[0];
 
-                    fileDaCaricare =
-                        inputLocandina.files[0];
+                nomeCampoWeb3Forms =
+                    "locandina_spettacolo";
 
-                    nomeCampoWeb3Forms =
-                        "locandina_spettacolo";
-
-                    descrizioneFile =
-                        "La locandina";
-sottocartellaCloudinary =
-    "locandine";
-                }
-
+                descrizioneFile =
+                    "La locandina";
             }
 
 
-            if (tipo === "compagnia") {
+            if (
+                tipo === "compagnia" &&
+                inputLogo.files.length > 0
+            ) {
 
-                if (
-                    inputLogo.files.length > 0
-                ) {
+                fileDaCaricare =
+                    inputLogo.files[0];
 
-                    fileDaCaricare =
-                        inputLogo.files[0];
+                nomeCampoWeb3Forms =
+                    "logo_compagnia";
 
-                    nomeCampoWeb3Forms =
-                        "logo_compagnia";
-
-                    descrizioneFile =
-                        "Il logo";
-sottocartellaCloudinary =
-    "loghi";
-                }
-
+                descrizioneFile =
+                    "Il logo";
             }
 
 
-            if (tipo === "bacheca") {
+            if (
+                tipo === "bacheca" &&
+                inputImmagine.files.length > 0
+            ) {
 
-                if (
-                    inputImmagine.files.length > 0
-                ) {
+                fileDaCaricare =
+                    inputImmagine.files[0];
 
-                    fileDaCaricare =
-                        inputImmagine.files[0];
+                nomeCampoWeb3Forms =
+                    "immagine_bacheca";
 
-                    nomeCampoWeb3Forms =
-                        "immagine_bacheca";
-
-                    descrizioneFile =
-                        "L'immagine";
-sottocartellaCloudinary =
-    "bacheca";
-                }
-
+                descrizioneFile =
+                    "L'immagine";
             }
 
 
-            /*
-               Ricontrolla il file prima dell'upload
-            */
+            /* =================================================
+               CONTROLLO FILE
+               ================================================= */
 
             if (
                 fileDaCaricare &&
@@ -1824,13 +1723,12 @@ sottocartellaCloudinary =
             ) {
 
                 return;
-
             }
 
 
-            /*
-               Stato pulsante
-            */
+            /* =================================================
+               STATO PULSANTE
+               ================================================= */
 
             const testoOriginale =
                 submitButton.textContent;
@@ -1852,16 +1750,25 @@ sottocartellaCloudinary =
 
                 if (fileDaCaricare) {
 
-                   const urlImmagine =
-    await caricaSuCloudinary(
-        fileDaCaricare,
-        sottocartellaCloudinary
-    );
-
-
                     /*
-                       Inserisce URL nel modulo Web3Forms
+                       QUI PASSIAMO DIRETTAMENTE:
+
+                       evento
+                       compagnia
+                       bacheca
+
+                       La funzione associa direttamente
+                       il tipo al preset corretto.
                     */
+
+                    const urlImmagine =
+                        await caricaSuCloudinary(
+                            fileDaCaricare,
+                            tipo
+                        );
+
+
+                    /* URL specifico */
 
                     impostaCampoNascosto(
                         nomeCampoWeb3Forms,
@@ -1869,24 +1776,29 @@ sottocartellaCloudinary =
                     );
 
 
-                    /*
-                       Campo generico utile alla redazione
-                    */
+                    /* URL generico */
 
                     impostaCampoNascosto(
                         "immagine_cloudinary",
                         urlImmagine
                     );
 
-                }
+
+                    /* Tipo immagine */
+
+                    impostaCampoNascosto(
+                        "tipo_immagine_cloudinary",
+                        tipo
+                    );
 
 
-                /*
-                   Segnala alla redazione che l'immagine
-                   è già stata caricata
-                */
+                    /* Preset utilizzato */
 
-                if (fileDaCaricare) {
+                    impostaCampoNascosto(
+                        "preset_cloudinary",
+                        CLOUDINARY_PRESETS[tipo]
+                    );
+
 
                     impostaCampoNascosto(
                         "stato_immagine",
@@ -1899,35 +1811,25 @@ sottocartellaCloudinary =
                         "stato_immagine",
                         "Nessuna immagine allegata"
                     );
-
                 }
 
 
-                /*
-                   Cambia testo prima dell'invio
-                */
+                /* =================================================
+                   INVIO A WEB3FORMS
+                   ================================================= */
 
                 submitButton.textContent =
                     "Invio alla redazione...";
-
-
-                /*
-                   IMPORTANTE:
-                   usa submit() nativo per evitare di
-                   riattivare questo stesso listener
-                */
 
                 form.submit();
 
 
             } catch (errore) {
 
-
                 console.error(
                     "Errore invio:",
                     errore
                 );
-
 
                 alert(
                     "Non è stato possibile caricare l'immagine.\n\n" +
@@ -1936,12 +1838,10 @@ sottocartellaCloudinary =
                     errore.message
                 );
 
-
                 submitButton.disabled = false;
 
                 submitButton.textContent =
                     testoOriginale;
-
             }
 
         }
