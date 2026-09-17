@@ -167,7 +167,13 @@ async function caricaEventi() {
 
                 return `
                     <article class="event-card">
-
+${evento.locandina ? `
+    <img
+        src="${evento.locandina}"
+        alt="Locandina ${evento.titolo}"
+        class="event-poster"
+    >
+` : ""}
                         <div class="categoria">
                             ${evento.tipo}
                         </div>
@@ -321,7 +327,18 @@ async function caricaSchedaCompagnia() {
         contenitore.innerHTML = `
 
             <section>
+<div class="company-profile">
 
+    ${compagnia.logo ? `
+        <div class="company-profile-logo">
+            <img
+                src="${compagnia.logo}"
+                alt="Logo ${compagnia.nome}"
+            >
+        </div>
+    ` : ""}
+
+    <div class="company-profile-content">
                 <div class="categoria">
                     ${compagnia.tipologia}
                 </div>
@@ -362,7 +379,8 @@ async function caricaSchedaCompagnia() {
                         `
                         : ""
                 }
-
+</div>
+</div>
             </section>
 
             <section style="margin-top: 50px;">
