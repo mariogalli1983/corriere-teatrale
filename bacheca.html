@@ -1,19 +1,254 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
     <title>Bacheca | Corriere Teatrale</title>
-    <link rel="icon" href="logo-corriere-teatrale.jpg">
+
+    <meta name="description"
+          content="Casting, ricerca attori, tecnici, sale prova, materiali e collaborazioni per il teatro amatoriale romano.">
+
+    <link rel="icon"
+          href="logo-corriere-teatrale.jpg">
+
+    <link rel="stylesheet"
+          href="assets/css/style.css">
+
 </head>
+
 <body>
 
-<h1>Bacheca teatrale</h1>
+<div class="topbar">
+    ROMA · CORRIERE TEATRALE
+</div>
 
-<p>
-Casting, ricerca attori, tecnici, sale prove,
-materiali, scenografie e collaborazioni.
-</p>
+
+<header class="masthead">
+
+    <div class="brand">
+
+        <a href="index.html">
+
+            <img
+                src="logo-corriere-teatrale.jpg"
+                alt="Corriere Teatrale"
+            >
+
+        </a>
+
+        <div>
+
+            <a href="index.html">
+
+                <h1>
+                    CORRIERE
+                    <span>TEATRALE</span>
+                </h1>
+
+            </a>
+
+            <p>
+                Il giornale del teatro amatoriale romano
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="official">
+
+        Organo ufficiale di<br>
+
+        <strong>
+            I FATTI IN CASA APS
+        </strong>
+
+    </div>
+
+</header>
+
+
+<nav>
+
+    <div class="nav-inner">
+
+        <a href="index.html">Home</a>
+
+        <a href="notizie.html">
+            Notizie
+        </a>
+
+        <a href="eventi.html">
+            Spettacoli
+        </a>
+
+        <a href="compagnie.html">
+            Compagnie
+        </a>
+
+        <a href="interviste.html">
+            Interviste
+        </a>
+
+        <a href="bacheca.html">
+            Bacheca
+        </a>
+
+        <a href="segnala.html"
+           class="segnala">
+            Segnala
+        </a>
+
+    </div>
+
+</nav>
+
+
+<main>
+
+    <section>
+
+        <div class="section-header">
+
+            <h2>
+                Bacheca
+            </h2>
+
+        </div>
+
+        <p class="section-intro">
+            Il punto d'incontro del teatro amatoriale romano.
+            Casting, collaborazioni, sale prova, materiali,
+            tecnici e opportunità.
+        </p>
+
+
+        <div class="bacheca-filters">
+
+            <button
+                class="bacheca-filter active"
+                data-categoria="tutti">
+                Tutti
+            </button>
+
+            <button
+                class="bacheca-filter"
+                data-categoria="CASTING">
+                Casting
+            </button>
+
+            <button
+                class="bacheca-filter"
+                data-categoria="TECNICI">
+                Tecnici
+            </button>
+
+            <button
+                class="bacheca-filter"
+                data-categoria="SALE PROVA">
+                Sale prova
+            </button>
+
+            <button
+                class="bacheca-filter"
+                data-categoria="MATERIALI">
+                Materiali
+            </button>
+
+            <button
+                class="bacheca-filter"
+                data-categoria="COLLABORAZIONI">
+                Collaborazioni
+            </button>
+
+            <button
+                class="bacheca-filter"
+                data-categoria="CERCO COMPAGNIA">
+                Cerco compagnia
+            </button>
+
+        </div>
+
+
+        <div id="elenco-annunci"
+             class="bacheca-grid">
+
+            <p>
+                Caricamento annunci...
+            </p>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<section class="bacheca-cta">
+
+    <div>
+
+        <h2>
+            Hai qualcosa da segnalare?
+        </h2>
+
+        <p>
+            Cerchi un attore, un tecnico, una sala,
+            del materiale o una collaborazione?
+        </p>
+
+        <a href="segnala.html">
+            Pubblica una segnalazione
+        </a>
+
+    </div>
+
+</section>
+
+
+<footer>
+
+    <div class="footer-inner">
+
+        <div>
+
+            <strong>
+                CORRIERE TEATRALE
+            </strong>
+
+            <p>
+                Il giornale del teatro amatoriale romano.
+            </p>
+
+        </div>
+
+        <div>
+
+            <p>
+
+                Organo ufficiale di<br>
+
+                <strong>
+                    I FATTI IN CASA APS
+                </strong>
+
+            </p>
+
+        </div>
+
+    </div>
+
+</footer>
+
+
+<script src="assets/js/app.js"></script>
 
 </body>
+
 </html>
