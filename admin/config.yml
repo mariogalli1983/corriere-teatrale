@@ -169,7 +169,7 @@ collections:
           - label: "Evento"
             value: "evento"
 
-            - label: "Compagnia"
+      - label: "Compagnia"
         name: "compagnia_id"
         widget: "relation"
         collection: "compagnie"
