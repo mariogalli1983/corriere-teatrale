@@ -22,17 +22,35 @@ jobs:
 
       - name: Genera compagnie.json
         run: |
-          jq -s '.' data/compagnie/*.json > data/compagnie.tmp.json
+          if find data/compagnie -maxdepth 1 -type f -name "*.json" | grep -q .; then
+            find data/compagnie -maxdepth 1 -type f -name "*.json" -print0 \
+              | sort -z \
+              | xargs -0 jq -s '.' > data/compagnie.tmp.json
+          else
+            echo '[]' > data/compagnie.tmp.json
+          fi
           mv data/compagnie.tmp.json data/compagnie.json
 
       - name: Genera eventi.json
         run: |
-          jq -s '.' data/eventi/*.json > data/eventi.tmp.json
+          if find data/eventi -maxdepth 1 -type f -name "*.json" | grep -q .; then
+            find data/eventi -maxdepth 1 -type f -name "*.json" -print0 \
+              | sort -z \
+              | xargs -0 jq -s '.' > data/eventi.tmp.json
+          else
+            echo '[]' > data/eventi.tmp.json
+          fi
           mv data/eventi.tmp.json data/eventi.json
 
       - name: Genera annunci.json
         run: |
-          jq -s '.' data/annunci/*.json > data/annunci.tmp.json
+          if find data/annunci -maxdepth 1 -type f -name "*.json" | grep -q .; then
+            find data/annunci -maxdepth 1 -type f -name "*.json" -print0 \
+              | sort -z \
+              | xargs -0 jq -s '.' > data/annunci.tmp.json
+          else
+            echo '[]' > data/annunci.tmp.json
+          fi
           mv data/annunci.tmp.json data/annunci.json
 
       - name: Pubblica indici aggiornati
