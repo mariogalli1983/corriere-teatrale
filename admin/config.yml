@@ -319,10 +319,17 @@ collections:
         name: "descrizione"
         widget: "text"
 
-      - label: "ID compagnia"
+            - label: "Compagnia"
         name: "compagnia_id"
-        widget: "string"
+        widget: "relation"
+        collection: "compagnie"
+        search_fields:
+          - "nome"
+        value_field: "id"
+        display_fields:
+          - "nome"
         required: false
+        hint: "Se l'annuncio è collegato a una compagnia, selezionala qui"
 
       - label: "Autore"
         name: "autore"
