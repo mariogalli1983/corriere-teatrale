@@ -1,19 +1,1312 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Segnala | Corriere Teatrale</title>
+
+    <meta
+        name="description"
+        content="Segnala spettacoli, compagnie, casting, corsi e notizie alla redazione di Corriere Teatrale."
+    >
+
+    <link rel="stylesheet" href="assets/css/style.css">
     <link rel="icon" href="logo-corriere-teatrale.jpg">
 </head>
+
 <body>
 
-<h1>Segnala a Corriere Teatrale</h1>
+<header class="site-header">
 
-<p>
-Invia alla redazione uno spettacolo, una compagnia,
-un corso, un annuncio o una notizia.
-</p>
+    <div class="masthead">
+
+        <div class="brand">
+
+            <a href="index.html">
+                <img
+                    src="logo-corriere-teatrale.jpg"
+                    alt="Corriere Teatrale"
+                    class="site-logo"
+                >
+            </a>
+
+            <div>
+                <div class="site-title">
+                    CORRIERE TEATRALE
+                </div>
+
+                <div class="site-subtitle">
+                    Il teatro amatoriale di Roma
+                </div>
+            </div>
+
+        </div>
+
+        <div class="official">
+            Pubblicazione ufficiale<br>
+            <strong>I FATTI IN CASA APS</strong>
+        </div>
+
+    </div>
+
+</header>
+
+
+<nav>
+
+    <div class="nav-inner">
+
+        <a href="index.html">Home</a>
+        <a href="notizie.html">Notizie</a>
+        <a href="eventi.html">Spettacoli</a>
+        <a href="compagnie.html">Compagnie</a>
+        <a href="interviste.html">Interviste</a>
+        <a href="bacheca.html">Bacheca</a>
+        <a href="segnala.html" class="segnala">Segnala</a>
+
+    </div>
+
+</nav>
+
+
+<main>
+
+    <section class="segnala-page">
+
+        <div class="section-header">
+            <h2>Segnala</h2>
+        </div>
+
+        <div class="segnala-intro">
+
+            <div>
+
+                <div class="categoria">
+                    PARTECIPA
+                </div>
+
+                <h1>
+                    Il teatro romano<br>
+                    passa anche da qui.
+                </h1>
+
+                <p>
+                    Hai uno spettacolo da promuovere?
+                    Fai parte di una compagnia?
+                    Cerchi un attore, un tecnico o una sala?
+                    Organizzi un laboratorio?
+                </p>
+
+                <p>
+                    Invia la tua segnalazione alla redazione
+                    di <strong>Corriere Teatrale</strong>.
+                </p>
+
+            </div>
+
+            <aside class="segnala-note">
+
+                <strong>Prima di inviare</strong>
+
+                <p>
+                    Inserisci informazioni complete e verificabili.
+                    La segnalazione non comporta automaticamente
+                    la pubblicazione.
+                </p>
+
+                <p>
+                    La redazione potrà contattarti per richiedere
+                    ulteriori informazioni.
+                </p>
+
+            </aside>
+
+        </div>
+
+
+        <form
+            id="form-segnala"
+            class="segnala-form"
+            action="https://api.web3forms.com/submit"
+            method="POST"
+        >
+
+            <!-- ACCESS KEY WEB3FORMS -->
+
+            <input
+                type="hidden"
+                name="access_key"
+                value="4df62839-7333-4bb9-95db-4222ac1ae751"
+            >
+
+            <input
+                type="hidden"
+                name="subject"
+                value="Nuova segnalazione - Corriere Teatrale"
+            >
+
+            <input
+                type="hidden"
+                name="from_name"
+                value="Corriere Teatrale"
+            >
+
+
+            <!-- =====================================================
+                 TIPOLOGIA
+                 ===================================================== -->
+
+            <fieldset class="form-section">
+
+                <legend>
+                    1. Cosa vuoi segnalare?
+                </legend>
+
+                <div class="tipo-segnalazione">
+
+                    <label class="tipo-card">
+
+                        <input
+                            type="radio"
+                            name="tipologia"
+                            value="Spettacolo / Evento"
+                            data-tipo="evento"
+                            required
+                        >
+
+                        <span class="tipo-icon">🎭</span>
+
+                        <strong>
+                            Spettacolo / Evento
+                        </strong>
+
+                        <small>
+                            Una rappresentazione o un appuntamento teatrale
+                        </small>
+
+                    </label>
+
+
+                    <label class="tipo-card">
+
+                        <input
+                            type="radio"
+                            name="tipologia"
+                            value="Compagnia teatrale"
+                            data-tipo="compagnia"
+                        >
+
+                        <span class="tipo-icon">👥</span>
+
+                        <strong>
+                            Compagnia teatrale
+                        </strong>
+
+                        <small>
+                            Presenta la tua compagnia
+                        </small>
+
+                    </label>
+
+
+                    <label class="tipo-card">
+
+                        <input
+                            type="radio"
+                            name="tipologia"
+                            value="Annuncio Bacheca"
+                            data-tipo="bacheca"
+                        >
+
+                        <span class="tipo-icon">📌</span>
+
+                        <strong>
+                            Annuncio in Bacheca
+                        </strong>
+
+                        <small>
+                            Casting, tecnici, sale, materiali e collaborazioni
+                        </small>
+
+                    </label>
+
+
+                    <label class="tipo-card">
+
+                        <input
+                            type="radio"
+                            name="tipologia"
+                            value="Corso / Laboratorio"
+                            data-tipo="corso"
+                        >
+
+                        <span class="tipo-icon">🎓</span>
+
+                        <strong>
+                            Corso / Laboratorio
+                        </strong>
+
+                        <small>
+                            Formazione, workshop e laboratori teatrali
+                        </small>
+
+                    </label>
+
+
+                    <label class="tipo-card">
+
+                        <input
+                            type="radio"
+                            name="tipologia"
+                            value="Notizia / Storia"
+                            data-tipo="notizia"
+                        >
+
+                        <span class="tipo-icon">📰</span>
+
+                        <strong>
+                            Notizia / Storia
+                        </strong>
+
+                        <small>
+                            Una storia o una notizia da proporre alla redazione
+                        </small>
+
+                    </label>
+
+                </div>
+
+            </fieldset>
+
+
+            <!-- =====================================================
+                 CAMPI SPETTACOLO
+                 ===================================================== -->
+
+            <fieldset
+                class="form-section campi-dinamici"
+                id="campi-evento"
+            >
+
+                <legend>
+                    Informazioni sullo spettacolo
+                </legend>
+
+                <div class="form-grid">
+
+                    <div class="form-group form-full">
+
+                        <label for="evento-titolo">
+                            Titolo dello spettacolo
+                        </label>
+
+                        <input
+                            type="text"
+                            id="evento-titolo"
+                            name="evento_titolo"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="evento-compagnia">
+                            Compagnia
+                        </label>
+
+                        <input
+                            type="text"
+                            id="evento-compagnia"
+                            name="evento_compagnia"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="evento-genere">
+                            Genere
+                        </label>
+
+                        <input
+                            type="text"
+                            id="evento-genere"
+                            name="evento_genere"
+                            placeholder="Es. commedia"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="evento-data">
+                            Data
+                        </label>
+
+                        <input
+                            type="date"
+                            id="evento-data"
+                            name="evento_data"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="evento-ora">
+                            Orario
+                        </label>
+
+                        <input
+                            type="time"
+                            id="evento-ora"
+                            name="evento_ora"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="evento-luogo">
+                            Teatro / Luogo
+                        </label>
+
+                        <input
+                            type="text"
+                            id="evento-luogo"
+                            name="evento_luogo"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="evento-indirizzo">
+                            Indirizzo
+                        </label>
+
+                        <input
+                            type="text"
+                            id="evento-indirizzo"
+                            name="evento_indirizzo"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group form-full">
+
+                        <label for="evento-descrizione">
+                            Descrizione
+                        </label>
+
+                        <textarea
+                            id="evento-descrizione"
+                            name="evento_descrizione"
+                            rows="6"
+                        ></textarea>
+
+                    </div>
+
+
+                    <div class="form-group form-full">
+
+                        <label for="evento-link">
+                            Link prenotazioni o informazioni
+                        </label>
+
+                        <input
+                            type="url"
+                            id="evento-link"
+                            name="evento_link"
+                            placeholder="https://"
+                        >
+
+                    </div>
+
+                </div>
+
+            </fieldset>
+
+
+            <!-- =====================================================
+                 CAMPI COMPAGNIA
+                 ===================================================== -->
+
+            <fieldset
+                class="form-section campi-dinamici"
+                id="campi-compagnia"
+            >
+
+                <legend>
+                    Informazioni sulla compagnia
+                </legend>
+
+                <div class="form-grid">
+
+                    <div class="form-group form-full">
+
+                        <label for="compagnia-nome">
+                            Nome della compagnia
+                        </label>
+
+                        <input
+                            type="text"
+                            id="compagnia-nome"
+                            name="compagnia_nome"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="compagnia-citta">
+                            Città
+                        </label>
+
+                        <input
+                            type="text"
+                            id="compagnia-citta"
+                            name="compagnia_citta"
+                            value="Roma"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="compagnia-zona">
+                            Zona / Quartiere
+                        </label>
+
+                        <input
+                            type="text"
+                            id="compagnia-zona"
+                            name="compagnia_zona"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="compagnia-municipio">
+                            Municipio
+                        </label>
+
+                        <select
+                            id="compagnia-municipio"
+                            name="compagnia_municipio"
+                        >
+
+                            <option value="">
+                                Seleziona
+                            </option>
+
+                            <option>I</option>
+                            <option>II</option>
+                            <option>III</option>
+                            <option>IV</option>
+                            <option>V</option>
+                            <option>VI</option>
+                            <option>VII</option>
+                            <option>VIII</option>
+                            <option>IX</option>
+                            <option>X</option>
+                            <option>XI</option>
+                            <option>XII</option>
+                            <option>XIII</option>
+                            <option>XIV</option>
+                            <option>XV</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="compagnia-genere">
+                            Genere principale
+                        </label>
+
+                        <input
+                            type="text"
+                            id="compagnia-genere"
+                            name="compagnia_genere"
+                            placeholder="Es. commedia"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group form-full">
+
+                        <label for="compagnia-descrizione">
+                            Presentazione della compagnia
+                        </label>
+
+                        <textarea
+                            id="compagnia-descrizione"
+                            name="compagnia_descrizione"
+                            rows="6"
+                        ></textarea>
+
+                    </div>
+
+
+                    <div class="form-group form-full">
+
+                        <label for="compagnia-sito">
+                            Sito o pagina social
+                        </label>
+
+                        <input
+                            type="url"
+                            id="compagnia-sito"
+                            name="compagnia_sito"
+                            placeholder="https://"
+                        >
+
+                    </div>
+
+                </div>
+
+            </fieldset>
+
+
+            <!-- =====================================================
+                 CAMPI BACHECA
+                 ===================================================== -->
+
+            <fieldset
+                class="form-section campi-dinamici"
+                id="campi-bacheca"
+            >
+
+                <legend>
+                    Informazioni per la Bacheca
+                </legend>
+
+                <div class="form-grid">
+
+
+                    <div class="form-group">
+
+                        <label for="bacheca-categoria">
+                            Categoria
+                        </label>
+
+                        <select
+                            id="bacheca-categoria"
+                            name="bacheca_categoria"
+                        >
+
+                            <option value="">
+                                Seleziona
+                            </option>
+
+                            <option value="CASTING">
+                                Casting
+                            </option>
+
+                            <option value="TECNICI">
+                                Tecnici
+                            </option>
+
+                            <option value="SALE PROVA">
+                                Sale prova
+                            </option>
+
+                            <option value="MATERIALI">
+                                Materiali
+                            </option>
+
+                            <option value="COLLABORAZIONI">
+                                Collaborazioni
+                            </option>
+
+                            <option value="CERCO COMPAGNIA">
+                                Cerco compagnia
+                            </option>
+
+                            <option value="ALTRO">
+                                Altro
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="bacheca-scadenza">
+                            Scadenza dell'annuncio
+                        </label>
+
+                        <input
+                            type="date"
+                            id="bacheca-scadenza"
+                            name="bacheca_scadenza"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group form-full">
+
+                        <label for="bacheca-titolo">
+                            Titolo dell'annuncio
+                        </label>
+
+                        <input
+                            type="text"
+                            id="bacheca-titolo"
+                            name="bacheca_titolo"
+                            placeholder="Es. Compagnia cerca attrice per nuova produzione"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group form-full">
+
+                        <label for="bacheca-descrizione">
+                            Descrizione
+                        </label>
+
+                        <textarea
+                            id="bacheca-descrizione"
+                            name="bacheca_descrizione"
+                            rows="7"
+                            placeholder="Descrivi con precisione cosa cerchi o cosa proponi..."
+                        ></textarea>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="bacheca-zona">
+                            Zona / Quartiere
+                        </label>
+
+                        <input
+                            type="text"
+                            id="bacheca-zona"
+                            name="bacheca_zona"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="bacheca-municipio">
+                            Municipio
+                        </label>
+
+                        <select
+                            id="bacheca-municipio"
+                            name="bacheca_municipio"
+                        >
+
+                            <option value="">
+                                Seleziona
+                            </option>
+
+                            <option>I</option>
+                            <option>II</option>
+                            <option>III</option>
+                            <option>IV</option>
+                            <option>V</option>
+                            <option>VI</option>
+                            <option>VII</option>
+                            <option>VIII</option>
+                            <option>IX</option>
+                            <option>X</option>
+                            <option>XI</option>
+                            <option>XII</option>
+                            <option>XIII</option>
+                            <option>XIV</option>
+                            <option>XV</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- IMMAGINE -->
+
+                    <div class="form-group form-full">
+
+                        <label for="immagine-annuncio">
+                            Immagine dell'annuncio
+                            <span class="optional">
+                                (facoltativa)
+                            </span>
+                        </label>
+
+                        <div class="image-upload-box">
+
+                            <input
+                                type="file"
+                                id="immagine-annuncio"
+                                accept="image/jpeg,image/png,image/webp"
+                            >
+
+                            <div class="upload-copy">
+
+                                <strong>
+                                    Aggiungi un'immagine
+                                </strong>
+
+                                <span>
+                                    JPG, PNG o WebP · massimo 5 MB
+                                </span>
+
+                                <span>
+                                    Sarà visualizzata nel formato 16:9
+                                    di Corriere Teatrale.
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <div
+                            id="image-preview"
+                            class="image-preview"
+                        ></div>
+
+                        <p
+                            id="image-upload-note"
+                            class="form-help"
+                        >
+                            L'invio dell'immagine sarà attivato
+                            nel prossimo passaggio.
+                        </p>
+
+                    </div>
+
+
+                </div>
+
+            </fieldset>
+
+
+            <!-- =====================================================
+                 CORSO
+                 ===================================================== -->
+
+            <fieldset
+                class="form-section campi-dinamici"
+                id="campi-corso"
+            >
+
+                <legend>
+                    Informazioni sul corso
+                </legend>
+
+                <div class="form-grid">
+
+                    <div class="form-group form-full">
+
+                        <label for="corso-titolo">
+                            Titolo del corso o laboratorio
+                        </label>
+
+                        <input
+                            type="text"
+                            id="corso-titolo"
+                            name="corso_titolo"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="corso-organizzatore">
+                            Organizzatore
+                        </label>
+
+                        <input
+                            type="text"
+                            id="corso-organizzatore"
+                            name="corso_organizzatore"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="corso-zona">
+                            Zona / Quartiere
+                        </label>
+
+                        <input
+                            type="text"
+                            id="corso-zona"
+                            name="corso_zona"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group form-full">
+
+                        <label for="corso-descrizione">
+                            Descrizione
+                        </label>
+
+                        <textarea
+                            id="corso-descrizione"
+                            name="corso_descrizione"
+                            rows="6"
+                        ></textarea>
+
+                    </div>
+
+
+                    <div class="form-group form-full">
+
+                        <label for="corso-link">
+                            Link per informazioni / iscrizioni
+                        </label>
+
+                        <input
+                            type="url"
+                            id="corso-link"
+                            name="corso_link"
+                            placeholder="https://"
+                        >
+
+                    </div>
+
+                </div>
+
+            </fieldset>
+
+
+            <!-- =====================================================
+                 NOTIZIA
+                 ===================================================== -->
+
+            <fieldset
+                class="form-section campi-dinamici"
+                id="campi-notizia"
+            >
+
+                <legend>
+                    Proponi una storia
+                </legend>
+
+                <div class="form-grid">
+
+                    <div class="form-group form-full">
+
+                        <label for="notizia-titolo">
+                            Titolo / Argomento
+                        </label>
+
+                        <input
+                            type="text"
+                            id="notizia-titolo"
+                            name="notizia_titolo"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group form-full">
+
+                        <label for="notizia-testo">
+                            Raccontaci la storia
+                        </label>
+
+                        <textarea
+                            id="notizia-testo"
+                            name="notizia_testo"
+                            rows="8"
+                        ></textarea>
+
+                    </div>
+
+
+                    <div class="form-group form-full">
+
+                        <label for="notizia-link">
+                            Eventuale link di approfondimento
+                        </label>
+
+                        <input
+                            type="url"
+                            id="notizia-link"
+                            name="notizia_link"
+                            placeholder="https://"
+                        >
+
+                    </div>
+
+                </div>
+
+            </fieldset>
+
+
+            <!-- =====================================================
+                 REFERENTE
+                 ===================================================== -->
+
+            <fieldset class="form-section">
+
+                <legend>
+                    2. I tuoi contatti
+                </legend>
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+
+                        <label for="referente">
+                            Nome e cognome
+                        </label>
+
+                        <input
+                            type="text"
+                            id="referente"
+                            name="name"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="email">
+                            Email
+                        </label>
+
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="telefono">
+                            Telefono
+                            <span class="optional">
+                                (facoltativo)
+                            </span>
+                        </label>
+
+                        <input
+                            type="tel"
+                            id="telefono"
+                            name="telefono"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="compagnia-referente">
+                            Compagnia / Associazione
+                            <span class="optional">
+                                (facoltativa)
+                            </span>
+                        </label>
+
+                        <input
+                            type="text"
+                            id="compagnia-referente"
+                            name="compagnia_associazione"
+                        >
+
+                    </div>
+
+                </div>
+
+            </fieldset>
+
+
+            <!-- =====================================================
+                 PRIVACY
+                 ===================================================== -->
+
+            <fieldset class="form-section form-final">
+
+                <label class="privacy-check">
+
+                    <input
+                        type="checkbox"
+                        name="privacy"
+                        value="Accettata"
+                        required
+                    >
+
+                    <span>
+                        Confermo che le informazioni inviate
+                        possono essere utilizzate dalla redazione
+                        per valutare la segnalazione e ricontattarmi.
+                    </span>
+
+                </label>
+
+
+                <!-- ANTISPAM WEB3FORMS -->
+
+                <input
+                    type="checkbox"
+                    name="botcheck"
+                    class="hidden"
+                    style="display:none;"
+                >
+
+
+                <button
+                    type="submit"
+                    class="submit-segnala"
+                >
+                    Invia alla redazione
+                </button>
+
+
+                <p class="submit-note">
+                    L'invio non garantisce automaticamente
+                    la pubblicazione sul sito.
+                </p>
+
+            </fieldset>
+
+
+        </form>
+
+    </section>
+
+</main>
+
+
+<footer>
+
+    <div>
+        <strong>Corriere Teatrale</strong>
+        <p>Il teatro amatoriale di Roma</p>
+    </div>
+
+    <div>
+        Pubblicazione ufficiale di
+        <strong>I FATTI IN CASA APS</strong>
+    </div>
+
+</footer>
+
+
+<script>
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const scelte =
+        document.querySelectorAll(
+            'input[name="tipologia"]'
+        );
+
+    const sezioni =
+        document.querySelectorAll(
+            ".campi-dinamici"
+        );
+
+
+    /*
+       Nasconde inizialmente
+       tutte le sezioni dinamiche
+    */
+
+    sezioni.forEach(sezione => {
+        sezione.style.display = "none";
+    });
+
+
+    /*
+       Cambio tipologia
+    */
+
+    scelte.forEach(scelta => {
+
+        scelta.addEventListener(
+            "change",
+            () => {
+
+                sezioni.forEach(sezione => {
+                    sezione.style.display = "none";
+                });
+
+
+                const tipo =
+                    scelta.dataset.tipo;
+
+                const sezione =
+                    document.getElementById(
+                        "campi-" + tipo
+                    );
+
+
+                if (sezione) {
+                    sezione.style.display = "block";
+                }
+
+
+                /*
+                   Evidenzia la card selezionata
+                */
+
+                document
+                    .querySelectorAll(".tipo-card")
+                    .forEach(card => {
+                        card.classList.remove("selected");
+                    });
+
+
+                scelta
+                    .closest(".tipo-card")
+                    .classList.add("selected");
+
+            }
+        );
+
+    });
+
+
+    /*
+       ANTEPRIMA IMMAGINE BACHECA
+    */
+
+    const inputImmagine =
+        document.getElementById(
+            "immagine-annuncio"
+        );
+
+    const anteprima =
+        document.getElementById(
+            "image-preview"
+        );
+
+
+    inputImmagine.addEventListener(
+        "change",
+        () => {
+
+            const file =
+                inputImmagine.files[0];
+
+
+            anteprima.innerHTML = "";
+
+
+            if (!file) {
+                return;
+            }
+
+
+            /*
+               Limite 5 MB
+            */
+
+            if (
+                file.size >
+                5 * 1024 * 1024
+            ) {
+
+                alert(
+                    "L'immagine supera il limite di 5 MB."
+                );
+
+                inputImmagine.value = "";
+
+                return;
+            }
+
+
+            /*
+               Controllo formato
+            */
+
+            const formatiConsentiti = [
+                "image/jpeg",
+                "image/png",
+                "image/webp"
+            ];
+
+
+            if (
+                !formatiConsentiti.includes(
+                    file.type
+                )
+            ) {
+
+                alert(
+                    "Formato non supportato. Usa JPG, PNG o WebP."
+                );
+
+                inputImmagine.value = "";
+
+                return;
+            }
+
+
+            /*
+               Crea anteprima
+            */
+
+            const url =
+                URL.createObjectURL(file);
+
+
+            anteprima.innerHTML = `
+
+                <div class="preview-frame">
+
+                    <img
+                        src="${url}"
+                        alt="Anteprima immagine annuncio"
+                    >
+
+                </div>
+
+                <span>
+                    Anteprima del ritaglio utilizzato
+                    nella Bacheca
+                </span>
+
+            `;
+
+        }
+    );
+
+});
+
+</script>
+
 
 </body>
 </html>
