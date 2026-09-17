@@ -1,0 +1,27 @@
+backend:
+  name: turbo-github
+  turbo_site_id: 0c4eecf3-167d-4cfc-ac64-435b960a6b61
+  branch: main
+
+site_url: https://corriereteatrale.it
+display_url: https://corriereteatrale.it
+logo_url: https://corriereteatrale.it/logo-corriere-teatrale.jpg
+
+locale: it
+
+media_folder: "uploads"
+public_folder: "/uploads"
+
+collections:
+  - name: "redazione"
+    label: "Redazione"
+    files:
+      - name: "compagnie"
+        label: "Compagnie"
+        file: "data/compagnie.json"
+        format: "json"
+        fields:
+          - label: "Compagnie registrate"
+            name: "compagnie"
+            widget: "hidden"
+            required: false
