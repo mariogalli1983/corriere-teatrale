@@ -1218,10 +1218,15 @@ document.addEventListener("DOMContentLoaded", () => {
        ========================================================= */
 
     const CLOUDINARY_CLOUD_NAME = "mjbha9dx";
-    const CLOUDINARY_UPLOAD_PRESET = "corriere_teatrale";
 
-    const CLOUDINARY_UPLOAD_URL =
-        `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`;
+const CLOUDINARY_PRESETS = {
+    locandine: "corriere_teatrale_locandine",
+    loghi: "corriere_teatrale_loghi",
+    bacheca: "corriere_teatrale_bacheca"
+};
+
+const CLOUDINARY_UPLOAD_URL =
+    `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`;
 
 
     /* =========================================================
@@ -1585,10 +1590,17 @@ document.addEventListener("DOMContentLoaded", () => {
        UPLOAD SU CLOUDINARY
        ========================================================= */
 
-   async function caricaSuCloudinary(file, sottocartella) {
+  async function caricaSuCloudinary(file, tipoImmagine) {
 
-    const dati =
-        new FormData();
+    const preset = CLOUDINARY_PRESETS[tipoImmagine];
+
+    if (!preset) {
+        throw new Error(
+            "Non è stato configurato il preset Cloudinary per questo tipo di immagine."
+        );
+    }
+
+    const dati = new FormData();
 
     dati.append(
         "file",
@@ -1597,28 +1609,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     dati.append(
         "upload_preset",
-        CLOUDINARY_UPLOAD_PRESET
+        preset
     );
 
-    /*
-       Organizzazione automatica delle immagini
-    */
-
-    dati.append(
-        "asset_folder",
-        `corriere-teatrale/segnalazioni/${sottocartella}`
+    const risposta = await fetch(
+        CLOUDINARY_UPLOAD_URL,
+        {
+            method: "POST",
+            body: dati
+        }
     );
-
-
-    const risposta =
-        await fetch(
-            CLOUDINARY_UPLOAD_URL,
-            {
-                method: "POST",
-                body: dati
-            }
-        );
-
 
     if (!risposta.ok) {
 
@@ -1627,52 +1627,34 @@ document.addEventListener("DOMContentLoaded", () => {
 
         try {
 
-            const errore =
-                await risposta.json();
+            const errore = await risposta.json();
 
             if (
                 errore &&
                 errore.error &&
                 errore.error.message
             ) {
-
                 messaggioErrore =
                     errore.error.message;
-
             }
 
         } catch (erroreLettura) {
-
-            /*
-               Mantiene il messaggio generico
-            */
-
+            // Mantiene il messaggio generico
         }
 
-        throw new Error(
-            messaggioErrore
-        );
-
+        throw new Error(messaggioErrore);
     }
 
-
-    const risultato =
-        await risposta.json();
-
+    const risultato = await risposta.json();
 
     if (!risultato.secure_url) {
-
         throw new Error(
             "Cloudinary non ha restituito l'indirizzo dell'immagine."
         );
-
     }
 
-
     return risultato.secure_url;
-
 }
-
 
     /* =========================================================
        CREA / AGGIORNA CAMPO NASCOSTO
