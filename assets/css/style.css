@@ -1774,3 +1774,119 @@
     color: #777;
     font-size: 11px;
 }
+/* =========================================================
+   PAGINA GRAZIE
+   ========================================================= */
+
+.grazie-page {
+    min-height: 620px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 70px 20px 90px;
+}
+
+.grazie-box {
+    width: min(100%, 850px);
+    text-align: center;
+}
+
+.grazie-check {
+    display: flex;
+    width: 76px;
+    height: 76px;
+    align-items: center;
+    justify-content: center;
+
+    margin: 28px auto;
+
+    border: 2px solid #a71920;
+    border-radius: 50%;
+
+    color: #a71920;
+
+    font-size: 38px;
+    font-weight: bold;
+}
+
+.grazie-box h1 {
+    margin: 0 auto 25px;
+
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(42px, 6vw, 70px);
+    line-height: 1;
+    letter-spacing: -1.5px;
+}
+
+.grazie-lead {
+    margin: 0 0 15px;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 22px;
+}
+
+.grazie-box > p {
+    max-width: 650px;
+    margin-left: auto;
+    margin-right: auto;
+
+    color: #555;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.grazie-actions {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+
+    margin-top: 35px;
+}
+
+.grazie-primary,
+.grazie-secondary {
+    display: inline-block;
+    padding: 14px 20px;
+
+    text-decoration: none;
+    text-transform: uppercase;
+
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: .7px;
+}
+
+.grazie-primary {
+    background: #a71920;
+    border: 1px solid #a71920;
+    color: #fff;
+}
+
+.grazie-primary:hover {
+    background: #111;
+    border-color: #111;
+}
+
+.grazie-secondary {
+    background: #fff;
+    border: 1px solid #111;
+    color: #111;
+}
+
+.grazie-secondary:hover {
+    background: #111;
+    color: #fff;
+}
+
+@media (max-width: 600px) {
+
+    .grazie-page {
+        min-height: 500px;
+        padding: 50px 20px 70px;
+    }
+
+    .grazie-box h1 {
+        font-size: 42px;
+    }
+
+}
