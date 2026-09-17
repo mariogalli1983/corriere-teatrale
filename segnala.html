@@ -1237,7 +1237,76 @@ document.addEventListener("DOMContentLoaded", () => {
         );
 
     });
+/*
+   ANTEPRIMA LOCANDINA SPETTACOLO
+*/
 
+const inputLocandina =
+    document.getElementById("locandina-evento");
+
+const anteprimaLocandina =
+    document.getElementById("poster-preview");
+
+
+inputLocandina.addEventListener("change", () => {
+
+    const file =
+        inputLocandina.files[0];
+
+    anteprimaLocandina.innerHTML = "";
+
+    if (!file) {
+        return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+
+        alert(
+            "La locandina supera il limite di 5 MB."
+        );
+
+        inputLocandina.value = "";
+        return;
+    }
+
+    const formatiConsentiti = [
+        "image/jpeg",
+        "image/png",
+        "image/webp"
+    ];
+
+    if (!formatiConsentiti.includes(file.type)) {
+
+        alert(
+            "Formato non supportato. Usa JPG, PNG o WebP."
+        );
+
+        inputLocandina.value = "";
+        return;
+    }
+
+    const url =
+        URL.createObjectURL(file);
+
+    anteprimaLocandina.innerHTML = `
+
+        <div class="poster-preview-frame">
+
+            <img
+                src="${url}"
+                alt="Anteprima locandina"
+            >
+
+        </div>
+
+        <span>
+            Anteprima della locandina
+            nella proporzione utilizzata dal sito
+        </span>
+
+    `;
+
+});
 
     /*
        ANTEPRIMA IMMAGINE BACHECA
