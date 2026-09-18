@@ -296,7 +296,8 @@ def prepara_template(
     )
 
     return pagina
-    def genera_pagina_evento(evento):
+
+def genera_pagina_evento(evento):
     """Genera la pagina permalink di uno spettacolo."""
 
     event_id = str(
@@ -921,7 +922,8 @@ def genera_pagina_intervista(
     )
 
     return file_html
-    def leggi_json(file_json):
+
+def leggi_json(file_json):
     """Legge un singolo file JSON e restituisce il contenuto."""
 
     try:
