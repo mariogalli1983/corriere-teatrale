@@ -292,6 +292,31 @@
     </div>
 
 </footer>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
 
+    const menu = document.querySelector(".main-nav");
+    const pulsante = document.querySelector(".menu-toggle");
+
+    if (!menu || !pulsante) return;
+
+    pulsante.addEventListener("click", function () {
+
+        const aperto = menu.classList.toggle("menu-open");
+
+        pulsante.setAttribute(
+            "aria-expanded",
+            aperto ? "true" : "false"
+        );
+
+        pulsante.setAttribute(
+            "aria-label",
+            aperto ? "Chiudi menu" : "Apri menu"
+        );
+
+    });
+
+});
+</script>
 </body>
 </html>
