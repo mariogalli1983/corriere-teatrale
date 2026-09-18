@@ -288,8 +288,8 @@ def prepara_template(
 """
 
     pagina = re.sub(
-        r"</head>",
-        bootstrap + "\n</head>",
+        r"<head([^>]*)>",
+        lambda match: match.group(0) + "\n" + bootstrap,
         pagina,
         count=1,
         flags=re.IGNORECASE
