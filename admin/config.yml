@@ -180,9 +180,10 @@ collections:
         required: false
         hint: "Seleziona la compagnia che organizza o produce lo spettacolo"
 
-      - label: "Descrizione"
+            - label: "Descrizione dello spettacolo"
         name: "descrizione"
-        widget: "text"
+        widget: "markdown"
+        hint: "Puoi usare grassetto, corsivo, titoli, elenchi, link e paragrafi."
 
       - label: "Date e orari"
         name: "date"
