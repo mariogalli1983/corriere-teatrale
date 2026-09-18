@@ -8,6 +8,8 @@ on:
       - "data/compagnie/**"
       - "data/eventi/**"
       - "data/annunci/**"
+      - "data/notizie/**"
+      - "data/interviste/**"
 
 permissions:
   contents: write
@@ -53,6 +55,30 @@ jobs:
           fi
           mv data/annunci.tmp.json data/annunci.json
 
+      - name: Genera notizie.json
+        run: |
+          mkdir -p data/notizie
+          if find data/notizie -maxdepth 1 -type f -name "*.json" | grep -q .; then
+            find data/notizie -maxdepth 1 -type f -name "*.json" -print0 \
+              | sort -z \
+              | xargs -0 jq -s '.' > data/notizie.tmp.json
+          else
+            echo '[]' > data/notizie.tmp.json
+          fi
+          mv data/notizie.tmp.json data/notizie.json
+
+      - name: Genera interviste.json
+        run: |
+          mkdir -p data/interviste
+          if find data/interviste -maxdepth 1 -type f -name "*.json" | grep -q .; then
+            find data/interviste -maxdepth 1 -type f -name "*.json" -print0 \
+              | sort -z \
+              | xargs -0 jq -s '.' > data/interviste.tmp.json
+          else
+            echo '[]' > data/interviste.tmp.json
+          fi
+          mv data/interviste.tmp.json data/interviste.json
+
       - name: Pubblica indici aggiornati
         run: |
           git config user.name "Corriere Teatrale Bot"
@@ -61,6 +87,8 @@ jobs:
           git add data/compagnie.json
           git add data/eventi.json
           git add data/annunci.json
+          git add data/notizie.json
+          git add data/interviste.json
 
           if git diff --cached --quiet; then
             echo "Nessun indice da aggiornare."
