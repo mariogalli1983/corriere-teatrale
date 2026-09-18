@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const elencoAnnunci =
         document.getElementById("elenco-annunci");
 const homeEventi = document.getElementById("home-eventi");
-
+const homeBacheca = document.getElementById("home-bacheca");
     if (elencoCompagnie) {
         caricaCompagnie();
     }
@@ -61,6 +61,7 @@ const homeEventi = document.getElementById("home-eventi");
         caricaSchedaEvento();
     }
 if (homeEventi) caricaEventiHome();
+    if (homeBacheca) caricaBachecaHome();
     if (elencoAnnunci) {
         caricaAnnunci();
     }
@@ -1665,6 +1666,194 @@ async function caricaEventiHome() {
                 </a>
 
             </article>
+
+        `;
+
+    }
+
+}
+/* =========================================================
+   BACHECA HOME
+   ========================================================= */
+
+async function caricaBachecaHome() {
+
+    const contenitore =
+        document.getElementById("home-bacheca");
+
+    if (!contenitore) {
+        return;
+    }
+
+    try {
+
+        const risposta =
+            await fetch("data/annunci.json");
+
+        if (!risposta.ok) {
+
+            throw new Error(
+                "Impossibile caricare gli annunci"
+            );
+
+        }
+
+
+        const annunci =
+            await risposta.json();
+
+
+        const annunciVisibili =
+            annunci
+
+                .filter(
+                    annuncio =>
+                        annuncio.pubblicato === true &&
+                        !annuncioScaduto(
+                            annuncio.data_scadenza
+                        )
+                )
+
+                .sort(
+                    (a, b) =>
+                        new Date(b.data_pubblicazione) -
+                        new Date(a.data_pubblicazione)
+                )
+
+                .slice(0, 3);
+
+
+        /*
+         * Nessun annuncio attivo
+         */
+
+        if (annunciVisibili.length === 0) {
+
+            contenitore.innerHTML = `
+
+                <div class="annuncio">
+
+                    <small>
+                        BACHECA
+                    </small>
+
+                    <h3>
+                        La Bacheca aspetta
+                        il primo annuncio
+                    </h3>
+
+                    <p>
+                        Cerchi un attore, un tecnico,
+                        una sala prove, del materiale
+                        o una collaborazione?
+                    </p>
+
+                    <a href="segnala.html">
+                        Pubblica una segnalazione →
+                    </a>
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        /*
+         * Ultimi annunci
+         */
+
+        contenitore.innerHTML =
+            annunciVisibili.map(annuncio => {
+
+                const dataPubblicazione =
+                    formattaData(
+                        annuncio.data_pubblicazione,
+                        {
+                            day: "numeric",
+                            month: "long"
+                        }
+                    );
+
+
+                return `
+
+                    <div class="annuncio">
+
+                        <small>
+                            ${annuncio.categoria || "BACHECA"}
+                        </small>
+
+                        <h3>
+                            ${annuncio.titolo}
+                        </h3>
+
+                        ${
+                            annuncio.citta ||
+                            annuncio.zona
+
+                            ? `
+
+                                <p>
+
+                                    ${annuncio.citta || ""}
+
+                                    ${
+                                        annuncio.zona
+                                        ? " · " + annuncio.zona
+                                        : ""
+                                    }
+
+                                </p>
+
+                              `
+
+                            : ""
+                        }
+
+                        <p class="annuncio-data">
+                            ${dataPubblicazione}
+                        </p>
+
+                    </div>
+
+                `;
+
+            }).join("");
+
+
+    } catch (errore) {
+
+        console.error(
+            "Errore caricamento Bacheca Home:",
+            errore
+        );
+
+
+        contenitore.innerHTML = `
+
+            <div class="annuncio">
+
+                <small>
+                    BACHECA
+                </small>
+
+                <h3>
+                    Consulta gli annunci
+                </h3>
+
+                <p>
+                    Casting, collaborazioni,
+                    sale prova e opportunità.
+                </p>
+
+                <a href="bacheca.html">
+                    Vai alla Bacheca →
+                </a>
+
+            </div>
 
         `;
 
