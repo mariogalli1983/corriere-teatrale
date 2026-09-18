@@ -1,5 +1,34 @@
 document.addEventListener("DOMContentLoaded", () => {
+    /* =========================================================
+       MENU MOBILE
+       ========================================================= */
 
+    const menuPrincipale =
+        document.querySelector(".main-nav");
+
+    const pulsanteMenu =
+        document.querySelector(".menu-toggle");
+
+    if (menuPrincipale && pulsanteMenu) {
+
+        pulsanteMenu.addEventListener("click", () => {
+
+            const aperto =
+                menuPrincipale.classList.toggle("menu-open");
+
+            pulsanteMenu.setAttribute(
+                "aria-expanded",
+                aperto ? "true" : "false"
+            );
+
+            pulsanteMenu.setAttribute(
+                "aria-label",
+                aperto ? "Chiudi menu" : "Apri menu"
+            );
+
+        });
+
+    }
     const elencoCompagnie =
         document.getElementById("elenco-compagnie");
 
