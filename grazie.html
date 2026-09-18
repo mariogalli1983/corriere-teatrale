@@ -2,8 +2,13 @@
 <html lang="it">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>Segnalazione inviata | Corriere Teatrale</title>
 
@@ -12,64 +17,163 @@
         content="La tua segnalazione è stata inviata alla redazione di Corriere Teatrale."
     >
 
-    <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="icon" href="logo-corriere-teatrale.jpg">
+    <link
+        rel="stylesheet"
+        href="assets/css/style.css"
+    >
+
+    <link
+        rel="icon"
+        href="logo-corriere-teatrale.jpg"
+    >
+
 </head>
+
 
 <body>
 
-<header class="site-header">
 
-    <div class="masthead">
+<!-- =====================================================
+     TOPBAR
+     ===================================================== -->
 
-        <div class="brand">
+<div class="topbar">
+    ROMA · CORRIERE TEATRALE
+</div>
+
+
+<!-- =====================================================
+     HEADER
+     ===================================================== -->
+
+<header class="masthead">
+
+    <div class="brand">
+
+        <a href="index.html">
+
+            <img
+                src="logo-corriere-teatrale.jpg"
+                alt="Corriere Teatrale"
+            >
+
+        </a>
+
+
+        <div>
 
             <a href="index.html">
-                <img
-                    src="logo-corriere-teatrale.jpg"
-                    alt="Corriere Teatrale"
-                    class="site-logo"
-                >
+
+                <h1>
+                    CORRIERE
+                    <span>TEATRALE</span>
+                </h1>
+
             </a>
 
-            <div>
-                <div class="site-title">
-                    CORRIERE TEATRALE
-                </div>
-
-                <div class="site-subtitle">
-                    Il teatro amatoriale di Roma
-                </div>
-            </div>
+            <p>
+                Il giornale del teatro amatoriale romano
+            </p>
 
         </div>
 
-        <div class="official">
-            Pubblicazione ufficiale<br>
-            <strong>I FATTI IN CASA APS</strong>
-        </div>
+    </div>
+
+
+    <div class="official">
+
+        Organo ufficiale di<br>
+
+        <a href="i-fatti-in-casa.html">
+
+            <strong>
+                I FATTI IN CASA APS
+            </strong>
+
+        </a>
 
     </div>
 
 </header>
 
 
-<nav>
+<!-- =====================================================
+     NAVIGAZIONE
+     ===================================================== -->
 
-    <div class="nav-inner">
+<nav class="main-nav">
 
-        <a href="index.html">Home</a>
-        <a href="notizie.html">Notizie</a>
-        <a href="eventi.html">Spettacoli</a>
-        <a href="compagnie.html">Compagnie</a>
-        <a href="interviste.html">Interviste</a>
-        <a href="bacheca.html">Bacheca</a>
-        <a href="segnala.html" class="segnala">Segnala</a>
+    <div class="nav-mobile-bar">
+
+        <span class="nav-mobile-title">
+            MENU
+        </span>
+
+        <button
+            class="menu-toggle"
+            type="button"
+            aria-label="Apri menu"
+            aria-expanded="false"
+            aria-controls="menu-principale"
+        >
+
+            <span></span>
+            <span></span>
+            <span></span>
+
+        </button>
+
+    </div>
+
+
+    <div
+        class="nav-inner"
+        id="menu-principale"
+    >
+
+        <a href="index.html">
+            Home
+        </a>
+
+        <a href="notizie.html">
+            Notizie
+        </a>
+
+        <a href="eventi.html">
+            Spettacoli
+        </a>
+
+        <a href="compagnie.html">
+            Compagnie
+        </a>
+
+        <a href="interviste.html">
+            Interviste
+        </a>
+
+        <a href="bacheca.html">
+            Bacheca
+        </a>
+
+        <a href="chi-siamo.html">
+            Chi siamo
+        </a>
+
+        <a
+            href="segnala.html"
+            class="segnala"
+        >
+            Segnala
+        </a>
 
     </div>
 
 </nav>
 
+
+<!-- =====================================================
+     CONTENUTO
+     ===================================================== -->
 
 <main>
 
@@ -102,6 +206,7 @@
                 utilizzeremo i contatti che ci hai lasciato.
             </p>
 
+
             <div class="grazie-actions">
 
                 <a
@@ -127,19 +232,82 @@
 </main>
 
 
+<!-- =====================================================
+     FOOTER
+     ===================================================== -->
+
 <footer>
 
-    <div>
-        <strong>Corriere Teatrale</strong>
-        <p>Il teatro amatoriale di Roma</p>
-    </div>
+    <div class="footer-inner">
 
-    <div>
-        Pubblicazione ufficiale di
-        <strong>I FATTI IN CASA APS</strong>
+        <div>
+
+            <strong>
+                CORRIERE TEATRALE
+            </strong>
+
+            <p>
+                Il giornale del teatro amatoriale romano.
+            </p>
+
+        </div>
+
+
+        <div>
+
+            <p>
+
+                Organo ufficiale di<br>
+
+                <a href="i-fatti-in-casa.html">
+
+                    <strong>
+                        I FATTI IN CASA APS
+                    </strong>
+
+                </a>
+
+            </p>
+
+        </div>
+
+
+        <div>
+
+            <p>
+
+                <a href="privacy.html">
+                    Privacy
+                </a>
+
+                ·
+
+                <a href="disclaimer.html">
+                    Disclaimer
+                </a>
+
+                ·
+
+                <a href="faq.html">
+                    FAQ
+                </a>
+
+            </p>
+
+        </div>
+
     </div>
 
 </footer>
 
+
+<!-- =====================================================
+     JAVASCRIPT
+     ===================================================== -->
+
+<script src="assets/js/app.js"></script>
+
+
 </body>
+
 </html>
