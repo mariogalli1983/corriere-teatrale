@@ -25,8 +25,12 @@
 <body>
 
 
+<!-- =====================================================
+     TOPBAR
+     ===================================================== -->
+
 <div class="topbar">
-    ROMA · Giovedì 17 settembre 2026
+    ROMA · CORRIERE TEATRALE
 </div>
 
 
@@ -38,17 +42,26 @@
 
     <div class="brand">
 
-        <img
-            src="logo-corriere-teatrale.jpg"
-            alt="Corriere Teatrale"
-        >
+        <a href="index.html">
+
+            <img
+                src="logo-corriere-teatrale.jpg"
+                alt="Corriere Teatrale"
+            >
+
+        </a>
+
 
         <div>
 
-            <h1>
-                CORRIERE
-                <span>TEATRALE</span>
-            </h1>
+            <a href="index.html">
+
+                <h1>
+                    CORRIERE
+                    <span>TEATRALE</span>
+                </h1>
+
+            </a>
 
             <p>
                 Il giornale del teatro amatoriale romano
@@ -61,12 +74,14 @@
 
     <div class="official">
 
-        PUBBLICAZIONE UFFICIALE<br>
+        Organo ufficiale di<br>
 
         <a href="i-fatti-in-casa.html">
+
             <strong>
                 I FATTI IN CASA APS
             </strong>
+
         </a>
 
     </div>
@@ -108,8 +123,10 @@
         id="menu-principale"
     >
 
-        <a href="index.html"
-           class="active">
+        <a
+            href="index.html"
+            class="active"
+        >
             Home
         </a>
 
@@ -137,8 +154,10 @@
             Chi siamo
         </a>
 
-        <a href="segnala.html"
-           class="segnala">
+        <a
+            href="segnala.html"
+            class="segnala"
+        >
             Segnala
         </a>
 
@@ -219,11 +238,13 @@
 
 
     <!-- =================================================
-         EDITORIALE + BACHECA
+         ULTIME STORIE + BACHECA
          ================================================= -->
 
     <div class="editorial-grid">
 
+
+        <!-- ULTIME STORIE -->
 
         <section>
 
@@ -240,123 +261,71 @@
             </div>
 
 
-            <article class="article">
+            <div id="home-notizie">
 
-                <span class="categoria">
-                    Editoriale
-                </span>
+                <article class="article">
 
-                <h3>
-                    Perché nasce Corriere Teatrale
-                </h3>
+                    <span class="categoria">
+                        CORRIERE TEATRALE
+                    </span>
 
-                <p>
-                    Dare voce alle compagnie, agli attori,
-                    ai registi e alle tante persone che ogni
-                    giorno tengono vivo il teatro amatoriale
-                    romano.
-                </p>
+                    <h3>
+                        Le storie stanno per cominciare
+                    </h3>
 
-            </article>
+                    <p>
+                        In questa sezione racconteremo compagnie,
+                        spettacoli e persone del teatro amatoriale
+                        romano. Notizie, approfondimenti e storie
+                        da dentro e fuori il palcoscenico.
+                    </p>
 
+                    <a href="segnala.html">
+                        Hai una storia? Segnalala alla redazione →
+                    </a>
 
-            <article class="article">
+                </article>
 
-                <span class="categoria">
-                    Interviste
-                </span>
+            </div>
 
-                <h3>
-                    Dietro il sipario
-                </h3>
-
-                <p>
-                    Le persone, le storie e le passioni
-                    che non sempre arrivano sotto
-                    i riflettori.
-                </p>
-
-            </article>
+        </section>
 
 
-           <section>
+        <!-- BACHECA HOME -->
 
-    <div class="section-header">
+        <aside class="bacheca">
 
-        <h2>
-            Ultime storie
-        </h2>
+            <div class="section-header">
 
-        <a href="notizie.html">
-            Tutte →
-        </a>
+                <h2>
+                    Bacheca
+                </h2>
 
-    </div>
+                <a href="bacheca.html">
+                    Tutti →
+                </a>
 
+            </div>
 
-    <div id="home-notizie">
-
-        <article class="article">
-
-            <span class="categoria">
-                CORRIERE TEATRALE
-            </span>
-
-            <h3>
-                Le storie stanno per cominciare
-            </h3>
 
             <p>
-                In questa sezione racconteremo compagnie,
-                spettacoli e persone del teatro amatoriale
-                romano. Notizie, approfondimenti e storie
-                da dentro e fuori il palcoscenico.
+                Il punto d'incontro delle compagnie.
             </p>
 
-            <a href="segnala.html">
-                Hai una storia? Segnalala alla redazione →
-            </a>
 
-        </article>
+            <div id="home-bacheca">
 
-    </div>
+                <p>
+                    Caricamento annunci...
+                </p>
 
-</section>
+            </div>
 
+        </aside>
 
-        <!-- BACHECA HOME -->
-
-        <!-- BACHECA HOME -->
-
-<aside class="bacheca">
-
-    <div class="section-header">
-
-        <h2>
-            Bacheca
-        </h2>
-
-        <a href="bacheca.html">
-            Tutti →
-        </a>
 
     </div>
 
-    <p>
-        Il punto d'incontro delle compagnie.
-    </p>
-
-    <div id="home-bacheca">
-
-        <p>
-            Caricamento annunci...
-        </p>
-
-    </div>
-
-</aside>
-
-    </div>
 
 </main>
 
@@ -369,9 +338,18 @@
 
     <div class="companies-inner">
 
-        <h2>
-            Le compagnie
-        </h2>
+        <div class="section-header">
+
+            <h2>
+                Le compagnie
+            </h2>
+
+            <a href="compagnie.html">
+                Tutte →
+            </a>
+
+        </div>
+
 
         <p>
             Conosci le realtà che animano
@@ -390,8 +368,12 @@
 
                 <p>
                     Scopri le realtà del teatro
-                    amatoriale della Capitale
+                    amatoriale della Capitale.
                 </p>
+
+                <a href="compagnie.html">
+                    Scopri le compagnie →
+                </a>
 
             </div>
 
@@ -404,8 +386,12 @@
 
                 <p>
                     Entra nella directory
-                    di Corriere Teatrale
+                    di Corriere Teatrale.
                 </p>
+
+                <a href="segnala.html">
+                    Segnala la tua compagnia →
+                </a>
 
             </div>
 
@@ -413,13 +399,17 @@
             <div class="company-card">
 
                 <h3>
-                    Scopri le compagnie
+                    Spettacoli
                 </h3>
 
                 <p>
-                    Cerca per zona,
-                    genere e attività
+                    Scopri cosa portano in scena
+                    le compagnie della Capitale.
                 </p>
+
+                <a href="eventi.html">
+                    Guarda gli spettacoli →
+                </a>
 
             </div>
 
@@ -427,13 +417,17 @@
             <div class="company-card">
 
                 <h3>
-                    Presentati
+                    Raccontaci la tua storia
                 </h3>
 
                 <p>
-                    Raccontaci la storia
-                    della tua compagnia
+                    Presenta alla redazione
+                    la tua realtà teatrale.
                 </p>
+
+                <a href="segnala.html">
+                    Scrivi alla redazione →
+                </a>
 
             </div>
 
