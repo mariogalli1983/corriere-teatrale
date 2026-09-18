@@ -14,6 +14,10 @@ public_folder: "/uploads"
 
 collections:
 
+  # =========================================================
+  # COMPAGNIE
+  # =========================================================
+
   - name: "compagnie"
     label: "Compagnie"
     label_singular: "Compagnia"
@@ -122,6 +126,10 @@ collections:
         widget: "boolean"
         default: true
 
+
+  # =========================================================
+  # SPETTACOLI
+  # =========================================================
 
   - name: "eventi"
     label: "Spettacoli"
@@ -263,6 +271,10 @@ collections:
         default: true
 
 
+  # =========================================================
+  # BACHECA
+  # =========================================================
+
   - name: "annunci"
     label: "Bacheca"
     label_singular: "Annuncio"
@@ -375,6 +387,181 @@ collections:
         name: "link"
         widget: "string"
         required: false
+
+      - label: "Pubblicato"
+        name: "pubblicato"
+        widget: "boolean"
+        default: true
+
+
+  # =========================================================
+  # NOTIZIE
+  # =========================================================
+
+  - name: "notizie"
+    label: "Notizie"
+    label_singular: "Notizia"
+    description: "Articoli, approfondimenti e storie di Corriere Teatrale"
+    folder: "data/notizie"
+    create: true
+    delete: true
+    extension: "json"
+    format: "json"
+    identifier_field: "titolo"
+    slug: "{{slug}}"
+    summary: "{{data_pubblicazione}} — {{titolo}}"
+
+    fields:
+      - label: "ID"
+        name: "id"
+        widget: "string"
+        hint: "Identificativo univoco. Usa lettere minuscole e trattini. Esempio: teatro-quartieri-roma"
+
+      - label: "Titolo"
+        name: "titolo"
+        widget: "string"
+
+      - label: "Categoria"
+        name: "categoria"
+        widget: "select"
+        default: "NOTIZIE"
+        options:
+          - "NOTIZIE"
+          - "STORIE"
+          - "APPROFONDIMENTI"
+          - "DAL PALCOSCENICO"
+          - "DIETRO LE QUINTE"
+          - "CORSI E FORMAZIONE"
+
+      - label: "Occhiello"
+        name: "occhiello"
+        widget: "string"
+        required: false
+        hint: "Una breve frase sopra o accanto al titolo"
+
+      - label: "Sommario"
+        name: "sommario"
+        widget: "text"
+        hint: "Due o tre righe che presentano l'articolo"
+
+      - label: "Testo dell'articolo"
+        name: "testo"
+        widget: "markdown"
+
+      - label: "Immagine principale"
+        name: "immagine"
+        widget: "string"
+        required: false
+        hint: "Nome del file oppure URL completo dell'immagine"
+
+      - label: "Didascalia immagine"
+        name: "didascalia"
+        widget: "string"
+        required: false
+
+      - label: "Autore"
+        name: "autore"
+        widget: "string"
+        default: "Redazione Corriere Teatrale"
+
+      - label: "Data pubblicazione"
+        name: "data_pubblicazione"
+        widget: "date"
+        format: "YYYY-MM-DD"
+
+      - label: "Pubblicato"
+        name: "pubblicato"
+        widget: "boolean"
+        default: true
+
+
+  # =========================================================
+  # INTERVISTE
+  # =========================================================
+
+  - name: "interviste"
+    label: "Interviste"
+    label_singular: "Intervista"
+    description: "Le voci e le persone del teatro amatoriale romano"
+    folder: "data/interviste"
+    create: true
+    delete: true
+    extension: "json"
+    format: "json"
+    identifier_field: "titolo"
+    slug: "{{slug}}"
+    summary: "{{data_pubblicazione}} — {{intervistato}}"
+
+    fields:
+      - label: "ID"
+        name: "id"
+        widget: "string"
+        hint: "Identificativo univoco. Esempio: intervista-mario-rossi"
+
+      - label: "Titolo"
+        name: "titolo"
+        widget: "string"
+        hint: "Esempio: Mario Rossi: «Il teatro è prima di tutto incontro»"
+
+      - label: "Intervistato"
+        name: "intervistato"
+        widget: "string"
+
+      - label: "Ruolo"
+        name: "ruolo"
+        widget: "string"
+        required: false
+        hint: "Esempio: attore, regista, autore, presidente di compagnia"
+
+      - label: "Compagnia / realtà"
+        name: "compagnia"
+        widget: "string"
+        required: false
+
+      - label: "Introduzione"
+        name: "introduzione"
+        widget: "text"
+        hint: "Breve presentazione della persona e dell'intervista"
+
+      - label: "Domande e risposte"
+        name: "domande"
+        widget: "list"
+        summary: "{{fields.domanda}}"
+        fields:
+          - label: "Domanda"
+            name: "domanda"
+            widget: "string"
+
+          - label: "Risposta"
+            name: "risposta"
+            widget: "text"
+
+      - label: "Testo conclusivo"
+        name: "conclusione"
+        widget: "markdown"
+        required: false
+        hint: "Eventuale chiusura dell'intervista"
+
+      - label: "Immagine principale"
+        name: "immagine"
+        widget: "string"
+        required: false
+        hint: "Nome del file oppure URL completo dell'immagine"
+
+      - label: "Didascalia immagine"
+        name: "didascalia"
+        widget: "string"
+        required: false
+
+      - label: "Autore"
+        name: "autore"
+        widget: "string"
+        default: "Redazione Corriere Teatrale"
+
+      - label: "Data pubblicazione"
+        name: "data_pubblicazione"
+        widget: "date"
+        format: "YYYY-MM-DD"
 
       - label: "Pubblicato"
         name: "pubblicato"
