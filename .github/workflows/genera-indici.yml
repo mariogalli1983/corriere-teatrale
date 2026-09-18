@@ -1,4 +1,4 @@
-name: Genera indici JSON
+name: Genera indici JSON e pagine spettacoli
 
 on:
   push:
@@ -58,6 +58,7 @@ jobs:
       - name: Genera notizie.json
         run: |
           mkdir -p data/notizie
+
           if find data/notizie -maxdepth 1 -type f -name "*.json" | grep -q .; then
             find data/notizie -maxdepth 1 -type f -name "*.json" -print0 \
               | sort -z \
@@ -65,11 +66,13 @@ jobs:
           else
             echo '[]' > data/notizie.tmp.json
           fi
+
           mv data/notizie.tmp.json data/notizie.json
 
       - name: Genera interviste.json
         run: |
           mkdir -p data/interviste
+
           if find data/interviste -maxdepth 1 -type f -name "*.json" | grep -q .; then
             find data/interviste -maxdepth 1 -type f -name "*.json" -print0 \
               | sort -z \
@@ -77,9 +80,379 @@ jobs:
           else
             echo '[]' > data/interviste.tmp.json
           fi
+
           mv data/interviste.tmp.json data/interviste.json
 
-      - name: Pubblica indici aggiornati
+      - name: Genera pagine degli spettacoli
+        run: |
+          rm -rf spettacoli
+          mkdir -p spettacoli
+
+          for file in data/eventi/*.json; do
+
+            [ -e "$file" ] || continue
+
+            PUBBLICATO=$(jq -r '.pubblicato // false' "$file")
+
+            if [ "$PUBBLICATO" != "true" ]; then
+              continue
+            fi
+
+            ID=$(jq -r '.id // empty' "$file")
+
+            if [ -z "$ID" ]; then
+              continue
+            fi
+
+            TITOLO=$(jq -r '.titolo // "Spettacolo"' "$file")
+
+            DESCRIZIONE=$(jq -r '.descrizione // ""' "$file" \
+              | sed 's/^#\{1,6\}[[:space:]]*//g' \
+              | sed 's/\*\*//g' \
+              | sed 's/\*//g' \
+              | sed 's/\[//g' \
+              | sed 's/\]([^)]*)//g' \
+              | tr '\n' ' ' \
+              | sed 's/[[:space:]][[:space:]]*/ /g' \
+              | sed 's/^ *//;s/ *$//' \
+              | cut -c1-240)
+
+            if [ -z "$DESCRIZIONE" ]; then
+              DESCRIZIONE="Spettacolo segnalato da Corriere Teatrale, il giornale del teatro amatoriale romano."
+            fi
+
+            LOCANDINA=$(jq -r '.locandina // empty' "$file")
+
+            if [ -n "$LOCANDINA" ]; then
+
+              if [[ "$LOCANDINA" == http://* || "$LOCANDINA" == https://* ]]; then
+                IMMAGINE="$LOCANDINA"
+              else
+                LOCANDINA="${LOCANDINA#/}"
+                IMMAGINE="https://corriereteatrale.it/$LOCANDINA"
+              fi
+
+            else
+              IMMAGINE="https://corriereteatrale.it/header-corriere-teatrale.jpg"
+            fi
+
+            URL="https://corriereteatrale.it/spettacoli/$ID/"
+
+            mkdir -p "spettacoli/$ID"
+
+            export ID
+            export TITOLO
+            export DESCRIZIONE
+            export IMMAGINE
+            export URL
+
+            python3 <<'PY'
+          import html
+          import os
+          from pathlib import Path
+
+          event_id = os.environ["ID"]
+          title = os.environ["TITOLO"]
+          description = os.environ["DESCRIZIONE"]
+          image = os.environ["IMMAGINE"]
+          url = os.environ["URL"]
+
+          title_html = html.escape(title, quote=True)
+          description_html = html.escape(description, quote=True)
+          image_html = html.escape(image, quote=True)
+          url_html = html.escape(url, quote=True)
+
+          page = f"""<!DOCTYPE html>
+          <html lang="it">
+
+          <head>
+
+              <meta charset="UTF-8">
+
+              <meta name="viewport"
+                    content="width=device-width, initial-scale=1.0">
+
+              <title>{title_html} | Corriere Teatrale</title>
+
+              <meta name="description"
+                    content="{description_html}">
+
+              <link rel="canonical"
+                    href="{url_html}">
+
+              <meta property="og:type"
+                    content="article">
+
+              <meta property="og:site_name"
+                    content="Corriere Teatrale">
+
+              <meta property="og:locale"
+                    content="it_IT">
+
+              <meta property="og:title"
+                    content="{title_html}">
+
+              <meta property="og:description"
+                    content="{description_html}">
+
+              <meta property="og:url"
+                    content="{url_html}">
+
+              <meta property="og:image"
+                    content="{image_html}">
+
+              <meta property="og:image:secure_url"
+                    content="{image_html}">
+
+              <meta property="og:image:alt"
+                    content="Locandina di {title_html}">
+
+              <meta name="twitter:card"
+                    content="summary_large_image">
+
+              <meta name="twitter:title"
+                    content="{title_html}">
+
+              <meta name="twitter:description"
+                    content="{description_html}">
+
+              <meta name="twitter:image"
+                    content="{image_html}">
+
+              <link rel="icon"
+                    href="../../logo-corriere-teatrale.jpg">
+
+              <link rel="stylesheet"
+                    href="../../assets/css/style.css">
+
+          </head>
+
+          <body>
+
+          <div class="topbar">
+              ROMA · CORRIERE TEATRALE
+          </div>
+
+          <header class="masthead">
+
+              <div class="brand">
+
+                  <a href="../../index.html">
+
+                      <img
+                          src="../../logo-corriere-teatrale.jpg"
+                          alt="Corriere Teatrale"
+                      >
+
+                  </a>
+
+                  <div>
+
+                      <a href="../../index.html">
+
+                          <h1>
+                              CORRIERE
+                              <span>TEATRALE</span>
+                          </h1>
+
+                      </a>
+
+                      <p>
+                          Il giornale del teatro amatoriale romano
+                      </p>
+
+                  </div>
+
+              </div>
+
+              <div class="official">
+
+                  Organo ufficiale di<br>
+
+                  <a href="../../i-fatti-in-casa.html">
+                      <strong>
+                          I FATTI IN CASA APS
+                      </strong>
+                  </a>
+
+              </div>
+
+          </header>
+
+          <nav class="main-nav">
+
+              <div class="nav-mobile-bar">
+
+                  <span class="nav-mobile-title">
+                      MENU
+                  </span>
+
+                  <button
+                      class="menu-toggle"
+                      type="button"
+                      aria-label="Apri menu"
+                      aria-expanded="false"
+                      aria-controls="menu-principale"
+                  >
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                  </button>
+
+              </div>
+
+              <div class="nav-inner" id="menu-principale">
+
+                  <a href="../../index.html">
+                      Home
+                  </a>
+
+                  <a href="../../notizie.html">
+                      Notizie
+                  </a>
+
+                  <a href="../../eventi.html" class="active">
+                      Spettacoli
+                  </a>
+
+                  <a href="../../compagnie.html">
+                      Compagnie
+                  </a>
+
+                  <a href="../../interviste.html">
+                      Interviste
+                  </a>
+
+                  <a href="../../bacheca.html">
+                      Bacheca
+                  </a>
+
+                  <a href="../../chi-siamo.html">
+                      Chi siamo
+                  </a>
+
+                  <a href="../../segnala.html" class="segnala">
+                      Segnala
+                  </a>
+
+              </div>
+
+          </nav>
+
+          <main>
+
+              <div id="scheda-evento">
+
+                  <p>
+                      Caricamento spettacolo...
+                  </p>
+
+              </div>
+
+          </main>
+
+          <footer>
+
+              <div class="footer-inner">
+
+                  <div>
+
+                      <strong>
+                          CORRIERE TEATRALE
+                      </strong>
+
+                      <p>
+                          Il giornale del teatro amatoriale romano.
+                      </p>
+
+                  </div>
+
+                  <div>
+
+                      <p>
+
+                          Organo ufficiale di<br>
+
+                          <a href="../../i-fatti-in-casa.html">
+
+                              <strong>
+                                  I FATTI IN CASA APS
+                              </strong>
+
+                          </a>
+
+                      </p>
+
+                  </div>
+
+                  <div>
+
+                      <p>
+
+                          <a href="../../privacy.html">
+                              Privacy
+                          </a>
+
+                          ·
+
+                          <a href="../../disclaimer.html">
+                              Disclaimer
+                          </a>
+
+                          ·
+
+                          <a href="../../faq.html">
+                              FAQ
+                          </a>
+
+                      </p>
+
+                  </div>
+
+              </div>
+
+          </footer>
+
+          <script>
+              window.CORRIERE_TEATRALE_EVENTO_ID = {event_id!r};
+          </script>
+
+          <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+          <script>
+              const parametroOriginale = URLSearchParams.prototype.get;
+
+              URLSearchParams.prototype.get = function(nome) {{
+
+                  if (
+                      nome === "id" &&
+                      window.CORRIERE_TEATRALE_EVENTO_ID
+                  ) {{
+                      return window.CORRIERE_TEATRALE_EVENTO_ID;
+                  }}
+
+                  return parametroOriginale.call(this, nome);
+              }};
+          </script>
+
+          <script src="../../assets/js/app.js"></script>
+
+          </body>
+
+          </html>
+          """
+
+          Path(
+              f"spettacoli/{event_id}/index.html"
+          ).write_text(
+              page,
+              encoding="utf-8"
+          )
+          PY
+
+          done
+
+      - name: Pubblica indici e pagine aggiornate
         run: |
           git config user.name "Corriere Teatrale Bot"
           git config user.email "actions@github.com"
@@ -89,10 +462,11 @@ jobs:
           git add data/annunci.json
           git add data/notizie.json
           git add data/interviste.json
+          git add -A spettacoli
 
           if git diff --cached --quiet; then
-            echo "Nessun indice da aggiornare."
+            echo "Nessun indice o pagina da aggiornare."
           else
-            git commit -m "Aggiorna automaticamente gli indici JSON"
+            git commit -m "Aggiorna automaticamente indici e pagine spettacoli"
             git push
           fi
