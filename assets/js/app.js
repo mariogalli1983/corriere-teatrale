@@ -809,6 +809,41 @@ async function caricaSchedaCompagnia() {
 
 }
 /* =========================================================
+   FORMATTAZIONE MARKDOWN SPETTACOLI
+   ========================================================= */
+
+function formattaMarkdownEvento(testo) {
+
+    if (!testo) {
+        return "";
+    }
+
+    /*
+       Se marked.js è disponibile utilizziamo il parser Markdown
+       completo.
+
+       In caso contrario manteniamo comunque leggibile il testo,
+       trasformando le interruzioni di riga in paragrafi.
+    */
+
+    if (
+        typeof marked !== "undefined" &&
+        typeof marked.parse === "function"
+    ) {
+
+        return marked.parse(testo);
+
+    }
+
+    return testo
+        .split(/\n\s*\n/)
+        .map(paragrafo =>
+            `<p>${paragrafo.replace(/\n/g, "<br>")}</p>`
+        )
+        .join("");
+
+}
+/* =========================================================
    SCHEDA SINGOLO EVENTO / SPETTACOLO
    ========================================================= */
 
@@ -968,13 +1003,13 @@ async function caricaSchedaEvento() {
 
                         ` : ""}
 
-                        ${evento.descrizione ? `
+                      ${evento.descrizione ? `
 
-                            <p class="event-detail-description">
-                                ${evento.descrizione}
-                            </p>
+    <div class="event-detail-description">
+        ${formattaMarkdownEvento(evento.descrizione)}
+    </div>
 
-                        ` : ""}
+` : ""}
 
                         <div class="event-detail-block">
 
