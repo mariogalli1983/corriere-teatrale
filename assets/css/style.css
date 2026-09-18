@@ -2439,3 +2439,104 @@ header .official a:hover {
         font-size: 11px;
     }
 }
+/* =========================================================
+   MENU MOBILE HAMBURGER
+   ========================================================= */
+
+/* Su desktop la barra mobile non si vede */
+.nav-mobile-bar {
+    display: none;
+}
+
+
+/* MOBILE */
+@media (max-width: 768px) {
+
+    .main-nav {
+        position: relative;
+    }
+
+    /* Barra nera con MENU + hamburger */
+    .nav-mobile-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 52px;
+        padding: 0 20px;
+        background: #111;
+        color: #fff;
+    }
+
+    .nav-mobile-title {
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+    }
+
+    /* Pulsante hamburger */
+    .menu-toggle {
+        width: 42px;
+        height: 42px;
+        padding: 9px;
+        border: 0;
+        background: transparent;
+        cursor: pointer;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 5px;
+    }
+
+    .menu-toggle span {
+        display: block;
+        width: 24px;
+        height: 2px;
+        background: #fff;
+        transition: transform 0.25s ease,
+                    opacity 0.25s ease;
+    }
+
+    /* Menu chiuso */
+    .main-nav .nav-inner {
+        display: none;
+        width: 100%;
+        padding: 0;
+        background: #111;
+        overflow: visible;
+    }
+
+    /* Menu aperto */
+    .main-nav.menu-open .nav-inner {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .main-nav .nav-inner a {
+        display: block;
+        width: 100%;
+        padding: 15px 20px;
+        border-top: 1px solid #2d2d2d;
+        box-sizing: border-box;
+        white-space: normal;
+    }
+
+    .main-nav .nav-inner a.segnala {
+        background: #b30000;
+    }
+
+    /* Trasformazione ☰ → X */
+    .main-nav.menu-open .menu-toggle span:nth-child(1) {
+        transform: translateY(7px) rotate(45deg);
+    }
+
+    .main-nav.menu-open .menu-toggle span:nth-child(2) {
+        opacity: 0;
+    }
+
+    .main-nav.menu-open .menu-toggle span:nth-child(3) {
+        transform: translateY(-7px) rotate(-45deg);
+    }
+
+}
