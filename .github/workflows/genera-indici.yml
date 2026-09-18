@@ -89,81 +89,130 @@ jobs:
           rm -rf spettacoli
           mkdir -p spettacoli
 
-          for file in data/eventi/*.json; do
-
-            [ -e "$file" ] || continue
-
-            PUBBLICATO=$(jq -r '.pubblicato // false' "$file")
-
-            if [ "$PUBBLICATO" != "true" ]; then
-              continue
-            fi
-
-            ID=$(jq -r '.id // empty' "$file")
-
-            if [ -z "$ID" ]; then
-              continue
-            fi
-
-            TITOLO=$(jq -r '.titolo // "Spettacolo"' "$file")
-
-            DESCRIZIONE=$(jq -r '.descrizione // ""' "$file" \
-              | sed 's/^#\{1,6\}[[:space:]]*//g' \
-              | sed 's/\*\*//g' \
-              | sed 's/\*//g' \
-              | sed 's/\[//g' \
-              | sed 's/\]([^)]*)//g' \
-              | tr '\n' ' ' \
-              | sed 's/[[:space:]][[:space:]]*/ /g' \
-              | sed 's/^ *//;s/ *$//' \
-              | cut -c1-240)
-
-            if [ -z "$DESCRIZIONE" ]; then
-              DESCRIZIONE="Spettacolo segnalato da Corriere Teatrale, il giornale del teatro amatoriale romano."
-            fi
-
-            LOCANDINA=$(jq -r '.locandina // empty' "$file")
-
-            if [ -n "$LOCANDINA" ]; then
-
-              if [[ "$LOCANDINA" == http://* || "$LOCANDINA" == https://* ]]; then
-                IMMAGINE="$LOCANDINA"
-              else
-                LOCANDINA="${LOCANDINA#/}"
-                IMMAGINE="https://corriereteatrale.it/$LOCANDINA"
-              fi
-
-            else
-              IMMAGINE="https://corriereteatrale.it/header-corriere-teatrale.jpg"
-            fi
-
-            URL="https://corriereteatrale.it/spettacoli/$ID/"
-
-            mkdir -p "spettacoli/$ID"
-
-            export ID
-            export TITOLO
-            export DESCRIZIONE
-            export IMMAGINE
-            export URL
-
-            python3 <<'PY'
+          python3 <<'PY'
+          import json
           import html
-          import os
+          import re
           from pathlib import Path
 
-          event_id = os.environ["ID"]
-          title = os.environ["TITOLO"]
-          description = os.environ["DESCRIZIONE"]
-          image = os.environ["IMMAGINE"]
-          url = os.environ["URL"]
+          BASE_URL = "https://corriereteatrale.it"
+          FALLBACK_IMAGE = f"{BASE_URL}/header-corriere-teatrale.jpg"
 
-          title_html = html.escape(title, quote=True)
-          description_html = html.escape(description, quote=True)
-          image_html = html.escape(image, quote=True)
-          url_html = html.escape(url, quote=True)
+          def pulisci_markdown(testo):
+              if not testo:
+                  return ""
 
-          page = f"""<!DOCTYPE html>
+              testo = re.sub(r'^#{1,6}\s*', '', testo, flags=re.MULTILINE)
+              testo = re.sub(r'\*\*(.*?)\*\*', r'\1', testo)
+              testo = re.sub(r'\*(.*?)\*', r'\1', testo)
+              testo = re.sub(r'!\[([^\]]*)\]\([^)]+\)', r'\1', testo)
+              testo = re.sub(r'\[([^\]]+)\]\([^)]+\)', r'\1', testo)
+              testo = re.sub(r'\s+', ' ', testo).strip()
+
+              if len(testo) > 240:
+                  testo = testo[:237].rstrip() + "..."
+
+              return testo
+
+          cartella_eventi = Path("data/eventi")
+
+          for file_json in sorted(cartella_eventi.glob("*.json")):
+
+              with file_json.open(
+                  "r",
+                  encoding="utf-8"
+              ) as file:
+                  evento = json.load(file)
+
+              if evento.get("pubblicato") is not True:
+                  continue
+
+              event_id = str(
+                  evento.get("id", "")
+              ).strip()
+
+              if not event_id:
+                  continue
+
+              titolo = str(
+                  evento.get(
+                      "titolo",
+                      "Spettacolo"
+                  )
+              ).strip()
+
+              descrizione = pulisci_markdown(
+                  evento.get(
+                      "descrizione",
+                      ""
+                  )
+              )
+
+              if not descrizione:
+                  descrizione = (
+                      "Spettacolo segnalato da Corriere Teatrale, "
+                      "il giornale del teatro amatoriale romano."
+                  )
+
+              locandina = str(
+                  evento.get(
+                      "locandina",
+                      ""
+                  )
+              ).strip()
+
+              if locandina:
+
+                  if (
+                      locandina.startswith("http://") or
+                      locandina.startswith("https://")
+                  ):
+                      immagine = locandina
+
+                  else:
+                      immagine = (
+                          f"{BASE_URL}/"
+                          f"{locandina.lstrip('/')}"
+                      )
+
+              else:
+                  immagine = FALLBACK_IMAGE
+
+              url = (
+                  f"{BASE_URL}/spettacoli/"
+                  f"{event_id}/"
+              )
+
+              titolo_html = html.escape(
+                  titolo,
+                  quote=True
+              )
+
+              descrizione_html = html.escape(
+                  descrizione,
+                  quote=True
+              )
+
+              immagine_html = html.escape(
+                  immagine,
+                  quote=True
+              )
+
+              url_html = html.escape(
+                  url,
+                  quote=True
+              )
+
+              destinazione = (
+                  Path("spettacoli") /
+                  event_id
+              )
+
+              destinazione.mkdir(
+                  parents=True,
+                  exist_ok=True
+              )
+                          pagina = f"""<!DOCTYPE html>
           <html lang="it">
 
           <head>
@@ -173,12 +222,12 @@ jobs:
               <meta name="viewport"
                     content="width=device-width, initial-scale=1.0">
 
-              <base href="https://corriereteatrale.it/">
+              <base href="{BASE_URL}/">
 
-              <title>{title_html} | Corriere Teatrale</title>
+              <title>{titolo_html} | Corriere Teatrale</title>
 
               <meta name="description"
-                    content="{description_html}">
+                    content="{descrizione_html}">
 
               <link rel="canonical"
                     href="{url_html}">
@@ -193,34 +242,34 @@ jobs:
                     content="it_IT">
 
               <meta property="og:title"
-                    content="{title_html}">
+                    content="{titolo_html}">
 
               <meta property="og:description"
-                    content="{description_html}">
+                    content="{descrizione_html}">
 
               <meta property="og:url"
                     content="{url_html}">
 
               <meta property="og:image"
-                    content="{image_html}">
+                    content="{immagine_html}">
 
               <meta property="og:image:secure_url"
-                    content="{image_html}">
+                    content="{immagine_html}">
 
               <meta property="og:image:alt"
-                    content="Locandina di {title_html}">
+                    content="Locandina di {titolo_html}">
 
               <meta name="twitter:card"
                     content="summary_large_image">
 
               <meta name="twitter:title"
-                    content="{title_html}">
+                    content="{titolo_html}">
 
               <meta name="twitter:description"
-                    content="{description_html}">
+                    content="{descrizione_html}">
 
               <meta name="twitter:image"
-                    content="{image_html}">
+                    content="{immagine_html}">
 
               <link rel="icon"
                     href="logo-corriere-teatrale.jpg">
@@ -229,7 +278,8 @@ jobs:
                     href="assets/css/style.css">
 
           </head>
-                    <body>
+
+          <body>
 
           <div class="topbar">
               ROMA · CORRIERE TEATRALE
@@ -272,9 +322,11 @@ jobs:
                   Organo ufficiale di<br>
 
                   <a href="i-fatti-in-casa.html">
+
                       <strong>
                           I FATTI IN CASA APS
                       </strong>
+
                   </a>
 
               </div>
@@ -303,7 +355,10 @@ jobs:
 
               </div>
 
-              <div class="nav-inner" id="menu-principale">
+              <div
+                  class="nav-inner"
+                  id="menu-principale"
+              >
 
                   <a href="index.html">
                       Home
@@ -313,7 +368,10 @@ jobs:
                       Notizie
                   </a>
 
-                  <a href="eventi.html" class="active">
+                  <a
+                      href="eventi.html"
+                      class="active"
+                  >
                       Spettacoli
                   </a>
 
@@ -333,7 +391,10 @@ jobs:
                       Chi siamo
                   </a>
 
-                  <a href="segnala.html" class="segnala">
+                  <a
+                      href="segnala.html"
+                      class="segnala"
+                  >
                       Segnala
                   </a>
 
@@ -416,13 +477,14 @@ jobs:
           </footer>
 
           <script>
-              window.CORRIERE_TEATRALE_EVENTO_ID = {event_id!r};
+              window.CORRIERE_TEATRALE_EVENTO_ID = {json.dumps(event_id)};
           </script>
 
           <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
           <script>
-              const parametroOriginale = URLSearchParams.prototype.get;
+              const parametroOriginale =
+                  URLSearchParams.prototype.get;
 
               URLSearchParams.prototype.get = function(nome) {{
 
@@ -433,7 +495,10 @@ jobs:
                       return window.CORRIERE_TEATRALE_EVENTO_ID;
                   }}
 
-                  return parametroOriginale.call(this, nome);
+                  return parametroOriginale.call(
+                      this,
+                      nome
+                  );
               }};
           </script>
 
@@ -443,15 +508,22 @@ jobs:
 
           </html>
           """
-                  Path(
-              f"spettacoli/{event_id}/index.html"
-          ).write_text(
-              page,
-              encoding="utf-8"
-          )
-          PY
+                        file_html = (
+                  destinazione /
+                  "index.html"
+              )
 
-          done
+              file_html.write_text(
+                  pagina,
+                  encoding="utf-8"
+              )
+
+              print(
+                  "Generata pagina:",
+                  file_html
+              )
+
+          PY
 
       - name: Pubblica indici e pagine aggiornate
         run: |
@@ -470,4 +542,4 @@ jobs:
           else
             git commit -m "Aggiorna automaticamente indici e pagine spettacoli"
             git push
-          fi 
+          fi
