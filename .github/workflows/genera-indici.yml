@@ -1,4 +1,4 @@
-name: Genera indici JSON e pagine spettacoli
+name: Genera indici JSON e pagine del sito
 
 on:
   push:
@@ -95,9 +95,12 @@ jobs:
           mv data/interviste.tmp.json data/interviste.json
 
 
-      - name: Genera pagine degli spettacoli
+      - name: Genera pagine statiche
         run: |
           rm -rf spettacoli
+          rm -rf notizie
+          rm -rf interviste
+
           python3 scripts/genera_pagine.py
 
 
@@ -111,11 +114,14 @@ jobs:
           git add data/annunci.json
           git add data/notizie.json
           git add data/interviste.json
+
           git add -A spettacoli
+          git add -A notizie
+          git add -A interviste
 
           if git diff --cached --quiet; then
             echo "Nessun indice o pagina da aggiornare."
           else
-            git commit -m "Aggiorna automaticamente indici e pagine spettacoli"
+            git commit -m "Aggiorna automaticamente indici e pagine statiche"
             git push
           fi
