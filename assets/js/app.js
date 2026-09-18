@@ -1897,7 +1897,8 @@ async function caricaBachecaHome() {
 
 
 /* =========================================================
-   NOTIZIE HOME
+   ULTIME STORIE HOME
+   NOTIZIE + INTERVISTE
    ========================================================= */
 
 async function caricaNotizieHome() {
@@ -1911,37 +1912,246 @@ async function caricaNotizieHome() {
 
     try {
 
-        const risposta =
-            await fetch(
-                "data/notizie.json?ts=" + Date.now()
-            );
+        const [
+            rispostaNotizie,
+            rispostaInterviste
+        ] = await Promise.all([
 
-        if (!risposta.ok) {
+            fetch(
+                "data/notizie.json?ts=" +
+                Date.now()
+            ),
+
+            fetch(
+                "data/interviste.json?ts=" +
+                Date.now()
+            )
+
+        ]);
+
+
+        if (
+            !rispostaNotizie.ok ||
+            !rispostaInterviste.ok
+        ) {
 
             throw new Error(
-                "Impossibile caricare le notizie"
+                "Impossibile caricare le ultime storie"
             );
 
         }
+
 
         const notizie =
-            await risposta.json();
+            await rispostaNotizie.json();
 
-        if (!Array.isArray(notizie)) {
+        const interviste =
+            await rispostaInterviste.json();
+
+
+        if (
+            !Array.isArray(notizie) ||
+            !Array.isArray(interviste)
+        ) {
 
             throw new Error(
-                "Formato dell'archivio notizie non valido"
+                "Formato degli archivi editoriali non valido"
             );
 
         }
 
-        const notizieVisibili =
+
+        /*
+           Normalizziamo Notizie e Interviste
+           in un unico archivio editoriale.
+
+           In questo modo la Home può ordinarle
+           semplicemente per data senza preoccuparsi
+           della loro provenienza.
+        */
+
+
+        const notizieNormalizzate =
             notizie
 
                 .filter(
                     notizia =>
                         notizia.pubblicato !== false
                 )
+
+                .map(
+                    notizia => ({
+
+                        tipoContenuto:
+                            "notizia",
+
+                        id:
+                            notizia.id || "",
+
+                        titolo:
+                            notizia.titolo ||
+                            "Senza titolo",
+
+                        categoria:
+                            notizia.categoria ||
+                            "STORIE",
+
+                        occhiello:
+                            notizia.occhiello ||
+                            "",
+
+                        sommario:
+                            notizia.sommario ||
+                            "",
+
+                        autore:
+                            notizia.autore ||
+                            "Redazione Corriere Teatrale",
+
+                        immagine:
+                            notizia.immagine ||
+                            "",
+
+                        data_pubblicazione:
+                            notizia.data_pubblicazione ||
+                            "",
+
+                        url:
+                            `notizia.html?id=${encodeURIComponent(
+                                notizia.id || ""
+                            )}`,
+
+                        testoLink:
+                            "Leggi la storia"
+
+                    })
+                );
+
+
+        const intervisteNormalizzate =
+            interviste
+
+                .filter(
+                    intervista =>
+                        intervista.pubblicato !== false
+                )
+
+                .map(
+                    intervista => {
+
+                        const intervistato =
+                            intervista.intervistato ||
+                            "";
+
+                        const ruolo =
+                            intervista.ruolo ||
+                            "";
+
+                        const compagnia =
+                            intervista.compagnia ||
+                            "";
+
+
+                        let occhiello =
+                            "";
+
+
+                        if (intervistato) {
+
+                            occhiello =
+                                intervistato;
+
+                            if (ruolo) {
+                                occhiello +=
+                                    ` · ${ruolo}`;
+                            }
+
+                            if (compagnia) {
+                                occhiello +=
+                                    ` · ${compagnia}`;
+                            }
+
+                        } else if (ruolo) {
+
+                            occhiello =
+                                ruolo;
+
+                            if (compagnia) {
+                                occhiello +=
+                                    ` · ${compagnia}`;
+                            }
+
+                        } else if (compagnia) {
+
+                            occhiello =
+                                compagnia;
+
+                        }
+
+
+                        return {
+
+                            tipoContenuto:
+                                "intervista",
+
+                            id:
+                                intervista.id || "",
+
+                            titolo:
+                                intervista.titolo ||
+                                "Senza titolo",
+
+                            categoria:
+                                "INTERVISTA",
+
+                            occhiello:
+                                occhiello,
+
+                            sommario:
+                                intervista.introduzione ||
+                                "",
+
+                            autore:
+                                intervista.autore ||
+                                "Redazione Corriere Teatrale",
+
+                            immagine:
+                                intervista.immagine ||
+                                "",
+
+                            data_pubblicazione:
+                                intervista.data_pubblicazione ||
+                                "",
+
+                            url:
+                                `intervista.html?id=${encodeURIComponent(
+                                    intervista.id || ""
+                                )}`,
+
+                            testoLink:
+                                "Leggi l'intervista"
+
+                        };
+
+                    }
+                );
+
+
+        /*
+           Uniamo i due archivi.
+
+           Le pubblicazioni più recenti vengono
+           mostrate per prime indipendentemente
+           dal fatto che siano una notizia
+           o un'intervista.
+        */
+
+
+        const storieVisibili =
+            [
+                ...notizieNormalizzate,
+                ...intervisteNormalizzate
+            ]
 
                 .sort(
                     (a, b) =>
@@ -1958,7 +2168,7 @@ async function caricaNotizieHome() {
                 .slice(0, 3);
 
 
-        if (notizieVisibili.length === 0) {
+        if (storieVisibili.length === 0) {
 
             contenitore.innerHTML = `
 
@@ -1975,7 +2185,7 @@ async function caricaNotizieHome() {
                     <p>
                         In questa sezione racconteremo compagnie,
                         spettacoli e persone del teatro amatoriale
-                        romano. Notizie, approfondimenti e storie
+                        romano. Notizie, approfondimenti e interviste
                         da dentro e fuori il palcoscenico.
                     </p>
 
@@ -1993,43 +2203,41 @@ async function caricaNotizieHome() {
 
 
         contenitore.innerHTML =
-            notizieVisibili
+            storieVisibili
 
                 .map(
-                    (notizia, indice) => {
-
-                        const id =
-                            notizia.id || "";
+                    (storia, indice) => {
 
                         const titolo =
-                            notizia.titolo ||
-                            "Senza titolo";
+                            storia.titolo;
 
                         const categoria =
-                            notizia.categoria ||
-                            "NOTIZIE";
+                            storia.categoria;
 
                         const occhiello =
-                            notizia.occhiello ||
-                            "";
+                            storia.occhiello;
 
                         const sommario =
-                            notizia.sommario ||
-                            "";
+                            storia.sommario;
 
                         const autore =
-                            notizia.autore ||
-                            "Redazione Corriere Teatrale";
+                            storia.autore;
 
                         const immagine =
-                            notizia.immagine ||
-                            "";
+                            storia.immagine;
+
+                        const url =
+                            storia.url;
+
+                        const testoLink =
+                            storia.testoLink;
+
 
                         const data =
-                            notizia.data_pubblicazione
+                            storia.data_pubblicazione
 
                                 ? formattaData(
-                                    notizia.data_pubblicazione,
+                                    storia.data_pubblicazione,
                                     {
                                         day: "numeric",
                                         month: "long",
@@ -2038,6 +2246,13 @@ async function caricaNotizieHome() {
                                 )
 
                                 : "";
+
+
+                        /*
+                           Il contenuto più recente
+                           mantiene l'impaginazione principale
+                           già utilizzata dalla Home.
+                        */
 
 
                         if (indice === 0) {
@@ -2059,7 +2274,7 @@ async function caricaNotizieHome() {
                                             ? `
 
                                                 <a
-                                                    href="notizia.html?id=${encodeURIComponent(id)}"
+                                                    href="${url}"
                                                     style="
                                                         display: block;
                                                         margin-bottom: 18px;
@@ -2120,7 +2335,7 @@ async function caricaNotizieHome() {
                                         "
                                     >
 
-                                        <a href="notizia.html?id=${encodeURIComponent(id)}">
+                                        <a href="${url}">
                                             ${titolo}
                                         </a>
 
@@ -2130,6 +2345,7 @@ async function caricaNotizieHome() {
                                         sommario
 
                                             ? `
+
                                                 <p
                                                     style="
                                                         font-size: 17px;
@@ -2138,6 +2354,7 @@ async function caricaNotizieHome() {
                                                 >
                                                     ${sommario}
                                                 </p>
+
                                               `
 
                                             : ""
@@ -2165,10 +2382,10 @@ async function caricaNotizieHome() {
                                     </p>
 
                                     <a
-                                        href="notizia.html?id=${encodeURIComponent(id)}"
+                                        href="${url}"
                                         style="font-weight: 700;"
                                     >
-                                        Leggi la storia →
+                                        ${testoLink} →
                                     </a>
 
                                 </article>
@@ -2176,6 +2393,12 @@ async function caricaNotizieHome() {
                             `;
 
                         }
+
+
+                        /*
+                           Seconda e terza pubblicazione:
+                           formato più compatto.
+                        */
 
 
                         return `
@@ -2195,7 +2418,7 @@ async function caricaNotizieHome() {
                                         ? `
 
                                             <a
-                                                href="notizia.html?id=${encodeURIComponent(id)}"
+                                                href="${url}"
                                                 style="
                                                     display: block;
                                                     margin-bottom: 14px;
@@ -2224,9 +2447,32 @@ async function caricaNotizieHome() {
                                     ${categoria}
                                 </span>
 
+                                ${
+                                    occhiello
+
+                                        ? `
+
+                                            <div
+                                                style="
+                                                    margin-top: 8px;
+                                                    margin-bottom: 5px;
+                                                    font-family: Georgia, 'Times New Roman', serif;
+                                                    font-size: 15px;
+                                                    font-style: italic;
+                                                    color: #666;
+                                                "
+                                            >
+                                                ${occhiello}
+                                            </div>
+
+                                          `
+
+                                        : ""
+                                }
+
                                 <h3>
 
-                                    <a href="notizia.html?id=${encodeURIComponent(id)}">
+                                    <a href="${url}">
                                         ${titolo}
                                     </a>
 
@@ -2259,8 +2505,8 @@ async function caricaNotizieHome() {
 
                                 </p>
 
-                                <a href="notizia.html?id=${encodeURIComponent(id)}">
-                                    Leggi →
+                                <a href="${url}">
+                                    ${testoLink} →
                                 </a>
 
                             </article>
@@ -2276,7 +2522,7 @@ async function caricaNotizieHome() {
     } catch (errore) {
 
         console.error(
-            "Errore caricamento Notizie Home:",
+            "Errore caricamento Ultime Storie Home:",
             errore
         );
 
@@ -2293,7 +2539,7 @@ async function caricaNotizieHome() {
                 </h3>
 
                 <p>
-                    Consulta notizie, racconti e approfondimenti
+                    Consulta notizie, racconti e interviste
                     dal teatro amatoriale romano.
                 </p>
 
