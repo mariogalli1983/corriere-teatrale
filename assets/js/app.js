@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+
     /* =========================================================
        MENU MOBILE
        ========================================================= */
@@ -29,6 +30,12 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
     }
+
+
+    /* =========================================================
+       CONTENITORI DELLE PAGINE
+       ========================================================= */
+
     const elencoCompagnie =
         document.getElementById("elenco-compagnie");
 
@@ -43,8 +50,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const elencoAnnunci =
         document.getElementById("elenco-annunci");
-const homeEventi = document.getElementById("home-eventi");
-const homeBacheca = document.getElementById("home-bacheca");
+
+    const homeEventi =
+        document.getElementById("home-eventi");
+
+    const homeNotizie =
+        document.getElementById("home-notizie");
+
+    const homeBacheca =
+        document.getElementById("home-bacheca");
+
+
+    /* =========================================================
+       AVVIO FUNZIONI
+       ========================================================= */
+
     if (elencoCompagnie) {
         caricaCompagnie();
     }
@@ -60,8 +80,19 @@ const homeBacheca = document.getElementById("home-bacheca");
     if (schedaEvento) {
         caricaSchedaEvento();
     }
-if (homeEventi) caricaEventiHome();
-    if (homeBacheca) caricaBachecaHome();
+
+    if (homeEventi) {
+        caricaEventiHome();
+    }
+
+    if (homeNotizie) {
+        caricaNotizieHome();
+    }
+
+    if (homeBacheca) {
+        caricaBachecaHome();
+    }
+
     if (elencoAnnunci) {
         caricaAnnunci();
     }
@@ -108,6 +139,7 @@ function annuncioScaduto(dataScadenza) {
 
     return adesso > fineScadenza;
 }
+
 
 /* =========================================================
    GESTIONE COMPAGNIE SPECIALI
@@ -157,1529 +189,13 @@ function datiCompagniaEvento(evento, compagnie) {
 
 }
 /* =========================================================
-   DIRECTORY COMPAGNIE
+   NOTIZIE HOME
    ========================================================= */
 
-async function caricaCompagnie() {
+async function caricaNotizieHome() {
 
     const contenitore =
-        document.getElementById("elenco-compagnie");
-
-    try {
-
-        const risposta =
-            await fetch("data/compagnie.json");
-
-        if (!risposta.ok) {
-            throw new Error(
-                "Impossibile caricare le compagnie"
-            );
-        }
-
-        const compagnie =
-            await risposta.json();
-
-        const compagnieAttive =
-            compagnie.filter(
-                compagnia =>
-                    compagnia.attiva === true
-            );
-
-        if (compagnieAttive.length === 0) {
-
-            contenitore.innerHTML =
-                "<p>Non ci sono ancora compagnie pubblicate.</p>";
-
-            return;
-        }
-
-        contenitore.innerHTML =
-            compagnieAttive.map(compagnia => {
-
-                const generi =
-                    compagnia.generi
-                        ? compagnia.generi.join(" · ")
-                        : "";
-
-                return `
-
-                    <article class="company-card">
-
-                        ${compagnia.logo ? `
-
-                            <a href="compagnia.html?id=${compagnia.id}">
-
-                                <img
-                                    src="${compagnia.logo}"
-                                    alt="Logo ${compagnia.nome}"
-                                    class="company-logo"
-                                >
-
-                            </a>
-
-                        ` : ""}
-
-                        <div class="categoria">
-                            ${compagnia.tipologia}
-                        </div>
-
-                        <h3>
-
-                            <a href="compagnia.html?id=${compagnia.id}">
-                                ${compagnia.nome}
-                            </a>
-
-                        </h3>
-
-                        <p>
-
-                            ${compagnia.citta}
-
-                            ${compagnia.zona
-                                ? " · " + compagnia.zona
-                                : ""}
-
-                            ${compagnia.municipio
-                                ? " · Municipio " + compagnia.municipio
-                                : ""}
-
-                        </p>
-
-                        <p>
-                            ${compagnia.descrizione}
-                        </p>
-
-                        ${generi ? `
-
-                            <p>
-                                <strong>${generi}</strong>
-                            </p>
-
-                        ` : ""}
-
-                    </article>
-
-                `;
-
-            }).join("");
-
-    } catch (errore) {
-
-        console.error(errore);
-
-        contenitore.innerHTML =
-            "<p>Si è verificato un problema nel caricamento delle compagnie.</p>";
-
-    }
-
-}
-
-
-/* =========================================================
-   ELENCO EVENTI / SPETTACOLI
-   ========================================================= */
-
-async function caricaEventi() {
-
-    const contenitore =
-        document.getElementById("elenco-eventi");
-
-    try {
-
-        const [
-            rispostaEventi,
-            rispostaCompagnie
-        ] = await Promise.all([
-
-            fetch("data/eventi.json"),
-            fetch("data/compagnie.json")
-
-        ]);
-
-        if (
-            !rispostaEventi.ok ||
-            !rispostaCompagnie.ok
-        ) {
-
-            throw new Error(
-                "Impossibile caricare gli eventi"
-            );
-
-        }
-
-        const eventi =
-            await rispostaEventi.json();
-
-        const compagnie =
-            await rispostaCompagnie.json();
-
-        const eventiPubblicati =
-            eventi.filter(
-                evento =>
-                    evento.pubblicato === true
-            );
-
-        if (eventiPubblicati.length === 0) {
-
-            contenitore.innerHTML =
-                "<p>Non ci sono eventi in programma.</p>";
-
-            return;
-        }
-
-        contenitore.innerHTML =
-            eventiPubblicati.map(evento => {
-
-                const datiCompagnia =
-    datiCompagniaEvento(
-        evento,
-        compagnie
-    );
-                const dateHTML =
-                    evento.date.map(replica => {
-
-                        const dataFormattata =
-                            formattaData(
-                                replica.data,
-                                {
-                                    day: "numeric",
-                                    month: "long",
-                                    year: "numeric"
-                                }
-                            );
-
-                        return `
-
-                            <div>
-
-                                <strong>
-                                    ${dataFormattata}
-                                </strong>
-
-                                · ${replica.ora}
-
-                            </div>
-
-                        `;
-
-                    }).join("");
-
-                return `
-
-                    <article class="event-card">
-
-                        ${evento.locandina ? `
-
-                            <a href="evento.html?id=${evento.id}">
-
-                                <img
-                                    src="${evento.locandina}"
-                                    alt="Locandina ${evento.titolo}"
-                                    class="event-poster"
-                                >
-
-                            </a>
-
-                        ` : ""}
-
-                        <div class="categoria">
-                            ${evento.tipo}
-                        </div>
-
-                        <h3>
-
-                            <a href="evento.html?id=${evento.id}">
-                                ${evento.titolo}
-                            </a>
-
-                        </h3>
-
-                       <p>
-
-    ${
-        datiCompagnia.url
-            ? `
-                <a href="${datiCompagnia.url}">
-                    <strong>
-                        ${datiCompagnia.nome}
-                    </strong>
-                </a>
-            `
-            : `
-                <strong>
-                    ${datiCompagnia.nome}
-                </strong>
-            `
-    }
-
-</p>
-
-                        <div style="margin: 12px 0;">
-                            ${dateHTML}
-                        </div>
-
-                        <p>
-
-                            ${evento.luogo}
-
-                            ${evento.indirizzo
-                                ? "<br>" + evento.indirizzo
-                                : ""}
-
-                            ${evento.quartiere
-                                ? "<br>" + evento.quartiere
-                                : ""}
-
-                            ${evento.municipio
-                                ? " · Municipio " + evento.municipio
-                                : ""}
-
-                        </p>
-
-                    </article>
-
-                `;
-
-            }).join("");
-
-    } catch (errore) {
-
-        console.error(errore);
-
-        contenitore.innerHTML =
-            "<p>Si è verificato un problema nel caricamento degli eventi.</p>";
-
-    }
-
-}
-
-
-/* =========================================================
-   SCHEDA SINGOLA COMPAGNIA
-   ========================================================= */
-
-async function caricaSchedaCompagnia() {
-
-    const contenitore =
-        document.getElementById("scheda-compagnia");
-
-    const parametri =
-        new URLSearchParams(window.location.search);
-
-    const idCompagnia =
-        parametri.get("id");
-
-    if (!idCompagnia) {
-
-        contenitore.innerHTML =
-            "<p>Compagnia non specificata.</p>";
-
-        return;
-    }
-
-    try {
-
-        const [
-            rispostaCompagnie,
-            rispostaEventi
-        ] = await Promise.all([
-
-            fetch("data/compagnie.json"),
-            fetch("data/eventi.json")
-
-        ]);
-
-        if (
-            !rispostaCompagnie.ok ||
-            !rispostaEventi.ok
-        ) {
-
-            throw new Error(
-                "Errore nel caricamento dei dati"
-            );
-
-        }
-
-        const compagnie =
-            await rispostaCompagnie.json();
-
-        const eventi =
-            await rispostaEventi.json();
-
-        const compagnia =
-            compagnie.find(
-                c => c.id === idCompagnia
-            );
-
-        if (!compagnia) {
-
-            contenitore.innerHTML =
-                "<h2>Compagnia non trovata</h2>";
-
-            return;
-        }
-
-        const eventiCompagnia =
-            eventi.filter(
-                evento =>
-                    evento.compagnia_id === compagnia.id &&
-                    evento.pubblicato === true
-            );
-
-        document.title =
-            compagnia.nome +
-            " | Corriere Teatrale";
-
-        const generi =
-            compagnia.generi
-                ? compagnia.generi.join(" · ")
-                : "";
-
-        const eventiHTML =
-            eventiCompagnia.length > 0
-
-                ? eventiCompagnia.map(evento => {
-
-                    const date =
-                        evento.date.map(replica => {
-
-                            const dataFormattata =
-                                formattaData(
-                                    replica.data,
-                                    {
-                                        day: "numeric",
-                                        month: "long",
-                                        year: "numeric"
-                                    }
-                                );
-
-                            return `
-
-                                <div>
-
-                                    <strong>
-                                        ${dataFormattata}
-                                    </strong>
-
-                                    · ${replica.ora}
-
-                                </div>
-
-                            `;
-
-                        }).join("");
-
-                    return `
-
-                        <article class="event-card">
-
-                            ${evento.locandina ? `
-
-                                <a href="evento.html?id=${evento.id}">
-
-                                    <img
-                                        src="${evento.locandina}"
-                                        alt="Locandina ${evento.titolo}"
-                                        class="event-poster"
-                                    >
-
-                                </a>
-
-                            ` : ""}
-
-                            <div class="categoria">
-                                ${evento.tipo}
-                            </div>
-
-                            <h3>
-
-                                <a href="evento.html?id=${evento.id}">
-                                    ${evento.titolo}
-                                </a>
-
-                            </h3>
-
-                            <div style="margin: 12px 0;">
-                                ${date}
-                            </div>
-
-                            <p>
-
-                                ${evento.luogo}
-
-                                ${evento.indirizzo
-                                    ? "<br>" + evento.indirizzo
-                                    : ""}
-
-                                ${evento.quartiere
-                                    ? "<br>" + evento.quartiere
-                                    : ""}
-
-                                ${evento.municipio
-                                    ? " · Municipio " + evento.municipio
-                                    : ""}
-
-                            </p>
-
-                        </article>
-
-                    `;
-
-                }).join("")
-
-                : "<p>Nessun evento in programma.</p>";
-
-        contenitore.innerHTML = `
-
-            <section>
-
-                <div class="company-profile">
-
-                    ${compagnia.logo ? `
-
-                        <div class="company-profile-logo">
-
-                            <img
-                                src="${compagnia.logo}"
-                                alt="Logo ${compagnia.nome}"
-                            >
-
-                        </div>
-
-                    ` : ""}
-
-                    <div class="company-profile-content">
-
-                        <div class="categoria">
-                            ${compagnia.tipologia}
-                        </div>
-
-                        <h1 style="
-                            font-family: Georgia, 'Times New Roman', serif;
-                            font-size: clamp(36px, 5vw, 55px);
-                            margin: 10px 0;
-                        ">
-
-                            ${compagnia.nome}
-
-                        </h1>
-
-                        <p style="
-                            color: #666;
-                            font-size: 17px;
-                            margin-bottom: 20px;
-                        ">
-
-                            ${compagnia.citta}
-
-                            ${compagnia.zona
-                                ? " · " + compagnia.zona
-                                : ""}
-
-                            ${compagnia.municipio
-                                ? " · Municipio " + compagnia.municipio
-                                : ""}
-
-                        </p>
-
-                        <p style="
-                            max-width: 750px;
-                            font-size: 17px;
-                        ">
-
-                            ${compagnia.descrizione}
-
-                        </p>
-
-                        ${generi ? `
-
-                            <p style="margin-top: 15px;">
-
-                                <strong>
-                                    Generi:
-                                </strong>
-
-                                ${generi}
-
-                            </p>
-
-                        ` : ""}
-
-                        ${compagnia.email ? `
-
-                            <p style="margin-top: 15px;">
-
-                                <strong>Email:</strong>
-
-                                <a href="mailto:${compagnia.email}">
-                                    ${compagnia.email}
-                                </a>
-
-                            </p>
-
-                        ` : ""}
-
-                        ${compagnia.telefono ? `
-
-                            <p>
-
-                                <strong>Telefono:</strong>
-
-                                ${compagnia.telefono}
-
-                            </p>
-
-                        ` : ""}
-
-                        ${compagnia.sito ? `
-
-                            <p>
-
-                                <a
-                                    href="${compagnia.sito}"
-                                    target="_blank"
-                                    rel="noopener"
-                                >
-                                    Sito ufficiale
-                                </a>
-
-                            </p>
-
-                        ` : ""}
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <section style="margin-top: 50px;">
-
-                <div class="section-header">
-
-                    <h2>
-                        Prossimi spettacoli
-                    </h2>
-
-                </div>
-
-                <div class="event-grid">
-
-                    ${eventiHTML}
-
-                </div>
-
-            </section>
-
-        `;
-
-    } catch (errore) {
-
-        console.error(errore);
-
-        contenitore.innerHTML =
-            "<p>Si è verificato un problema nel caricamento della compagnia.</p>";
-
-    }
-
-}
-
-
-/* =========================================================
-   SCHEDA SINGOLO EVENTO / SPETTACOLO
-   ========================================================= */
-
-async function caricaSchedaEvento() {
-
-    const contenitore =
-        document.getElementById("scheda-evento");
-
-    const parametri =
-        new URLSearchParams(window.location.search);
-
-    const idEvento =
-        parametri.get("id");
-
-    if (!idEvento) {
-
-        contenitore.innerHTML =
-            "<p>Spettacolo non specificato.</p>";
-
-        return;
-    }
-
-    try {
-
-        const [
-            rispostaEventi,
-            rispostaCompagnie
-        ] = await Promise.all([
-
-            fetch("data/eventi.json"),
-            fetch("data/compagnie.json")
-
-        ]);
-
-        if (
-            !rispostaEventi.ok ||
-            !rispostaCompagnie.ok
-        ) {
-
-            throw new Error(
-                "Errore nel caricamento dello spettacolo"
-            );
-
-        }
-
-        const eventi =
-            await rispostaEventi.json();
-
-        const compagnie =
-            await rispostaCompagnie.json();
-
-        const evento =
-            eventi.find(
-                e =>
-                    e.id === idEvento &&
-                    e.pubblicato === true
-            );
-
-        if (!evento) {
-
-            contenitore.innerHTML =
-                "<h2>Spettacolo non trovato</h2>";
-
-            return;
-        }
-
-        const datiCompagnia =
-    datiCompagniaEvento(
-        evento,
-        compagnie
-    );
-
-        document.title =
-            evento.titolo +
-            " | Corriere Teatrale";
-
-        const dateHTML =
-            evento.date.map(replica => {
-
-                const dataFormattata =
-                    formattaData(
-                        replica.data,
-                        {
-                            weekday: "long",
-                            day: "numeric",
-                            month: "long",
-                            year: "numeric"
-                        }
-                    );
-
-                return `
-
-                    <div class="event-detail-date">
-
-                        <strong>
-                            ${dataFormattata}
-                        </strong>
-
-                        <span>
-                            ore ${replica.ora}
-                        </span>
-
-                    </div>
-
-                `;
-
-            }).join("");
-
-        contenitore.innerHTML = `
-
-            <article class="event-detail">
-
-                <div class="event-detail-grid">
-
-                    <div class="event-detail-poster">
-
-                        ${evento.locandina ? `
-
-                            <img
-                                src="${evento.locandina}"
-                                alt="Locandina ${evento.titolo}"
-                            >
-
-                        ` : ""}
-
-                    </div>
-
-                    <div class="event-detail-content">
-
-                        <div class="categoria">
-                            ${evento.tipo}
-                        </div>
-
-                        <h1>
-                            ${evento.titolo}
-                        </h1>
-
-                       ${datiCompagnia.nome ? `
-
-    <p class="event-detail-company">
-
-        di
-
-        ${
-            datiCompagnia.url
-                ? `
-                    <a href="${datiCompagnia.url}">
-                        ${datiCompagnia.nome}
-                    </a>
-                `
-                : `
-                    ${datiCompagnia.nome}
-                `
-        }
-
-    </p>
-
-` : ""}
-
-                        ${evento.descrizione ? `
-
-                            <p class="event-detail-description">
-                                ${evento.descrizione}
-                            </p>
-
-                        ` : ""}
-
-                        <div class="event-detail-block">
-
-                            <h2>
-                                Date e orari
-                            </h2>
-
-                            ${dateHTML}
-
-                        </div>
-
-                        <div class="event-detail-block">
-
-                            <h2>
-                                Dove
-                            </h2>
-
-                            <p>
-
-                                <strong>
-                                    ${evento.luogo}
-                                </strong>
-
-                                ${evento.indirizzo
-                                    ? "<br>" + evento.indirizzo
-                                    : ""}
-
-                                ${evento.citta
-                                    ? "<br>" + evento.citta
-                                    : ""}
-
-                                ${evento.quartiere
-                                    ? " · " + evento.quartiere
-                                    : ""}
-
-                                ${evento.municipio
-                                    ? " · Municipio " + evento.municipio
-                                    : ""}
-
-                            </p>
-
-                        </div>
-
-                        ${
-                            evento.prezzo_intero ||
-                            evento.prezzo_ridotto
-
-                            ? `
-
-                                <div class="event-detail-block">
-
-                                    <h2>
-                                        Biglietti
-                                    </h2>
-
-                                    ${evento.prezzo_intero ? `
-
-                                        <p>
-
-                                            <strong>
-                                                Intero:
-                                            </strong>
-
-                                            ${evento.prezzo_intero}
-
-                                        </p>
-
-                                    ` : ""}
-
-                                    ${evento.prezzo_ridotto ? `
-
-                                        <p>
-
-                                            <strong>
-                                                Ridotto:
-                                            </strong>
-
-                                            ${evento.prezzo_ridotto}
-
-                                        </p>
-
-                                    ` : ""}
-
-                                </div>
-
-                            `
-
-                            : ""
-                        }
-
-                        ${evento.prenotazioni ? `
-
-                            <div class="event-detail-block">
-
-                                <h2>
-                                    Prenotazioni
-                                </h2>
-
-                                <p>
-                                    ${evento.prenotazioni}
-                                </p>
-
-                            </div>
-
-                        ` : ""}
-
-                        ${evento.link ? `
-
-                            <p style="margin-top: 25px;">
-
-                                <a
-                                    href="${evento.link}"
-                                    target="_blank"
-                                    rel="noopener"
-                                    class="event-button"
-                                >
-                                    Prenota / maggiori informazioni
-                                </a>
-
-                            </p>
-
-                        ` : ""}
-
-                    </div>
-
-                </div>
-
-            </article>
-
-        `;
-
-    } catch (errore) {
-
-        console.error(errore);
-
-        contenitore.innerHTML =
-            "<p>Si è verificato un problema nel caricamento dello spettacolo.</p>";
-
-    }
-
-}
-
-
-/* =========================================================
-   BACHECA
-   ========================================================= */
-
-async function caricaAnnunci() {
-
-    const contenitore =
-        document.getElementById("elenco-annunci");
-
-    try {
-
-        const [
-            rispostaAnnunci,
-            rispostaCompagnie
-        ] = await Promise.all([
-
-            fetch("data/annunci.json"),
-            fetch("data/compagnie.json")
-
-        ]);
-
-        if (
-            !rispostaAnnunci.ok ||
-            !rispostaCompagnie.ok
-        ) {
-
-            throw new Error(
-                "Impossibile caricare la Bacheca"
-            );
-
-        }
-
-        const annunci =
-            await rispostaAnnunci.json();
-
-        const compagnie =
-            await rispostaCompagnie.json();
-
-
-        /*
-           Manteniamo soltanto:
-           - annunci pubblicati
-           - annunci non ancora scaduti
-        */
-
-        const annunciVisibili =
-            annunci
-                .filter(
-                    annuncio =>
-                        annuncio.pubblicato === true &&
-                        !annuncioScaduto(
-                            annuncio.data_scadenza
-                        )
-                )
-                .sort(
-                    (a, b) =>
-                        new Date(b.data_pubblicazione) -
-                        new Date(a.data_pubblicazione)
-                );
-
-
-        function mostraAnnunci(categoria = "tutti") {
-
-            const filtrati =
-                categoria === "tutti"
-
-                    ? annunciVisibili
-
-                    : annunciVisibili.filter(
-                        annuncio =>
-                            annuncio.categoria === categoria
-                    );
-
-
-            if (filtrati.length === 0) {
-
-                contenitore.innerHTML = `
-
-                    <div class="bacheca-vuota">
-
-                        <h3>
-                            Nessun annuncio
-                        </h3>
-
-                        <p>
-                            Al momento non ci sono annunci
-                            in questa categoria.
-                        </p>
-
-                    </div>
-
-                `;
-
-                return;
-            }
-
-
-            contenitore.innerHTML =
-                filtrati.map(annuncio => {
-
-                    const compagnia =
-                        compagnie.find(
-                            c =>
-                                c.id ===
-                                annuncio.compagnia_id
-                        );
-
-
-                    const dataPubblicazione =
-                        formattaData(
-                            annuncio.data_pubblicazione,
-                            {
-                                day: "numeric",
-                                month: "long",
-                                year: "numeric"
-                            }
-                        );
-
-
-                    const dataScadenza =
-                        annuncio.data_scadenza
-
-                            ? formattaData(
-                                annuncio.data_scadenza,
-                                {
-                                    day: "numeric",
-                                    month: "long",
-                                    year: "numeric"
-                                }
-                            )
-
-                            : "";
-
-
-                    return `
-
-                        <article class="annuncio-card">
-
-                            <div class="annuncio-categoria">
-                                ${annuncio.categoria}
-                            </div>
-
-
-                            <h3>
-                                ${annuncio.titolo}
-                            </h3>
-
-
-                            ${compagnia ? `
-
-                                <div class="annuncio-compagnia">
-
-                                    <a href="compagnia.html?id=${compagnia.id}">
-                                        ${compagnia.nome}
-                                    </a>
-
-                                </div>
-
-                            ` : annuncio.autore ? `
-
-                                <div class="annuncio-compagnia">
-                                    ${annuncio.autore}
-                                </div>
-
-                            ` : ""}
-
-
-                            <p class="annuncio-descrizione">
-                                ${annuncio.descrizione}
-                            </p>
-
-
-                            <div class="annuncio-meta">
-
-                                ${annuncio.citta ? `
-                                    ${annuncio.citta}
-                                ` : ""}
-
-                                ${annuncio.zona ? `
-                                    · ${annuncio.zona}
-                                ` : ""}
-
-                                ${annuncio.municipio ? `
-                                    · Municipio ${annuncio.municipio}
-                                ` : ""}
-
-                                <br>
-
-                                Pubblicato il
-                                ${dataPubblicazione}
-
-                                ${dataScadenza ? `
-
-                                    <br>
-
-                                    Scadenza:
-                                    <strong>
-                                        ${dataScadenza}
-                                    </strong>
-
-                                ` : ""}
-
-
-                                ${annuncio.email ? `
-
-                                    <br><br>
-
-                                    <a href="mailto:${annuncio.email}">
-                                        Contatta via email
-                                    </a>
-
-                                ` : ""}
-
-
-                                ${annuncio.telefono ? `
-
-                                    <br>
-
-                                    <strong>
-                                        ${annuncio.telefono}
-                                    </strong>
-
-                                ` : ""}
-
-
-                                ${annuncio.link ? `
-
-                                    <br>
-
-                                    <a
-                                        href="${annuncio.link}"
-                                        target="_blank"
-                                        rel="noopener"
-                                    >
-                                        Maggiori informazioni
-                                    </a>
-
-                                ` : ""}
-
-                            </div>
-
-                        </article>
-
-                    `;
-
-                }).join("");
-
-        }
-
-
-        /*
-           Visualizzazione iniziale:
-           tutti gli annunci.
-        */
-
-        mostraAnnunci("tutti");
-
-
-        /*
-           FILTRI
-        */
-
-        const pulsanti =
-            document.querySelectorAll(
-                ".bacheca-filter"
-            );
-
-
-        pulsanti.forEach(pulsante => {
-
-            pulsante.addEventListener(
-                "click",
-                () => {
-
-                    pulsanti.forEach(
-                        bottone =>
-                            bottone.classList.remove(
-                                "active"
-                            )
-                    );
-
-                    pulsante.classList.add(
-                        "active"
-                    );
-
-                    const categoria =
-                        pulsante.dataset.categoria;
-
-                    mostraAnnunci(
-                        categoria
-                    );
-
-                }
-            );
-
-        });
-
-
-    } catch (errore) {
-
-        console.error(errore);
-
-        contenitore.innerHTML = `
-
-            <div class="bacheca-vuota">
-
-                <h3>
-                    Bacheca non disponibile
-                </h3>
-
-                <p>
-                    Si è verificato un problema
-                    nel caricamento degli annunci.
-                </p>
-
-            </div>
-
-        `;
-
-    }
-
-}
-async function caricaEventiHome() {
-
-    const contenitore = document.getElementById("home-eventi");
-
-    if (!contenitore) return;
-
-    try {
-
-        const [rispostaEventi, rispostaCompagnie] =
-            await Promise.all([
-                fetch("data/eventi.json"),
-                fetch("data/compagnie.json")
-            ]);
-
-        if (!rispostaEventi.ok) {
-            throw new Error("Impossibile caricare gli eventi");
-        }
-
-        const eventi = await rispostaEventi.json();
-
-        const compagnie = rispostaCompagnie.ok
-            ? await rispostaCompagnie.json()
-            : [];
-
-
-        const adesso = new Date();
-
-
-        const eventiFuturi = eventi
-            .filter(evento => evento.pubblicato === true)
-
-            .map(evento => {
-
-                const dateFuture = (evento.date || [])
-                    .map(dataEvento => {
-
-                        const dataOra = new Date(
-                            `${dataEvento.data}T${dataEvento.ora || "23:59"}`
-                        );
-
-                        return {
-                            ...dataEvento,
-                            dataOra
-                        };
-
-                    })
-                    .filter(dataEvento => dataEvento.dataOra >= adesso)
-                    .sort((a, b) => a.dataOra - b.dataOra);
-
-
-                return {
-                    ...evento,
-                    dateFuture
-                };
-
-            })
-
-            .filter(evento => evento.dateFuture.length > 0)
-
-            .sort(
-                (a, b) =>
-                    a.dateFuture[0].dataOra -
-                    b.dateFuture[0].dataOra
-            )
-
-            .slice(0, 3);
-
-
-        if (eventiFuturi.length === 0) {
-
-            contenitore.innerHTML = `
-                <article class="event-card">
-
-                    <div class="date">
-                        PROSSIMAMENTE
-                    </div>
-
-                    <h3>
-                        Il prossimo spettacolo
-                    </h3>
-
-                    <p>
-                        Stiamo aggiornando l'agenda
-                        di Corriere Teatrale.
-                    </p>
-
-                </article>
-
-                <article class="event-card">
-
-                    <div class="date">
-                        SEGNALA
-                    </div>
-
-                    <h3>
-                        Il tuo spettacolo
-                    </h3>
-
-                    <p>
-                        Hai una nuova produzione?
-                        Segnalala alla redazione.
-                    </p>
-
-                    <a href="segnala.html">
-                        Invia una segnalazione →
-                    </a>
-
-                </article>
-            `;
-
-            return;
-        }
-
-
-        contenitore.innerHTML = eventiFuturi
-            .map(evento => {
-
-                /*
-                 * I FATTI IN CASA APS è l'editore e non
-                 * compare nella directory delle compagnie.
-                 * Per questo viene gestito separatamente.
-                 */
-
-                let nomeCompagnia = "Compagnia teatrale";
-                let linkCompagnia = "";
-
-
-                if (evento.compagnia_id === "i-fatti-in-casa") {
-
-                    nomeCompagnia = "I FATTI IN CASA APS";
-                    linkCompagnia = "i-fatti-in-casa.html";
-
-                } else {
-
-                    const compagnia = compagnie.find(
-                        c => c.id === evento.compagnia_id
-                    );
-
-                    if (compagnia) {
-
-                        nomeCompagnia = compagnia.nome;
-
-                        linkCompagnia =
-                            `compagnia.html?id=${compagnia.id}`;
-                    }
-
-                }
-
-
-                const prossimaData = evento.dateFuture[0];
-
-
-                const dataFormattata =
-                    prossimaData.dataOra.toLocaleDateString(
-                        "it-IT",
-                        {
-                            day: "numeric",
-                            month: "long"
-                        }
-                    );
-
-
-                const compagniaHTML = linkCompagnia
-                    ? `
-                        <a href="${linkCompagnia}">
-                            ${nomeCompagnia}
-                        </a>
-                      `
-                    : nomeCompagnia;
-
-
-                return `
-
-                    <article class="event-card">
-
-                        <div class="date">
-                            ${dataFormattata}
-                            ·
-                            ${prossimaData.ora || ""}
-                        </div>
-
-                        <h3>
-
-                            <a href="evento.html?id=${evento.id}">
-                                ${evento.titolo}
-                            </a>
-
-                        </h3>
-
-                        <p>
-
-                            ${evento.luogo || ""}
-
-                            ${evento.citta
-                                ? ` · ${evento.citta}`
-                                : ""
-                            }
-
-                            <br>
-
-                            ${compagniaHTML}
-
-                        </p>
-
-                        <a
-                            href="evento.html?id=${evento.id}"
-                            class="event-link"
-                        >
-                            Dettagli →
-                        </a>
-
-                    </article>
-
-                `;
-
-            })
-            .join("");
-
-
-    } catch (errore) {
-
-        console.error(
-            "Errore caricamento eventi Home:",
-            errore
-        );
-
-        contenitore.innerHTML = `
-
-            <article class="event-card">
-
-                <div class="date">
-                    AGENDA
-                </div>
-
-                <h3>
-                    Gli spettacoli di Roma
-                </h3>
-
-                <p>
-                    Consulta l'agenda completa
-                    di Corriere Teatrale.
-                </p>
-
-                <a href="eventi.html">
-                    Vai agli spettacoli →
-                </a>
-
-            </article>
-
-        `;
-
-    }
-
-}
-/* =========================================================
-   BACHECA HOME
-   ========================================================= */
-
-async function caricaBachecaHome() {
-
-    const contenitore =
-        document.getElementById("home-bacheca");
+        document.getElementById("home-notizie");
 
     if (!contenitore) {
         return;
@@ -1687,72 +203,107 @@ async function caricaBachecaHome() {
 
     try {
 
+        /*
+         * Aggiungiamo un timestamp alla richiesta
+         * per evitare che il browser mostri una vecchia
+         * versione dell'indice delle notizie.
+         */
+
         const risposta =
-            await fetch("data/annunci.json");
+            await fetch(
+                "data/notizie.json?ts=" + Date.now()
+            );
+
 
         if (!risposta.ok) {
 
             throw new Error(
-                "Impossibile caricare gli annunci"
+                "Impossibile caricare le notizie"
             );
 
         }
 
 
-        const annunci =
+        const notizie =
             await risposta.json();
 
 
-        const annunciVisibili =
-            annunci
+        /*
+         * Controlliamo che l'indice sia realmente
+         * un elenco di notizie.
+         */
+
+        if (!Array.isArray(notizie)) {
+
+            throw new Error(
+                "Formato dell'archivio notizie non valido"
+            );
+
+        }
+
+
+        /*
+         * Mostriamo soltanto le notizie pubblicate.
+         *
+         * Le ordiniamo dalla più recente alla più vecchia
+         * e prendiamo al massimo le prime tre.
+         */
+
+        const notizieVisibili =
+            notizie
 
                 .filter(
-                    annuncio =>
-                        annuncio.pubblicato === true &&
-                        !annuncioScaduto(
-                            annuncio.data_scadenza
-                        )
+                    notizia =>
+                        notizia.pubblicato !== false
                 )
 
                 .sort(
                     (a, b) =>
-                        new Date(b.data_pubblicazione) -
-                        new Date(a.data_pubblicazione)
+                        new Date(
+                            b.data_pubblicazione ||
+                            "1900-01-01"
+                        ) -
+                        new Date(
+                            a.data_pubblicazione ||
+                            "1900-01-01"
+                        )
                 )
 
                 .slice(0, 3);
 
 
         /*
-         * Nessun annuncio attivo
+         * Se non esistono ancora articoli pubblicati,
+         * manteniamo il messaggio introduttivo
+         * della Home.
          */
 
-        if (annunciVisibili.length === 0) {
+        if (notizieVisibili.length === 0) {
 
             contenitore.innerHTML = `
 
-                <div class="annuncio">
+                <article class="article">
 
-                    <small>
-                        BACHECA
-                    </small>
+                    <span class="categoria">
+                        CORRIERE TEATRALE
+                    </span>
 
                     <h3>
-                        La Bacheca aspetta
-                        il primo annuncio
+                        Le storie stanno per cominciare
                     </h3>
 
                     <p>
-                        Cerchi un attore, un tecnico,
-                        una sala prove, del materiale
-                        o una collaborazione?
+                        In questa sezione racconteremo compagnie,
+                        spettacoli e persone del teatro amatoriale
+                        romano. Notizie, approfondimenti e storie
+                        da dentro e fuori il palcoscenico.
                     </p>
 
                     <a href="segnala.html">
-                        Pubblica una segnalazione →
+                        Hai una storia? Segnalala alla redazione →
                     </a>
 
-                </div>
+                </article>
 
             `;
 
@@ -1762,98 +313,368 @@ async function caricaBachecaHome() {
 
 
         /*
-         * Ultimi annunci
+         * Costruiamo le ultime storie.
          */
 
         contenitore.innerHTML =
-            annunciVisibili.map(annuncio => {
+            notizieVisibili
 
-                const dataPubblicazione =
-                    formattaData(
-                        annuncio.data_pubblicazione,
-                        {
-                            day: "numeric",
-                            month: "long"
-                        }
-                    );
+                .map(
+                    (notizia, indice) => {
+
+                        const id =
+                            notizia.id || "";
+
+                        const titolo =
+                            notizia.titolo ||
+                            "Senza titolo";
+
+                        const categoria =
+                            notizia.categoria ||
+                            "NOTIZIE";
+
+                        const occhiello =
+                            notizia.occhiello ||
+                            "";
+
+                        const sommario =
+                            notizia.sommario ||
+                            "";
+
+                        const autore =
+                            notizia.autore ||
+                            "Redazione Corriere Teatrale";
+
+                        const immagine =
+                            notizia.immagine ||
+                            "";
+
+                        const data =
+                            notizia.data_pubblicazione
+                                ? formattaData(
+                                    notizia.data_pubblicazione,
+                                    {
+                                        day: "numeric",
+                                        month: "long",
+                                        year: "numeric"
+                                    }
+                                )
+                                : "";
 
 
-                return `
+                        /*
+                         * La prima notizia ha un trattamento
+                         * leggermente più importante.
+                         */
 
-                    <div class="annuncio">
+                        if (indice === 0) {
 
-                        <small>
-                            ${annuncio.categoria || "BACHECA"}
-                        </small>
+                            return `
 
-                        <h3>
-                            ${annuncio.titolo}
-                        </h3>
-
-                        ${
-                            annuncio.citta ||
-                            annuncio.zona
-
-                            ? `
-
-                                <p>
-
-                                    ${annuncio.citta || ""}
+                                <article
+                                    class="article"
+                                    style="
+                                        padding-bottom: 30px;
+                                        margin-bottom: 30px;
+                                        border-bottom: 1px solid #ccc;
+                                    "
+                                >
 
                                     ${
-                                        annuncio.zona
-                                        ? " · " + annuncio.zona
+                                        immagine
+                                            ? `
+
+                                                <a
+                                                    href="notizia.html?id=${encodeURIComponent(id)}"
+                                                    style="
+                                                        display: block;
+                                                        margin-bottom: 18px;
+                                                    "
+                                                >
+
+                                                    <img
+                                                        src="${immagine}"
+                                                        alt="${titolo}"
+                                                        style="
+                                                            display: block;
+                                                            width: 100%;
+                                                            max-height: 430px;
+                                                            object-fit: cover;
+                                                        "
+                                                    >
+
+                                                </a>
+
+                                              `
+                                            : ""
+                                    }
+
+
+                                    <span class="categoria">
+                                        ${categoria}
+                                    </span>
+
+
+                                    ${
+                                        occhiello
+                                            ? `
+
+                                                <div
+                                                    style="
+                                                        margin-top: 10px;
+                                                        margin-bottom: 6px;
+                                                        font-family: Georgia, 'Times New Roman', serif;
+                                                        font-size: 16px;
+                                                        font-style: italic;
+                                                        color: #666;
+                                                    "
+                                                >
+                                                    ${occhiello}
+                                                </div>
+
+                                              `
+                                            : ""
+                                    }
+
+
+                                    <h3
+                                        style="
+                                            font-size: clamp(27px, 4vw, 38px);
+                                            line-height: 1.1;
+                                            margin-top: 8px;
+                                            margin-bottom: 12px;
+                                        "
+                                    >
+
+                                        <a
+                                            href="notizia.html?id=${encodeURIComponent(id)}"
+                                        >
+                                            ${titolo}
+                                        </a>
+
+                                    </h3>
+
+
+                                    ${
+                                        sommario
+                                            ? `
+
+                                                <p
+                                                    style="
+                                                        font-size: 17px;
+                                                        line-height: 1.6;
+                                                    "
+                                                >
+                                                    ${sommario}
+                                                </p>
+
+                                              `
+                                            : ""
+                                    }
+
+
+                                    <p
+                                        style="
+                                            margin-top: 14px;
+                                            margin-bottom: 14px;
+                                            font-size: 13px;
+                                            color: #777;
+                                        "
+                                    >
+
+                                        ${
+                                            data
+                                                ? `${data}`
+                                                : ""
+                                        }
+
+                                        ${
+                                            data && autore
+                                                ? " · "
+                                                : ""
+                                        }
+
+                                        ${
+                                            autore
+                                                ? `${autore}`
+                                                : ""
+                                        }
+
+                                    </p>
+
+
+                                    <a
+                                        href="notizia.html?id=${encodeURIComponent(id)}"
+                                        style="
+                                            font-weight: 700;
+                                        "
+                                    >
+                                        Leggi la storia →
+                                    </a>
+
+                                </article>
+
+                            `;
+
+                        }
+
+
+                        /*
+                         * Seconda e terza notizia:
+                         * formato più compatto.
+                         */
+
+                        return `
+
+                            <article
+                                class="article"
+                                style="
+                                    padding-bottom: 25px;
+                                    margin-bottom: 25px;
+                                    border-bottom: 1px solid #ddd;
+                                "
+                            >
+
+                                ${
+                                    immagine
+                                        ? `
+
+                                            <a
+                                                href="notizia.html?id=${encodeURIComponent(id)}"
+                                                style="
+                                                    display: block;
+                                                    margin-bottom: 14px;
+                                                "
+                                            >
+
+                                                <img
+                                                    src="${immagine}"
+                                                    alt="${titolo}"
+                                                    style="
+                                                        display: block;
+                                                        width: 100%;
+                                                        max-height: 280px;
+                                                        object-fit: cover;
+                                                    "
+                                                >
+
+                                            </a>
+
+                                          `
                                         : ""
+                                }
+
+
+                                <span class="categoria">
+                                    ${categoria}
+                                </span>
+
+
+                                <h3>
+
+                                    <a
+                                        href="notizia.html?id=${encodeURIComponent(id)}"
+                                    >
+                                        ${titolo}
+                                    </a>
+
+                                </h3>
+
+
+                                ${
+                                    sommario
+                                        ? `
+
+                                            <p>
+                                                ${sommario}
+                                            </p>
+
+                                          `
+                                        : ""
+                                }
+
+
+                                <p
+                                    style="
+                                        margin-top: 10px;
+                                        margin-bottom: 12px;
+                                        font-size: 13px;
+                                        color: #777;
+                                    "
+                                >
+
+                                    ${
+                                        data
+                                            ? `${data}`
+                                            : ""
+                                    }
+
+                                    ${
+                                        data && autore
+                                            ? " · "
+                                            : ""
+                                    }
+
+                                    ${
+                                        autore
+                                            ? `${autore}`
+                                            : ""
                                     }
 
                                 </p>
 
-                              `
 
-                            : ""
-                        }
+                                <a
+                                    href="notizia.html?id=${encodeURIComponent(id)}"
+                                >
+                                    Leggi →
+                                </a>
 
-                        <p class="annuncio-data">
-                            ${dataPubblicazione}
-                        </p>
+                            </article>
 
-                    </div>
+                        `;
 
-                `;
+                    }
+                )
 
-            }).join("");
+                .join("");
 
 
     } catch (errore) {
 
         console.error(
-            "Errore caricamento Bacheca Home:",
+            "Errore caricamento Notizie Home:",
             errore
         );
 
 
+        /*
+         * Se per qualsiasi motivo l'indice non fosse
+         * raggiungibile, la Home non resta vuota.
+         */
+
         contenitore.innerHTML = `
 
-            <div class="annuncio">
+            <article class="article">
 
-                <small>
-                    BACHECA
-                </small>
+                <span class="categoria">
+                    CORRIERE TEATRALE
+                </span>
 
                 <h3>
-                    Consulta gli annunci
+                    Le storie di Corriere Teatrale
                 </h3>
 
                 <p>
-                    Casting, collaborazioni,
-                    sale prova e opportunità.
+                    Consulta notizie, racconti e approfondimenti
+                    dal teatro amatoriale romano.
                 </p>
 
-                <a href="bacheca.html">
-                    Vai alla Bacheca →
+                <a href="notizie.html">
+                    Vai alle Notizie →
                 </a>
 
-            </div>
+            </article>
 
         `;
 
