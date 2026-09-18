@@ -21,64 +21,106 @@
 
 </head>
 
+
 <body>
 
-<div class="topbar">
-    ROMA · CORRIERE TEATRALE
-</div>
 
+<!-- =====================================================
+     HEADER
+     ===================================================== -->
 
-<header class="masthead">
+<header>
 
-    <div class="brand">
+    <div class="header-inner">
 
-        <a href="index.html">
-
-            <img
-                src="logo-corriere-teatrale.jpg"
-                alt="Corriere Teatrale"
-            >
-
-        </a>
-
-        <div>
+        <div class="brand">
 
             <a href="index.html">
 
-                <h1>
-                    CORRIERE
-                    <span>TEATRALE</span>
-                </h1>
+                <img
+                    src="logo-corriere-teatrale.jpg"
+                    alt="Corriere Teatrale"
+                    class="site-logo"
+                >
 
             </a>
 
-            <p>
-                Il giornale del teatro amatoriale romano
-            </p>
+
+            <div class="brand-text">
+
+                <a
+                    href="index.html"
+                    class="site-title"
+                >
+                    CORRIERE TEATRALE
+                </a>
+
+                <div class="site-subtitle">
+                    Il teatro amatoriale di Roma,
+                    in scena e dietro le quinte
+                </div>
+
+            </div>
 
         </div>
 
-    </div>
 
+        <div class="official">
 
-    <div class="official">
+            PUBBLICAZIONE UFFICIALE<br>
 
-        Organo ufficiale di<br>
+            <a href="i-fatti-in-casa.html">
 
-        <strong>
-            I FATTI IN CASA APS
-        </strong>
+                <strong>
+                    I FATTI IN CASA APS
+                </strong>
+
+            </a>
+
+        </div>
 
     </div>
 
 </header>
 
 
-<nav>
+<!-- =====================================================
+     NAVIGAZIONE
+     ===================================================== -->
 
-    <div class="nav-inner">
+<nav class="main-nav">
 
-        <a href="index.html">Home</a>
+    <div class="nav-mobile-bar">
+
+        <span class="nav-mobile-title">
+            MENU
+        </span>
+
+        <button
+            class="menu-toggle"
+            type="button"
+            aria-label="Apri menu"
+            aria-expanded="false"
+            aria-controls="menu-principale"
+        >
+
+            <span></span>
+            <span></span>
+            <span></span>
+
+        </button>
+
+    </div>
+
+
+    <div
+        class="nav-inner"
+        id="menu-principale"
+    >
+
+        <a href="index.html">
+            Home
+        </a>
 
         <a href="notizie.html">
             Notizie
@@ -96,12 +138,21 @@
             Interviste
         </a>
 
-        <a href="bacheca.html">
+        <a
+            href="bacheca.html"
+            class="active"
+        >
             Bacheca
         </a>
 
-        <a href="segnala.html"
-           class="segnala">
+        <a href="chi-siamo.html">
+            Chi siamo
+        </a>
+
+        <a
+            href="segnala.html"
+            class="segnala"
+        >
             Segnala
         </a>
 
@@ -109,6 +160,10 @@
 
 </nav>
 
+
+<!-- =====================================================
+     BACHECA
+     ===================================================== -->
 
 <main>
 
@@ -122,62 +177,78 @@
 
         </div>
 
+
         <p class="section-intro">
+
             Il punto d'incontro del teatro amatoriale romano.
             Casting, collaborazioni, sale prova, materiali,
             tecnici e opportunità.
+
         </p>
 
+
+        <!-- FILTRI -->
 
         <div class="bacheca-filters">
 
             <button
                 class="bacheca-filter active"
-                data-categoria="tutti">
+                data-categoria="tutti"
+            >
                 Tutti
             </button>
 
             <button
                 class="bacheca-filter"
-                data-categoria="CASTING">
+                data-categoria="CASTING"
+            >
                 Casting
             </button>
 
             <button
                 class="bacheca-filter"
-                data-categoria="TECNICI">
+                data-categoria="TECNICI"
+            >
                 Tecnici
             </button>
 
             <button
                 class="bacheca-filter"
-                data-categoria="SALE PROVA">
+                data-categoria="SALE PROVA"
+            >
                 Sale prova
             </button>
 
             <button
                 class="bacheca-filter"
-                data-categoria="MATERIALI">
+                data-categoria="MATERIALI"
+            >
                 Materiali
             </button>
 
             <button
                 class="bacheca-filter"
-                data-categoria="COLLABORAZIONI">
+                data-categoria="COLLABORAZIONI"
+            >
                 Collaborazioni
             </button>
 
             <button
                 class="bacheca-filter"
-                data-categoria="CERCO COMPAGNIA">
+                data-categoria="CERCO COMPAGNIA"
+            >
                 Cerco compagnia
             </button>
 
         </div>
 
 
-        <div id="elenco-annunci"
-             class="bacheca-grid">
+        <!-- ANNUNCI -->
+
+        <div
+            id="elenco-annunci"
+            class="bacheca-grid"
+        >
 
             <p>
                 Caricamento annunci...
@@ -189,6 +260,10 @@
 
 </main>
 
+
+<!-- =====================================================
+     CTA
+     ===================================================== -->
 
 <section class="bacheca-cta">
 
@@ -212,6 +287,10 @@
 </section>
 
 
+<!-- =====================================================
+     FOOTER
+     ===================================================== -->
+
 <footer>
 
     <div class="footer-inner">
@@ -223,20 +302,26 @@
             </strong>
 
             <p>
-                Il giornale del teatro amatoriale romano.
+                Il teatro amatoriale di Roma,
+                in scena e dietro le quinte.
             </p>
 
         </div>
+
 
         <div>
 
             <p>
 
-                Organo ufficiale di<br>
+                Pubblicazione ufficiale<br>
 
-                <strong>
-                    I FATTI IN CASA APS
-                </strong>
+                <a href="i-fatti-in-casa.html">
+
+                    <strong>
+                        I FATTI IN CASA APS
+                    </strong>
+
+                </a>
 
             </p>
 
@@ -247,7 +332,12 @@
 </footer>
 
 
+<!-- =====================================================
+     JAVASCRIPT
+     ===================================================== -->
+
 <script src="assets/js/app.js"></script>
+
 
 </body>
 
