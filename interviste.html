@@ -10,14 +10,14 @@
 
     <title>Interviste | Corriere Teatrale</title>
 
-    <meta
-        name="description"
-        content="Interviste a compagnie, attori, registi e protagonisti del teatro amatoriale romano."
-    >
+    <meta name="description"
+          content="Interviste a compagnie, attori, registi e protagonisti del teatro amatoriale romano.">
 
-    <link rel="icon" href="logo-corriere-teatrale.jpg">
+    <link rel="icon"
+          href="logo-corriere-teatrale.jpg">
 
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet"
+          href="assets/css/style.css">
 
 </head>
 
@@ -26,50 +26,63 @@
 
 
 <!-- =====================================================
+     TOPBAR
+     ===================================================== -->
+
+<div class="topbar">
+    ROMA · CORRIERE TEATRALE
+</div>
+
+
+<!-- =====================================================
      HEADER
      ===================================================== -->
 
-<header>
+<header class="masthead">
 
-    <div class="header-inner">
+    <div class="brand">
 
-        <div class="brand">
+        <a href="index.html">
+
+            <img
+                src="logo-corriere-teatrale.jpg"
+                alt="Corriere Teatrale"
+            >
+
+        </a>
+
+
+        <div>
 
             <a href="index.html">
 
-                <img
-                    src="logo-corriere-teatrale.jpg"
-                    alt="Corriere Teatrale"
-                    class="site-logo"
-                >
+                <h1>
+                    CORRIERE
+                    <span>TEATRALE</span>
+                </h1>
 
             </a>
 
-            <div class="brand-text">
-
-                <a href="index.html" class="site-title">
-                    CORRIERE TEATRALE
-                </a>
-
-                <div class="site-subtitle">
-                    Il teatro amatoriale di Roma,
-                    in scena e dietro le quinte
-                </div>
-
-            </div>
+            <p>
+                Il giornale del teatro amatoriale romano
+            </p>
 
         </div>
 
+    </div>
 
-        <div class="official">
 
-            PUBBLICAZIONE UFFICIALE<br>
+    <div class="official">
 
-            <a href="i-fatti-in-casa.html">
-                <strong>I FATTI IN CASA APS</strong>
-            </a>
+        Organo ufficiale di<br>
 
-        </div>
+        <a href="i-fatti-in-casa.html">
+
+            <strong>
+                I FATTI IN CASA APS
+            </strong>
+
+        </a>
 
     </div>
 
@@ -95,15 +108,20 @@
             aria-expanded="false"
             aria-controls="menu-principale"
         >
+
             <span></span>
             <span></span>
             <span></span>
+
         </button>
 
     </div>
 
 
-    <div class="nav-inner" id="menu-principale">
+    <div
+        class="nav-inner"
+        id="menu-principale"
+    >
 
         <a href="index.html">
             Home
@@ -121,7 +139,10 @@
             Compagnie
         </a>
 
-        <a href="interviste.html" class="active">
+        <a
+            href="interviste.html"
+            class="active"
+        >
             Interviste
         </a>
 
@@ -133,7 +154,10 @@
             Chi siamo
         </a>
 
-        <a href="segnala.html" class="segnala">
+        <a
+            href="segnala.html"
+            class="segnala"
+        >
             Segnala
         </a>
 
@@ -245,7 +269,9 @@
         </div>
 
 
-        <!-- CTA -->
+        <!-- =================================================
+             CTA
+             ================================================= -->
 
         <div
             style="
@@ -313,23 +339,29 @@
                 CORRIERE TEATRALE
             </strong>
 
-            <br>
-
-            Il teatro amatoriale di Roma,
-            in scena e dietro le quinte.
+            <p>
+                Il giornale del teatro
+                amatoriale romano.
+            </p>
 
         </div>
 
 
         <div>
 
-            Pubblicazione ufficiale<br>
+            <p>
 
-            <a href="i-fatti-in-casa.html">
-                <strong>
-                    I FATTI IN CASA APS
-                </strong>
-            </a>
+                Organo ufficiale di<br>
+
+                <a href="i-fatti-in-casa.html">
+
+                    <strong>
+                        I FATTI IN CASA APS
+                    </strong>
+
+                </a>
+
+            </p>
 
         </div>
 
@@ -338,8 +370,13 @@
 </footer>
 
 
+<!-- =====================================================
+     JAVASCRIPT
+     ===================================================== -->
+
 <script src="assets/js/app.js"></script>
 
 
 </body>
+
 </html>
