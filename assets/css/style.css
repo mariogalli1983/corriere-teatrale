@@ -2540,3 +2540,23 @@ header .official a:hover {
     }
 
 }
+/* =========================================================
+   HEADER UFFICIALE CORRIERE TEATRALE
+   ========================================================= */
+
+.masthead .official a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.masthead .official a:hover {
+    color: #b30000;
+}
+
+.masthead .brand > a {
+    flex: 0 0 auto;
+}
+
+.masthead .brand > a img {
+    display: block;
+}
