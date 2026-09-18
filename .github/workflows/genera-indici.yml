@@ -10,6 +10,7 @@ on:
       - "data/annunci/**"
       - "data/notizie/**"
       - "data/interviste/**"
+      - ".github/workflows/genera-indici.yml"
 
 permissions:
   contents: write
