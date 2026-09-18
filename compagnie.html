@@ -48,16 +48,41 @@
 
 </header>
 
-<nav>
-    <div class="nav-inner">
+<nav class="main-nav">
+
+    <div class="nav-mobile-bar">
+
+        <span class="nav-mobile-title">
+            MENU
+        </span>
+
+        <button
+            class="menu-toggle"
+            type="button"
+            aria-label="Apri menu"
+            aria-expanded="false"
+            aria-controls="menu-principale"
+        >
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+    </div>
+
+    <div class="nav-inner" id="menu-principale">
+
         <a href="index.html">Home</a>
         <a href="notizie.html">Notizie</a>
         <a href="eventi.html">Spettacoli</a>
-        <a href="compagnie.html">Compagnie</a>
+        <a href="compagnie.html" class="active">Compagnie</a>
         <a href="interviste.html">Interviste</a>
         <a href="bacheca.html">Bacheca</a>
+        <a href="chi-siamo.html">Chi siamo</a>
         <a href="segnala.html" class="segnala">Segnala</a>
+
     </div>
+
 </nav>
 
 <main>
