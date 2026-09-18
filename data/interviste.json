@@ -1,1 +1,46 @@
-[]
+[
+  {
+    "autore": "Redazione Corriere Teatrale",
+    "intervistato": "Elena Moretti",
+    "ruolo": "Spettatrice per la prima volta dietro le quinte",
+    "domande": [
+      {
+        "domanda": "Prima di Gaeta avevi mai visto da vicino la preparazione di uno spettacolo teatrale?",
+        "risposta": "No, ed è probabilmente la cosa che mi ha colpito di più. Da spettatrice ero abituata ad arrivare, sedermi e aspettare che si spegnessero le luci. A Gaeta ho scoperto che quando il pubblico entra in teatro è già successo un mondo intero. Ci sono ore di preparazione che normalmente nessuno vede."
+      },
+      {
+        "domanda": "Qual è stata la prima cosa che ti ha fatto pensare: “Non me l'aspettavo”?",
+        "risposta": "La quantità di lavoro. Pensavo che una compagnia arrivasse, provasse qualche scena, si cambiasse e andasse sul palco. Invece ho visto persone occuparsi contemporaneamente di costumi, oggetti di scena, luci, battute, entrate. E poi magari un minuto dopo scherzavano tutti insieme. Sembrava caos, ma era un caos con un'organizzazione tutta sua."
+      },
+      {
+        "domanda": "Hai percepito tensione prima dello spettacolo?",
+        "risposta": "Sì, ma diversa da come l'immaginavo. Non era il silenzio assoluto di persone terrorizzate prima di salire sul palco. C'erano battute, qualcuno ripassava, qualcuno cercava qualcosa che non trovava, qualcuno sembrava tranquillissimo. Però avvertivi che, avvicinandosi l'orario dello spettacolo, qualcosa cambiava. A un certo punto ognuno entrava nel proprio ruolo."
+      },
+      {
+        "domanda": "E stare dietro le quinte durante lo spettacolo che effetto ti ha fatto?",
+        "risposta": "È stranissimo, perché senti contemporaneamente due spettacoli. Quello che vede il pubblico e quello che accade pochi metri più indietro. Una persona esce di scena e cambia completamente espressione, qualcuno deve prepararsi per l'ingresso successivo, ci si parla quasi senza voce. E intanto senti le risate del pubblico. È lì che ho capito quanto lavoro ci sia dietro qualcosa che dalla platea sembra naturale."
+      },
+      {
+        "domanda": "C'è un momento della giornata che ricordi più degli altri?",
+        "risposta": "Il momento immediatamente dopo la fine. Fino a pochi secondi prima c'era concentrazione, poi sono arrivati gli applausi e ho visto le facce cambiare. Non era soltanto la soddisfazione per lo spettacolo riuscito. Sembrava quasi la conclusione di qualcosa che avevano costruito insieme durante tutta la giornata."
+      },
+      {
+        "domanda": "Hai avuto la sensazione di osservare una compagnia teatrale o un gruppo di amici?",
+        "risposta": "Tutte e due le cose. Ed è forse questo l'aspetto che mi è rimasto di più. Sul palco ci sono ruoli precisi e responsabilità, ma dietro le quinte capisci che lo spettacolo funziona anche perché esiste un rapporto tra le persone. Ci si aiuta per cose piccolissime. Uno sistema qualcosa all'altro, qualcuno si accorge che manca un oggetto, un altro tranquillizza chi è più agitato."
+      },
+      {
+        "domanda": "Se dovessi raccontare questa esperienza a qualcuno che non ha mai frequentato una compagnia amatoriale, cosa gli diresti?",
+        "risposta": "Che la parola “amatoriale” può ingannare. Da fuori uno può pensare a qualcosa fatto semplicemente nel tempo libero. Invece ho visto impegno, preparazione e soprattutto tantissimo tempo dedicato a far funzionare ogni cosa. Nessuno era lì perché doveva esserci. Erano lì perché volevano esserci."
+      },
+      {
+        "domanda": "Quindi torneresti dietro le quinte?",
+        "risposta": "Assolutamente sì. Però la prossima volta con una consapevolezza diversa. A Gaeta pensavo di essere semplicemente venuta con voi a vedere uno spettacolo. Alla fine mi sono resa conto che lo spettacolo era soltanto una parte della giornata. Il resto era tutto quello che normalmente, seduti in platea, non sappiamo nemmeno che esista."
+      }
+    ],
+    "compagnia": "I FATTI IN CASA APS",
+    "titolo": "«Pensavo di venire a vedere uno spettacolo. Ho scoperto tutto quello che succede prima che si apra il sipario»",
+    "introduzione": "Per la prima volta Elena ha seguito I FATTI IN CASA in trasferta a Gaeta, vivendo lo spettacolo da una prospettiva insolita: non soltanto dalla platea, ma accanto alla compagnia nelle ore che precedono l'apertura del sipario. Le abbiamo chiesto cosa cambia quando il teatro lo si guarda anche dalla parte che il pubblico normalmente non vede.",
+    "id": "intervista-elena-moretti",
+    "pubblicato": true
+  }
+]
