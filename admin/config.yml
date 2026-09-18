@@ -168,7 +168,7 @@ collections:
           - label: "Evento"
             value: "evento"
 
-      - label: "Compagnia"
+           - label: "Compagnia"
         name: "compagnia_id"
         widget: "relation"
         collection: "compagnie"
@@ -180,10 +180,25 @@ collections:
         required: false
         hint: "Seleziona la compagnia che organizza o produce lo spettacolo"
 
-            - label: "Descrizione dello spettacolo"
+      - label: "Descrizione dello spettacolo"
         name: "descrizione"
         widget: "markdown"
         hint: "Puoi usare grassetto, corsivo, titoli, elenchi, link e paragrafi."
+
+      - label: "Date e orari"
+        name: "date"
+        widget: "list"
+        summary: "{{fields.data}} — {{fields.ora}}"
+        fields:
+          - label: "Data"
+            name: "data"
+            widget: "date"
+            format: "YYYY-MM-DD"
+
+          - label: "Ora"
+            name: "ora"
+            widget: "string"
+            hint: "Formato HH:MM, ad esempio 21:00"
 
       - label: "Date e orari"
         name: "date"
