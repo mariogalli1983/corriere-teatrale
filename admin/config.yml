@@ -168,7 +168,7 @@ collections:
           - label: "Evento"
             value: "evento"
 
-           - label: "Compagnia"
+      - label: "Compagnia"
         name: "compagnia_id"
         widget: "relation"
         collection: "compagnie"
@@ -184,21 +184,6 @@ collections:
         name: "descrizione"
         widget: "markdown"
         hint: "Puoi usare grassetto, corsivo, titoli, elenchi, link e paragrafi."
-
-      - label: "Date e orari"
-        name: "date"
-        widget: "list"
-        summary: "{{fields.data}} — {{fields.ora}}"
-        fields:
-          - label: "Data"
-            name: "data"
-            widget: "date"
-            format: "YYYY-MM-DD"
-
-          - label: "Ora"
-            name: "ora"
-            widget: "string"
-            hint: "Formato HH:MM, ad esempio 21:00"
 
       - label: "Date e orari"
         name: "date"
@@ -285,9 +270,7 @@ collections:
         name: "pubblicato"
         widget: "boolean"
         default: true
-
-
-  # =========================================================
+          # =========================================================
   # BACHECA
   # =========================================================
 
@@ -489,9 +472,7 @@ collections:
         name: "pubblicato"
         widget: "boolean"
         default: true
-
-
-  # =========================================================
+          # =========================================================
   # INTERVISTE
   # =========================================================
 
