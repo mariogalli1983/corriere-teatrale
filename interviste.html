@@ -5,19 +5,27 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>Interviste | Corriere Teatrale</title>
 
-    <meta name="description"
-          content="Interviste a compagnie, attori, registi e protagonisti del teatro amatoriale romano.">
+    <meta
+        name="description"
+        content="Interviste a compagnie, attori, registi e protagonisti del teatro amatoriale romano."
+    >
 
-    <link rel="icon"
-          href="logo-corriere-teatrale.jpg">
+    <link
+        rel="icon"
+        href="logo-corriere-teatrale.jpg"
+    >
 
-    <link rel="stylesheet"
-          href="assets/css/style.css">
+    <link
+        rel="stylesheet"
+        href="assets/css/style.css"
+    >
 
 </head>
 
@@ -217,53 +225,20 @@
         </p>
 
 
+        <!-- =================================================
+             ARCHIVIO INTERVISTE
+             ================================================= -->
+
         <div
+            id="elenco-interviste"
             style="
                 border-top: 4px solid #111;
-                border-bottom: 1px solid #ccc;
-                padding: 35px 0;
-                margin-top: 25px;
+                padding-top: 30px;
             "
         >
 
-            <div
-                style="
-                    font-size: 12px;
-                    font-weight: 700;
-                    letter-spacing: 1.5px;
-                    color: #b30000;
-                    margin-bottom: 12px;
-                "
-            >
-                PROSSIMAMENTE
-            </div>
-
-
-            <h2
-                style="
-                    font-family: Georgia, 'Times New Roman', serif;
-                    font-size: clamp(26px, 4vw, 36px);
-                    margin: 0 0 12px;
-                "
-            >
-                Le voci del teatro romano
-            </h2>
-
-
-            <p
-                style="
-                    max-width: 700px;
-                    font-size: 17px;
-                    line-height: 1.65;
-                    color: #555;
-                    margin: 0;
-                "
-            >
-                Stiamo preparando le prime interviste
-                di Corriere Teatrale. Conversazioni,
-                esperienze e storie raccontate
-                direttamente da chi il teatro
-                lo costruisce ogni giorno.
+            <p>
+                Caricamento delle interviste...
             </p>
 
         </div>
@@ -275,7 +250,7 @@
 
         <div
             style="
-                margin-top: 45px;
+                margin-top: 55px;
                 padding: 25px;
                 background: #f4f4f4;
                 border-left: 5px solid #b30000;
@@ -371,10 +346,657 @@
 
 
 <!-- =====================================================
-     JAVASCRIPT
+     JAVASCRIPT GENERALE
      ===================================================== -->
 
 <script src="assets/js/app.js"></script>
+
+
+<!-- =====================================================
+     ARCHIVIO INTERVISTE
+     ===================================================== -->
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    caricaInterviste
+);
+
+
+async function caricaInterviste() {
+
+    const contenitore =
+        document.getElementById(
+            "elenco-interviste"
+        );
+
+    if (!contenitore) {
+        return;
+    }
+
+
+    try {
+
+        /*
+         * Il timestamp evita che il browser
+         * utilizzi una vecchia copia dell'indice.
+         */
+
+        const risposta =
+            await fetch(
+                "data/interviste.json?ts=" +
+                Date.now()
+            );
+
+
+        if (!risposta.ok) {
+
+            throw new Error(
+                "Impossibile caricare le interviste"
+            );
+
+        }
+
+
+        const interviste =
+            await risposta.json();
+
+
+        if (!Array.isArray(interviste)) {
+
+            throw new Error(
+                "Formato archivio interviste non valido"
+            );
+
+        }
+
+
+        /*
+         * Mostriamo solo le interviste pubblicate
+         * e le ordiniamo dalla più recente.
+         */
+
+        const intervisteVisibili =
+            interviste
+
+                .filter(
+                    intervista =>
+                        intervista.pubblicato !== false
+                )
+
+                .sort(
+                    (a, b) =>
+                        new Date(
+                            b.data_pubblicazione ||
+                            "1900-01-01"
+                        ) -
+                        new Date(
+                            a.data_pubblicazione ||
+                            "1900-01-01"
+                        )
+                );
+
+
+        /*
+         * ARCHIVIO VUOTO
+         */
+
+        if (
+            intervisteVisibili.length === 0
+        ) {
+
+            contenitore.innerHTML = `
+
+                <article
+                    style="
+                        padding: 10px 0 35px;
+                        border-bottom: 1px solid #ccc;
+                    "
+                >
+
+                    <div
+                        style="
+                            font-size: 12px;
+                            font-weight: 700;
+                            letter-spacing: 1.5px;
+                            color: #b30000;
+                            margin-bottom: 12px;
+                        "
+                    >
+                        PROSSIMAMENTE
+                    </div>
+
+
+                    <h2
+                        style="
+                            font-family: Georgia, 'Times New Roman', serif;
+                            font-size: clamp(26px, 4vw, 36px);
+                            margin: 0 0 12px;
+                        "
+                    >
+                        Le voci del teatro romano
+                    </h2>
+
+
+                    <p
+                        style="
+                            max-width: 700px;
+                            font-size: 17px;
+                            line-height: 1.65;
+                            color: #555;
+                            margin: 0;
+                        "
+                    >
+                        Stiamo preparando le prime
+                        interviste di Corriere Teatrale.
+                        Conversazioni, esperienze e
+                        storie raccontate direttamente
+                        da chi il teatro lo costruisce
+                        ogni giorno.
+                    </p>
+
+                </article>
+
+            `;
+
+            return;
+
+        }
+
+
+        /*
+         * COSTRUZIONE ARCHIVIO
+         */
+
+        contenitore.innerHTML =
+            intervisteVisibili
+
+                .map(
+                    (intervista, indice) => {
+
+                        const id =
+                            intervista.id || "";
+
+                        const titolo =
+                            intervista.titolo ||
+                            "Intervista";
+
+                        const intervistato =
+                            intervista.intervistato ||
+                            "";
+
+                        const ruolo =
+                            intervista.ruolo ||
+                            "";
+
+                        const compagnia =
+                            intervista.compagnia ||
+                            "";
+
+                        const introduzione =
+                            intervista.introduzione ||
+                            "";
+
+                        const immagine =
+                            intervista.immagine ||
+                            "";
+
+                        const autore =
+                            intervista.autore ||
+                            "Redazione Corriere Teatrale";
+
+
+                        let data = "";
+
+                        if (
+                            intervista.data_pubblicazione
+                        ) {
+
+                            const dataOggetto =
+                                new Date(
+                                    intervista.data_pubblicazione +
+                                    "T12:00:00"
+                                );
+
+                            data =
+                                dataOggetto
+                                    .toLocaleDateString(
+                                        "it-IT",
+                                        {
+                                            day: "numeric",
+                                            month: "long",
+                                            year: "numeric"
+                                        }
+                                    );
+
+                        }
+
+
+                        /*
+                         * PRIMA INTERVISTA
+                         * trattamento da apertura
+                         */
+
+                        if (indice === 0) {
+
+                            return `
+
+                                <article
+                                    style="
+                                        padding-bottom: 38px;
+                                        margin-bottom: 35px;
+                                        border-bottom: 2px solid #111;
+                                    "
+                                >
+
+                                    ${
+                                        immagine
+
+                                            ? `
+
+                                                <a
+                                                    href="intervista.html?id=${encodeURIComponent(id)}"
+                                                    style="
+                                                        display: block;
+                                                        margin-bottom: 22px;
+                                                    "
+                                                >
+
+                                                    <img
+                                                        src="${immagine}"
+                                                        alt="${intervistato || titolo}"
+                                                        style="
+                                                            display: block;
+                                                            width: 100%;
+                                                            max-height: 520px;
+                                                            object-fit: cover;
+                                                        "
+                                                    >
+
+                                                </a>
+
+                                              `
+
+                                            : ""
+                                    }
+
+
+                                    <div
+                                        style="
+                                            font-size: 12px;
+                                            font-weight: 700;
+                                            letter-spacing: 1.5px;
+                                            color: #b30000;
+                                            margin-bottom: 10px;
+                                        "
+                                    >
+                                        INTERVISTA
+                                    </div>
+
+
+                                    ${
+                                        intervistato
+
+                                            ? `
+
+                                                <div
+                                                    style="
+                                                        font-size: 14px;
+                                                        font-weight: 700;
+                                                        text-transform: uppercase;
+                                                        letter-spacing: 1px;
+                                                        color: #666;
+                                                        margin-bottom: 8px;
+                                                    "
+                                                >
+                                                    ${intervistato}
+                                                </div>
+
+                                              `
+
+                                            : ""
+                                    }
+
+
+                                    <h2
+                                        style="
+                                            font-family: Georgia, 'Times New Roman', serif;
+                                            font-size: clamp(30px, 5vw, 46px);
+                                            line-height: 1.08;
+                                            margin: 0 0 15px;
+                                        "
+                                    >
+
+                                        <a
+                                            href="intervista.html?id=${encodeURIComponent(id)}"
+                                            style="
+                                                color: inherit;
+                                                text-decoration: none;
+                                            "
+                                        >
+                                            ${titolo}
+                                        </a>
+
+                                    </h2>
+
+
+                                    ${
+                                        ruolo || compagnia
+
+                                            ? `
+
+                                                <p
+                                                    style="
+                                                        margin: 0 0 16px;
+                                                        font-size: 15px;
+                                                        color: #777;
+                                                    "
+                                                >
+
+                                                    ${ruolo}
+
+                                                    ${
+                                                        ruolo &&
+                                                        compagnia
+                                                            ? " · "
+                                                            : ""
+                                                    }
+
+                                                    ${compagnia}
+
+                                                </p>
+
+                                              `
+
+                                            : ""
+                                    }
+
+
+                                    ${
+                                        introduzione
+
+                                            ? `
+
+                                                <p
+                                                    style="
+                                                        max-width: 820px;
+                                                        font-family: Georgia, 'Times New Roman', serif;
+                                                        font-size: 19px;
+                                                        line-height: 1.6;
+                                                        color: #444;
+                                                    "
+                                                >
+                                                    ${introduzione}
+                                                </p>
+
+                                              `
+
+                                            : ""
+                                    }
+
+
+                                    <p
+                                        style="
+                                            margin: 18px 0 14px;
+                                            font-size: 13px;
+                                            color: #777;
+                                        "
+                                    >
+
+                                        ${data}
+
+                                        ${
+                                            data && autore
+                                                ? " · "
+                                                : ""
+                                        }
+
+                                        ${autore}
+
+                                    </p>
+
+
+                                    <a
+                                        href="intervista.html?id=${encodeURIComponent(id)}"
+                                        style="
+                                            font-weight: 700;
+                                            color: #b30000;
+                                            text-decoration: none;
+                                        "
+                                    >
+                                        LEGGI L'INTERVISTA →
+                                    </a>
+
+                                </article>
+
+                            `;
+
+                        }
+
+
+                        /*
+                         * INTERVISTE SUCCESSIVE
+                         */
+
+                        return `
+
+                            <article
+                                style="
+                                    display: grid;
+                                    grid-template-columns:
+                                        ${immagine
+                                            ? "minmax(180px, 280px) 1fr"
+                                            : "1fr"};
+                                    gap: 25px;
+                                    padding-bottom: 30px;
+                                    margin-bottom: 30px;
+                                    border-bottom: 1px solid #ccc;
+                                "
+                            >
+
+                                ${
+                                    immagine
+
+                                        ? `
+
+                                            <a
+                                                href="intervista.html?id=${encodeURIComponent(id)}"
+                                            >
+
+                                                <img
+                                                    src="${immagine}"
+                                                    alt="${intervistato || titolo}"
+                                                    style="
+                                                        display: block;
+                                                        width: 100%;
+                                                        height: 190px;
+                                                        object-fit: cover;
+                                                    "
+                                                >
+
+                                            </a>
+
+                                          `
+
+                                        : ""
+                                }
+
+
+                                <div>
+
+                                    <div
+                                        style="
+                                            font-size: 11px;
+                                            font-weight: 700;
+                                            letter-spacing: 1.4px;
+                                            color: #b30000;
+                                            margin-bottom: 8px;
+                                        "
+                                    >
+                                        INTERVISTA
+                                    </div>
+
+
+                                    ${
+                                        intervistato
+
+                                            ? `
+
+                                                <div
+                                                    style="
+                                                        font-size: 13px;
+                                                        font-weight: 700;
+                                                        text-transform: uppercase;
+                                                        color: #666;
+                                                        margin-bottom: 7px;
+                                                    "
+                                                >
+                                                    ${intervistato}
+                                                </div>
+
+                                              `
+
+                                            : ""
+                                    }
+
+
+                                    <h2
+                                        style="
+                                            font-family: Georgia, 'Times New Roman', serif;
+                                            font-size: 27px;
+                                            line-height: 1.15;
+                                            margin: 0 0 10px;
+                                        "
+                                    >
+
+                                        <a
+                                            href="intervista.html?id=${encodeURIComponent(id)}"
+                                            style="
+                                                color: inherit;
+                                                text-decoration: none;
+                                            "
+                                        >
+                                            ${titolo}
+                                        </a>
+
+                                    </h2>
+
+
+                                    ${
+                                        introduzione
+
+                                            ? `
+
+                                                <p
+                                                    style="
+                                                        line-height: 1.55;
+                                                        color: #555;
+                                                    "
+                                                >
+                                                    ${introduzione}
+                                                </p>
+
+                                              `
+
+                                            : ""
+                                    }
+
+
+                                    <p
+                                        style="
+                                            margin: 12px 0;
+                                            font-size: 13px;
+                                            color: #777;
+                                        "
+                                    >
+                                        ${data}
+
+                                        ${
+                                            data && autore
+                                                ? " · "
+                                                : ""
+                                        }
+
+                                        ${autore}
+                                    </p>
+
+
+                                    <a
+                                        href="intervista.html?id=${encodeURIComponent(id)}"
+                                        style="
+                                            font-weight: 700;
+                                            color: #b30000;
+                                            text-decoration: none;
+                                        "
+                                    >
+                                        Leggi →
+                                    </a>
+
+                                </div>
+
+                            </article>
+
+                        `;
+
+                    }
+                )
+
+                .join("");
+
+
+    } catch (errore) {
+
+        console.error(
+            "Errore caricamento interviste:",
+            errore
+        );
+
+
+        contenitore.innerHTML = `
+
+            <article
+                style="
+                    padding: 20px 0 35px;
+                    border-bottom: 1px solid #ccc;
+                "
+            >
+
+                <div
+                    style="
+                        font-size: 12px;
+                        font-weight: 700;
+                        letter-spacing: 1.5px;
+                        color: #b30000;
+                        margin-bottom: 12px;
+                    "
+                >
+                    INTERVISTE
+                </div>
+
+                <h2
+                    style="
+                        font-family: Georgia, 'Times New Roman', serif;
+                        font-size: 30px;
+                        margin: 0 0 12px;
+                    "
+                >
+                    Archivio temporaneamente non disponibile
+                </h2>
+
+                <p>
+                    Riprova tra qualche minuto.
+                </p>
+
+            </article>
+
+        `;
+
+    }
+
+}
+
+</script>
 
 
 </body>
