@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const elencoAnnunci =
         document.getElementById("elenco-annunci");
-
+const homeEventi = document.getElementById("home-eventi");
 
     if (elencoCompagnie) {
         caricaCompagnie();
@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (schedaEvento) {
         caricaSchedaEvento();
     }
-
+if (homeEventi) caricaEventiHome();
     if (elencoAnnunci) {
         caricaAnnunci();
     }
@@ -1411,6 +1411,260 @@ async function caricaAnnunci() {
                 </p>
 
             </div>
+
+        `;
+
+    }
+
+}
+async function caricaEventiHome() {
+
+    const contenitore = document.getElementById("home-eventi");
+
+    if (!contenitore) return;
+
+    try {
+
+        const [rispostaEventi, rispostaCompagnie] =
+            await Promise.all([
+                fetch("data/eventi.json"),
+                fetch("data/compagnie.json")
+            ]);
+
+        if (!rispostaEventi.ok) {
+            throw new Error("Impossibile caricare gli eventi");
+        }
+
+        const eventi = await rispostaEventi.json();
+
+        const compagnie = rispostaCompagnie.ok
+            ? await rispostaCompagnie.json()
+            : [];
+
+
+        const adesso = new Date();
+
+
+        const eventiFuturi = eventi
+            .filter(evento => evento.pubblicato === true)
+
+            .map(evento => {
+
+                const dateFuture = (evento.date || [])
+                    .map(dataEvento => {
+
+                        const dataOra = new Date(
+                            `${dataEvento.data}T${dataEvento.ora || "23:59"}`
+                        );
+
+                        return {
+                            ...dataEvento,
+                            dataOra
+                        };
+
+                    })
+                    .filter(dataEvento => dataEvento.dataOra >= adesso)
+                    .sort((a, b) => a.dataOra - b.dataOra);
+
+
+                return {
+                    ...evento,
+                    dateFuture
+                };
+
+            })
+
+            .filter(evento => evento.dateFuture.length > 0)
+
+            .sort(
+                (a, b) =>
+                    a.dateFuture[0].dataOra -
+                    b.dateFuture[0].dataOra
+            )
+
+            .slice(0, 3);
+
+
+        if (eventiFuturi.length === 0) {
+
+            contenitore.innerHTML = `
+                <article class="event-card">
+
+                    <div class="date">
+                        PROSSIMAMENTE
+                    </div>
+
+                    <h3>
+                        Il prossimo spettacolo
+                    </h3>
+
+                    <p>
+                        Stiamo aggiornando l'agenda
+                        di Corriere Teatrale.
+                    </p>
+
+                </article>
+
+                <article class="event-card">
+
+                    <div class="date">
+                        SEGNALA
+                    </div>
+
+                    <h3>
+                        Il tuo spettacolo
+                    </h3>
+
+                    <p>
+                        Hai una nuova produzione?
+                        Segnalala alla redazione.
+                    </p>
+
+                    <a href="segnala.html">
+                        Invia una segnalazione →
+                    </a>
+
+                </article>
+            `;
+
+            return;
+        }
+
+
+        contenitore.innerHTML = eventiFuturi
+            .map(evento => {
+
+                /*
+                 * I FATTI IN CASA APS è l'editore e non
+                 * compare nella directory delle compagnie.
+                 * Per questo viene gestito separatamente.
+                 */
+
+                let nomeCompagnia = "Compagnia teatrale";
+                let linkCompagnia = "";
+
+
+                if (evento.compagnia_id === "i-fatti-in-casa") {
+
+                    nomeCompagnia = "I FATTI IN CASA APS";
+                    linkCompagnia = "i-fatti-in-casa.html";
+
+                } else {
+
+                    const compagnia = compagnie.find(
+                        c => c.id === evento.compagnia_id
+                    );
+
+                    if (compagnia) {
+
+                        nomeCompagnia = compagnia.nome;
+
+                        linkCompagnia =
+                            `compagnia.html?id=${compagnia.id}`;
+                    }
+
+                }
+
+
+                const prossimaData = evento.dateFuture[0];
+
+
+                const dataFormattata =
+                    prossimaData.dataOra.toLocaleDateString(
+                        "it-IT",
+                        {
+                            day: "numeric",
+                            month: "long"
+                        }
+                    );
+
+
+                const compagniaHTML = linkCompagnia
+                    ? `
+                        <a href="${linkCompagnia}">
+                            ${nomeCompagnia}
+                        </a>
+                      `
+                    : nomeCompagnia;
+
+
+                return `
+
+                    <article class="event-card">
+
+                        <div class="date">
+                            ${dataFormattata}
+                            ·
+                            ${prossimaData.ora || ""}
+                        </div>
+
+                        <h3>
+
+                            <a href="evento.html?id=${evento.id}">
+                                ${evento.titolo}
+                            </a>
+
+                        </h3>
+
+                        <p>
+
+                            ${evento.luogo || ""}
+
+                            ${evento.citta
+                                ? ` · ${evento.citta}`
+                                : ""
+                            }
+
+                            <br>
+
+                            ${compagniaHTML}
+
+                        </p>
+
+                        <a
+                            href="evento.html?id=${evento.id}"
+                            class="event-link"
+                        >
+                            Dettagli →
+                        </a>
+
+                    </article>
+
+                `;
+
+            })
+            .join("");
+
+
+    } catch (errore) {
+
+        console.error(
+            "Errore caricamento eventi Home:",
+            errore
+        );
+
+        contenitore.innerHTML = `
+
+            <article class="event-card">
+
+                <div class="date">
+                    AGENDA
+                </div>
+
+                <h3>
+                    Gli spettacoli di Roma
+                </h3>
+
+                <p>
+                    Consulta l'agenda completa
+                    di Corriere Teatrale.
+                </p>
+
+                <a href="eventi.html">
+                    Vai agli spettacoli →
+                </a>
+
+            </article>
 
         `;
 
