@@ -10,6 +10,7 @@ on:
       - "data/annunci/**"
       - "data/notizie/**"
       - "data/interviste/**"
+      - "scripts/genera_pagine.py"
       - ".github/workflows/genera-indici.yml"
 
 permissions:
@@ -20,8 +21,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
       - name: Scarica repository
         uses: actions/checkout@v4
+
 
       - name: Genera compagnie.json
         run: |
@@ -32,7 +35,9 @@ jobs:
           else
             echo '[]' > data/compagnie.tmp.json
           fi
+
           mv data/compagnie.tmp.json data/compagnie.json
+
 
       - name: Genera eventi.json
         run: |
@@ -43,7 +48,9 @@ jobs:
           else
             echo '[]' > data/eventi.tmp.json
           fi
+
           mv data/eventi.tmp.json data/eventi.json
+
 
       - name: Genera annunci.json
         run: |
@@ -54,7 +61,9 @@ jobs:
           else
             echo '[]' > data/annunci.tmp.json
           fi
+
           mv data/annunci.tmp.json data/annunci.json
+
 
       - name: Genera notizie.json
         run: |
@@ -70,6 +79,7 @@ jobs:
 
           mv data/notizie.tmp.json data/notizie.json
 
+
       - name: Genera interviste.json
         run: |
           mkdir -p data/interviste
@@ -84,446 +94,12 @@ jobs:
 
           mv data/interviste.tmp.json data/interviste.json
 
+
       - name: Genera pagine degli spettacoli
         run: |
           rm -rf spettacoli
-          mkdir -p spettacoli
+          python3 scripts/genera_pagine.py
 
-          python3 <<'PY'
-          import json
-          import html
-          import re
-          from pathlib import Path
-
-          BASE_URL = "https://corriereteatrale.it"
-          FALLBACK_IMAGE = f"{BASE_URL}/header-corriere-teatrale.jpg"
-
-          def pulisci_markdown(testo):
-              if not testo:
-                  return ""
-
-              testo = re.sub(r'^#{1,6}\s*', '', testo, flags=re.MULTILINE)
-              testo = re.sub(r'\*\*(.*?)\*\*', r'\1', testo)
-              testo = re.sub(r'\*(.*?)\*', r'\1', testo)
-              testo = re.sub(r'!\[([^\]]*)\]\([^)]+\)', r'\1', testo)
-              testo = re.sub(r'\[([^\]]+)\]\([^)]+\)', r'\1', testo)
-              testo = re.sub(r'\s+', ' ', testo).strip()
-
-              if len(testo) > 240:
-                  testo = testo[:237].rstrip() + "..."
-
-              return testo
-
-          cartella_eventi = Path("data/eventi")
-
-          for file_json in sorted(cartella_eventi.glob("*.json")):
-
-              with file_json.open(
-                  "r",
-                  encoding="utf-8"
-              ) as file:
-                  evento = json.load(file)
-
-              if evento.get("pubblicato") is not True:
-                  continue
-
-              event_id = str(
-                  evento.get("id", "")
-              ).strip()
-
-              if not event_id:
-                  continue
-
-              titolo = str(
-                  evento.get(
-                      "titolo",
-                      "Spettacolo"
-                  )
-              ).strip()
-
-              descrizione = pulisci_markdown(
-                  evento.get(
-                      "descrizione",
-                      ""
-                  )
-              )
-
-              if not descrizione:
-                  descrizione = (
-                      "Spettacolo segnalato da Corriere Teatrale, "
-                      "il giornale del teatro amatoriale romano."
-                  )
-
-              locandina = str(
-                  evento.get(
-                      "locandina",
-                      ""
-                  )
-              ).strip()
-
-              if locandina:
-
-                  if (
-                      locandina.startswith("http://") or
-                      locandina.startswith("https://")
-                  ):
-                      immagine = locandina
-
-                  else:
-                      immagine = (
-                          f"{BASE_URL}/"
-                          f"{locandina.lstrip('/')}"
-                      )
-
-              else:
-                  immagine = FALLBACK_IMAGE
-
-              url = (
-                  f"{BASE_URL}/spettacoli/"
-                  f"{event_id}/"
-              )
-
-              titolo_html = html.escape(
-                  titolo,
-                  quote=True
-              )
-
-              descrizione_html = html.escape(
-                  descrizione,
-                  quote=True
-              )
-
-              immagine_html = html.escape(
-                  immagine,
-                  quote=True
-              )
-
-              url_html = html.escape(
-                  url,
-                  quote=True
-              )
-
-              destinazione = (
-                  Path("spettacoli") /
-                  event_id
-              )
-
-              destinazione.mkdir(
-                  parents=True,
-                  exist_ok=True
-              )
-                          pagina = f"""<!DOCTYPE html>
-          <html lang="it">
-
-          <head>
-
-              <meta charset="UTF-8">
-
-              <meta name="viewport"
-                    content="width=device-width, initial-scale=1.0">
-
-              <base href="{BASE_URL}/">
-
-              <title>{titolo_html} | Corriere Teatrale</title>
-
-              <meta name="description"
-                    content="{descrizione_html}">
-
-              <link rel="canonical"
-                    href="{url_html}">
-
-              <meta property="og:type"
-                    content="article">
-
-              <meta property="og:site_name"
-                    content="Corriere Teatrale">
-
-              <meta property="og:locale"
-                    content="it_IT">
-
-              <meta property="og:title"
-                    content="{titolo_html}">
-
-              <meta property="og:description"
-                    content="{descrizione_html}">
-
-              <meta property="og:url"
-                    content="{url_html}">
-
-              <meta property="og:image"
-                    content="{immagine_html}">
-
-              <meta property="og:image:secure_url"
-                    content="{immagine_html}">
-
-              <meta property="og:image:alt"
-                    content="Locandina di {titolo_html}">
-
-              <meta name="twitter:card"
-                    content="summary_large_image">
-
-              <meta name="twitter:title"
-                    content="{titolo_html}">
-
-              <meta name="twitter:description"
-                    content="{descrizione_html}">
-
-              <meta name="twitter:image"
-                    content="{immagine_html}">
-
-              <link rel="icon"
-                    href="logo-corriere-teatrale.jpg">
-
-              <link rel="stylesheet"
-                    href="assets/css/style.css">
-
-          </head>
-
-          <body>
-
-          <div class="topbar">
-              ROMA · CORRIERE TEATRALE
-          </div>
-
-          <header class="masthead">
-
-              <div class="brand">
-
-                  <a href="index.html">
-
-                      <img
-                          src="logo-corriere-teatrale.jpg"
-                          alt="Corriere Teatrale"
-                      >
-
-                  </a>
-
-                  <div>
-
-                      <a href="index.html">
-
-                          <h1>
-                              CORRIERE
-                              <span>TEATRALE</span>
-                          </h1>
-
-                      </a>
-
-                      <p>
-                          Il giornale del teatro amatoriale romano
-                      </p>
-
-                  </div>
-
-              </div>
-
-              <div class="official">
-
-                  Organo ufficiale di<br>
-
-                  <a href="i-fatti-in-casa.html">
-
-                      <strong>
-                          I FATTI IN CASA APS
-                      </strong>
-
-                  </a>
-
-              </div>
-
-          </header>
-
-          <nav class="main-nav">
-
-              <div class="nav-mobile-bar">
-
-                  <span class="nav-mobile-title">
-                      MENU
-                  </span>
-
-                  <button
-                      class="menu-toggle"
-                      type="button"
-                      aria-label="Apri menu"
-                      aria-expanded="false"
-                      aria-controls="menu-principale"
-                  >
-                      <span></span>
-                      <span></span>
-                      <span></span>
-                  </button>
-
-              </div>
-
-              <div
-                  class="nav-inner"
-                  id="menu-principale"
-              >
-
-                  <a href="index.html">
-                      Home
-                  </a>
-
-                  <a href="notizie.html">
-                      Notizie
-                  </a>
-
-                  <a
-                      href="eventi.html"
-                      class="active"
-                  >
-                      Spettacoli
-                  </a>
-
-                  <a href="compagnie.html">
-                      Compagnie
-                  </a>
-
-                  <a href="interviste.html">
-                      Interviste
-                  </a>
-
-                  <a href="bacheca.html">
-                      Bacheca
-                  </a>
-
-                  <a href="chi-siamo.html">
-                      Chi siamo
-                  </a>
-
-                  <a
-                      href="segnala.html"
-                      class="segnala"
-                  >
-                      Segnala
-                  </a>
-
-              </div>
-
-          </nav>
-
-          <main>
-
-              <div id="scheda-evento">
-
-                  <p>
-                      Caricamento spettacolo...
-                  </p>
-
-              </div>
-
-          </main>
-
-          <footer>
-
-              <div class="footer-inner">
-
-                  <div>
-
-                      <strong>
-                          CORRIERE TEATRALE
-                      </strong>
-
-                      <p>
-                          Il giornale del teatro amatoriale romano.
-                      </p>
-
-                  </div>
-
-                  <div>
-
-                      <p>
-
-                          Organo ufficiale di<br>
-
-                          <a href="i-fatti-in-casa.html">
-
-                              <strong>
-                                  I FATTI IN CASA APS
-                              </strong>
-
-                          </a>
-
-                      </p>
-
-                  </div>
-
-                  <div>
-
-                      <p>
-
-                          <a href="privacy.html">
-                              Privacy
-                          </a>
-
-                          ·
-
-                          <a href="disclaimer.html">
-                              Disclaimer
-                          </a>
-
-                          ·
-
-                          <a href="faq.html">
-                              FAQ
-                          </a>
-
-                      </p>
-
-                  </div>
-
-              </div>
-
-          </footer>
-
-          <script>
-              window.CORRIERE_TEATRALE_EVENTO_ID = {json.dumps(event_id)};
-          </script>
-
-          <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-
-          <script>
-              const parametroOriginale =
-                  URLSearchParams.prototype.get;
-
-              URLSearchParams.prototype.get = function(nome) {{
-
-                  if (
-                      nome === "id" &&
-                      window.CORRIERE_TEATRALE_EVENTO_ID
-                  ) {{
-                      return window.CORRIERE_TEATRALE_EVENTO_ID;
-                  }}
-
-                  return parametroOriginale.call(
-                      this,
-                      nome
-                  );
-              }};
-          </script>
-
-          <script src="assets/js/app.js"></script>
-
-          </body>
-
-          </html>
-          """
-                        file_html = (
-                  destinazione /
-                  "index.html"
-              )
-
-              file_html.write_text(
-                  pagina,
-                  encoding="utf-8"
-              )
-
-              print(
-                  "Generata pagina:",
-                  file_html
-              )
-
-          PY
 
       - name: Pubblica indici e pagine aggiornate
         run: |
