@@ -2,63 +2,180 @@
 <html lang="it">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
     <title>Chi siamo | Corriere Teatrale</title>
 
     <meta name="description"
           content="Corriere Teatrale è una pubblicazione di I FATTI IN CASA APS dedicata al teatro amatoriale di Roma: compagnie, spettacoli, corsi, casting e storie dal palcoscenico.">
 
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="icon"
+          href="logo-corriere-teatrale.jpg">
+
+    <link rel="stylesheet"
+          href="assets/css/style.css">
+
 </head>
+
 
 <body>
 
-<header>
-    <div class="header-inner">
 
-        <div class="brand">
+<!-- =====================================================
+     TOPBAR
+     ===================================================== -->
+
+<div class="topbar">
+    ROMA · CORRIERE TEATRALE
+</div>
+
+
+<!-- =====================================================
+     HEADER
+     ===================================================== -->
+
+<header class="masthead">
+
+    <div class="brand">
+
+        <a href="index.html">
+
+            <img
+                src="logo-corriere-teatrale.jpg"
+                alt="Corriere Teatrale"
+            >
+
+        </a>
+
+
+        <div>
+
             <a href="index.html">
-                <img src="logo-corriere-teatrale.jpg"
-                     alt="Corriere Teatrale"
-                     class="site-logo">
+
+                <h1>
+                    CORRIERE
+                    <span>TEATRALE</span>
+                </h1>
+
             </a>
 
-            <div class="brand-text">
-                <a href="index.html" class="site-title">
-                    CORRIERE TEATRALE
-                </a>
+            <p>
+                Il giornale del teatro amatoriale romano
+            </p>
 
-                <div class="site-subtitle">
-                    Il teatro amatoriale di Roma, in scena e dietro le quinte
-                </div>
-            </div>
-        </div>
-
-        <div class="official">
-            PUBBLICAZIONE UFFICIALE<br>
-            <strong>I FATTI IN CASA APS</strong>
         </div>
 
     </div>
+
+
+    <div class="official">
+
+        Organo ufficiale di<br>
+
+        <a href="i-fatti-in-casa.html">
+
+            <strong>
+                I FATTI IN CASA APS
+            </strong>
+
+        </a>
+
+    </div>
+
 </header>
 
 
-<nav>
-    <div class="nav-inner">
-        <a href="index.html">Home</a>
-        <a href="notizie.html">Notizie</a>
-        <a href="eventi.html">Spettacoli</a>
-        <a href="chi-siamo.html" class="active">Chi siamo</a>
-        <a href="interviste.html">Interviste</a>
-        <a href="bacheca.html">Bacheca</a>
-        <a href="segnala.html" class="segnala">Segnala</a>
+<!-- =====================================================
+     NAVIGAZIONE
+     ===================================================== -->
+
+<nav class="main-nav">
+
+    <div class="nav-mobile-bar">
+
+        <span class="nav-mobile-title">
+            MENU
+        </span>
+
+        <button
+            class="menu-toggle"
+            type="button"
+            aria-label="Apri menu"
+            aria-expanded="false"
+            aria-controls="menu-principale"
+        >
+
+            <span></span>
+            <span></span>
+            <span></span>
+
+        </button>
+
     </div>
+
+
+    <div
+        class="nav-inner"
+        id="menu-principale"
+    >
+
+        <a href="index.html">
+            Home
+        </a>
+
+        <a href="notizie.html">
+            Notizie
+        </a>
+
+        <a href="eventi.html">
+            Spettacoli
+        </a>
+
+        <a href="compagnie.html">
+            Compagnie
+        </a>
+
+        <a href="interviste.html">
+            Interviste
+        </a>
+
+        <a href="bacheca.html">
+            Bacheca
+        </a>
+
+        <a
+            href="chi-siamo.html"
+            class="active"
+        >
+            Chi siamo
+        </a>
+
+        <a
+            href="segnala.html"
+            class="segnala"
+        >
+            Segnala
+        </a>
+
+    </div>
+
 </nav>
 
 
+<!-- =====================================================
+     CONTENUTO
+     ===================================================== -->
+
 <main>
+
+
+    <!-- =================================================
+         HERO CHI SIAMO
+         ================================================= -->
 
     <section class="chi-siamo-hero">
 
@@ -66,97 +183,165 @@
             CHI SIAMO
         </div>
 
+
         <h1>
             Il teatro non vive soltanto<br>
             quando si alza il sipario.
         </h1>
 
+
         <p class="chi-siamo-lead">
-            Vive nelle prove, nelle sale parrocchiali, nei piccoli teatri,
-            nei laboratori, nelle compagnie, nei tecnici, negli attori
-            e nelle persone che ogni giorno dedicano tempo e passione
-            al palcoscenico.
+
+            Vive nelle prove, nelle sale parrocchiali,
+            nei piccoli teatri, nei laboratori,
+            nelle compagnie, nei tecnici, negli attori
+            e nelle persone che ogni giorno dedicano
+            tempo e passione al palcoscenico.
+
         </p>
 
     </section>
 
 
+    <!-- =================================================
+         CONTENUTO CHI SIAMO
+         ================================================= -->
+
     <section class="chi-siamo-grid">
+
 
         <article class="chi-siamo-main">
 
-            <h2>Perché nasce Corriere Teatrale</h2>
+
+            <h2>
+                Perché nasce Corriere Teatrale
+            </h2>
+
 
             <p>
-                <strong>Corriere Teatrale</strong> nasce per raccontare e mettere
+
+                <strong>
+                    Corriere Teatrale
+                </strong>
+
+                nasce per raccontare e mettere
                 in rete il teatro amatoriale di Roma.
-            </p>
 
-            <p>
-                Una realtà diffusa, fatta di compagnie, associazioni,
-                spettacoli, corsi, laboratori e centinaia di persone
-                che spesso lavorano lontano dai grandi circuiti della
-                comunicazione culturale.
-            </p>
-
-            <p>
-                Il nostro obiettivo è semplice: creare uno spazio nel quale
-                queste esperienze possano essere trovate, raccontate
-                e conosciute.
             </p>
 
 
-            <h2>Un giornale per chi fa teatro</h2>
-
             <p>
-                Corriere Teatrale raccoglie notizie, spettacoli,
-                interviste, segnalazioni e opportunità provenienti
-                dal mondo teatrale romano.
-            </p>
 
-            <p>
-                Vogliamo raccontare ciò che accade sul palco, ma anche
-                quello che normalmente rimane dietro le quinte:
-                le prove, le difficoltà, le idee, le persone e le storie
-                delle compagnie.
-            </p>
+                Una realtà diffusa, fatta di compagnie,
+                associazioni, spettacoli, corsi,
+                laboratori e centinaia di persone
+                che spesso lavorano lontano dai grandi
+                circuiti della comunicazione culturale.
 
-            <p>
-                La <strong>Bacheca</strong> nasce inoltre come spazio di servizio:
-                casting, ricerca di attori e tecnici, collaborazioni,
-                corsi, sale prova e altre opportunità utili alla comunità
-                teatrale.
             </p>
 
 
-            <h2>Una porta aperta alle compagnie</h2>
-
             <p>
-                Corriere Teatrale non vuole essere la vetrina di una sola
-                realtà teatrale.
+
+                Il nostro obiettivo è semplice:
+                creare uno spazio nel quale queste
+                esperienze possano essere trovate,
+                raccontate e conosciute.
+
             </p>
 
-            <p>
-                Il progetto è aperto alle compagnie e alle associazioni
-                che vogliono segnalare uno spettacolo, raccontare
-                un progetto, proporre una storia o condividere
-                un'opportunità.
-            </p>
+
+            <h2>
+                Un giornale per chi fa teatro
+            </h2>
+
 
             <p>
-                Per questo abbiamo creato uno spazio dedicato alle
-                segnalazioni: ogni realtà teatrale può inviarci
+
+                Corriere Teatrale raccoglie notizie,
+                spettacoli, interviste, segnalazioni
+                e opportunità provenienti dal mondo
+                teatrale romano.
+
+            </p>
+
+
+            <p>
+
+                Vogliamo raccontare ciò che accade
+                sul palco, ma anche quello che
+                normalmente rimane dietro le quinte:
+                le prove, le difficoltà, le idee,
+                le persone e le storie delle compagnie.
+
+            </p>
+
+
+            <p>
+
+                La <strong>Bacheca</strong> nasce inoltre
+                come spazio di servizio: casting,
+                ricerca di attori e tecnici,
+                collaborazioni, corsi, sale prova
+                e altre opportunità utili
+                alla comunità teatrale.
+
+            </p>
+
+
+            <h2>
+                Una porta aperta alle compagnie
+            </h2>
+
+
+            <p>
+
+                Corriere Teatrale non vuole essere
+                la vetrina di una sola realtà teatrale.
+
+            </p>
+
+
+            <p>
+
+                Il progetto è aperto alle compagnie
+                e alle associazioni che vogliono
+                segnalare uno spettacolo, raccontare
+                un progetto, proporre una storia
+                o condividere un'opportunità.
+
+            </p>
+
+
+            <p>
+
+                Per questo abbiamo creato uno spazio
+                dedicato alle segnalazioni:
+                ogni realtà teatrale può inviarci
                 gratuitamente le proprie iniziative.
+
             </p>
 
-            <a href="segnala.html" class="chi-siamo-cta">
+
+            <a
+                href="segnala.html"
+                class="chi-siamo-cta"
+            >
                 SEGNALA AL CORRIERE TEATRALE →
             </a>
+
 
         </article>
 
 
+        <!-- =================================================
+             SIDEBAR
+             ================================================= -->
+
         <aside class="chi-siamo-sidebar">
+
+
+            <!-- EDITORE -->
 
             <div class="chi-siamo-box">
 
@@ -164,22 +349,56 @@
                     L'EDITORE
                 </div>
 
-                <h3>I FATTI IN CASA APS</h3>
+
+                <h3>
+
+                    <a
+                        href="i-fatti-in-casa.html"
+                        style="
+                            color: inherit;
+                            text-decoration: none;
+                        "
+                    >
+                        I FATTI IN CASA APS
+                    </a>
+
+                </h3>
+
 
                 <p>
-                    Corriere Teatrale è una pubblicazione ufficiale
-                    di <strong>I FATTI IN CASA APS</strong>.
+
+                    Corriere Teatrale è una pubblicazione
+                    ufficiale di
+
+                    <a
+                        href="i-fatti-in-casa.html"
+                        style="
+                            color: inherit;
+                            text-decoration: none;
+                        "
+                    >
+                        <strong>
+                            I FATTI IN CASA APS
+                        </strong>
+                    </a>.
+
                 </p>
 
+
                 <p>
-                    L'associazione promuove attività teatrali,
-                    culturali e associative e sostiene la diffusione
-                    del teatro come esperienza di partecipazione,
+
+                    L'associazione promuove attività
+                    teatrali, culturali e associative
+                    e sostiene la diffusione del teatro
+                    come esperienza di partecipazione,
                     incontro e comunità.
+
                 </p>
 
             </div>
 
+
+            <!-- COSA RACCONTIAMO -->
 
             <div class="chi-siamo-box">
 
@@ -187,18 +406,43 @@
                     COSA RACCONTIAMO
                 </div>
 
+
                 <ul>
-                    <li>Spettacoli</li>
-                    <li>Compagnie teatrali</li>
-                    <li>Interviste</li>
-                    <li>Corsi e laboratori</li>
-                    <li>Casting</li>
-                    <li>Storie dal palcoscenico</li>
-                    <li>Opportunità per il teatro</li>
+
+                    <li>
+                        Spettacoli
+                    </li>
+
+                    <li>
+                        Compagnie teatrali
+                    </li>
+
+                    <li>
+                        Interviste
+                    </li>
+
+                    <li>
+                        Corsi e laboratori
+                    </li>
+
+                    <li>
+                        Casting
+                    </li>
+
+                    <li>
+                        Storie dal palcoscenico
+                    </li>
+
+                    <li>
+                        Opportunità per il teatro
+                    </li>
+
                 </ul>
 
             </div>
 
+
+            <!-- TERRITORIO -->
 
             <div class="chi-siamo-box">
 
@@ -206,43 +450,81 @@
                     TERRITORIO
                 </div>
 
+
                 <p>
-                    Partiamo da Roma, dai suoi quartieri e dai suoi
-                    palcoscenici, con particolare attenzione alle realtà
-                    teatrali che trovano meno spazio nei tradizionali
+
+                    Partiamo da Roma, dai suoi quartieri
+                    e dai suoi palcoscenici, con particolare
+                    attenzione alle realtà teatrali
+                    che trovano meno spazio nei tradizionali
                     circuiti dell'informazione.
+
                 </p>
 
             </div>
 
+
         </aside>
+
 
     </section>
 
+
 </main>
 
+
+<!-- =====================================================
+     FOOTER
+     ===================================================== -->
 
 <footer>
 
     <div class="footer-inner">
 
         <div>
-            <strong>CORRIERE TEATRALE</strong><br>
-            Il teatro amatoriale di Roma
+
+            <strong>
+                CORRIERE TEATRALE
+            </strong>
+
+            <p>
+                Il giornale del teatro
+                amatoriale romano.
+            </p>
+
         </div>
 
-        <div>
-            Pubblicazione ufficiale<br>
-            <strong>I FATTI IN CASA APS</strong>
-        </div>
 
         <div>
-            <a href="segnala.html">Segnala uno spettacolo</a>
+
+            <p>
+
+                Organo ufficiale di<br>
+
+                <a href="i-fatti-in-casa.html">
+
+                    <strong>
+                        I FATTI IN CASA APS
+                    </strong>
+
+                </a>
+
+            </p>
+
         </div>
 
     </div>
 
 </footer>
 
+
+<!-- =====================================================
+     JAVASCRIPT
+     ===================================================== -->
+
+<script src="assets/js/app.js"></script>
+
+
 </body>
+
 </html>
