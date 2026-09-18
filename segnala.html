@@ -18,56 +18,57 @@
 
 <body>
 
-<header class="site-header">
+<div class="topbar">
+    ROMA · CORRIERE TEATRALE
+</div>
 
-    <div class="masthead">
-
-        <div class="brand">
-
+<header class="masthead">
+    <div class="brand">
+        <a href="index.html">
+            <img src="logo-corriere-teatrale.jpg" alt="Corriere Teatrale">
+        </a>
+        <div>
             <a href="index.html">
-                <img
-                    src="logo-corriere-teatrale.jpg"
-                    alt="Corriere Teatrale"
-                    class="site-logo"
-                >
+                <h1>CORRIERE <span>TEATRALE</span></h1>
             </a>
-
-            <div>
-                <div class="site-title">
-                    CORRIERE TEATRALE
-                </div>
-
-                <div class="site-subtitle">
-                    Il teatro amatoriale di Roma
-                </div>
-            </div>
-
+            <p>Il giornale del teatro amatoriale romano</p>
         </div>
-
-        <div class="official">
-            Pubblicazione ufficiale<br>
-            <strong>I FATTI IN CASA APS</strong>
-        </div>
-
     </div>
 
+    <div class="official">
+        Organo ufficiale di<br>
+        <a href="i-fatti-in-casa.html">
+            <strong>I FATTI IN CASA APS</strong>
+        </a>
+    </div>
 </header>
 
+<nav class="main-nav">
+    <div class="nav-mobile-bar">
+        <span class="nav-mobile-title">MENU</span>
+        <button
+            class="menu-toggle"
+            type="button"
+            aria-label="Apri menu"
+            aria-expanded="false"
+            aria-controls="menu-principale"
+        >
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </div>
 
-<nav>
-
-    <div class="nav-inner">
-
+    <div class="nav-inner" id="menu-principale">
         <a href="index.html">Home</a>
         <a href="notizie.html">Notizie</a>
         <a href="eventi.html">Spettacoli</a>
         <a href="compagnie.html">Compagnie</a>
         <a href="interviste.html">Interviste</a>
         <a href="bacheca.html">Bacheca</a>
-        <a href="segnala.html" class="segnala">Segnala</a>
-
+        <a href="chi-siamo.html">Chi siamo</a>
+        <a href="segnala.html" class="segnala active">Segnala</a>
     </div>
-
 </nav>
 
 
@@ -283,6 +284,10 @@
                 </div>
 
             </fieldset>
+
+
+            <!-- Il resto del modulo compare solo dopo la scelta -->
+            <div id="form-dettagli" style="display: none;">
 
 
             <!-- =====================================================
@@ -1189,6 +1194,9 @@
             </fieldset>
 
 
+            </div>
+
+
         </form>
 
     </section>
@@ -1197,18 +1205,25 @@
 
 
 <footer>
+    <div class="footer-inner">
+        <div>
+            <strong>CORRIERE TEATRALE</strong>
+            <p>Il giornale del teatro amatoriale romano.</p>
+        </div>
 
-    <div>
-        <strong>Corriere Teatrale</strong>
-        <p>Il teatro amatoriale di Roma</p>
+        <div>
+            <p>
+                Organo ufficiale di<br>
+                <a href="i-fatti-in-casa.html">
+                    <strong>I FATTI IN CASA APS</strong>
+                </a>
+            </p>
+        </div>
     </div>
-
-    <div>
-        Pubblicazione ufficiale di
-        <strong>I FATTI IN CASA APS</strong>
-    </div>
-
 </footer>
+
+<script src="assets/js/app.js"></script>
+
 <script>
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -1249,6 +1264,9 @@ document.addEventListener("DOMContentLoaded", () => {
             ".campi-dinamici"
         );
 
+    const formDettagli =
+        document.getElementById("form-dettagli");
+
 
     /* =========================================================
        CAMPI IMMAGINE
@@ -1281,6 +1299,10 @@ document.addEventListener("DOMContentLoaded", () => {
         sezione.style.display = "none";
     });
 
+    if (formDettagli) {
+        formDettagli.style.display = "none";
+    }
+
 
     /* =========================================================
        CAMBIO TIPOLOGIA
@@ -1293,6 +1315,10 @@ document.addEventListener("DOMContentLoaded", () => {
             sezioni.forEach(sezione => {
                 sezione.style.display = "none";
             });
+
+            if (formDettagli) {
+                formDettagli.style.display = "block";
+            }
 
             const tipo = scelta.dataset.tipo;
 
