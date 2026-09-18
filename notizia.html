@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Notizia | Corriere Teatrale</title>
+
+    <meta name="description"
+          content="Notizie e approfondimenti dal teatro amatoriale romano.">
+
+    <link rel="icon"
+          href="logo-corriere-teatrale.jpg">
+
+    <link rel="stylesheet"
+          href="assets/css/style.css">
+
+    <!-- Libreria per trasformare il Markdown dell'Admin in HTML -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     TOPBAR
+     ===================================================== -->
+
+<div class="topbar">
+    ROMA · CORRIERE TEATRALE
+</div>
+
+
+<!-- =====================================================
+     HEADER
+     ===================================================== -->
+
+<header class="masthead">
+
+    <div class="brand">
+
+        <a href="index.html">
+
+            <img
+                src="logo-corriere-teatrale.jpg"
+                alt="Corriere Teatrale"
+            >
+
+        </a>
+
+        <div>
+
+            <a href="index.html">
+
+                <h1>
+                    CORRIERE
+                    <span>TEATRALE</span>
+                </h1>
+
+            </a>
+
+            <p>
+                Il giornale del teatro amatoriale romano
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="official">
+
+        Organo ufficiale di<br>
+
+        <a href="i-fatti-in-casa.html">
+
+            <strong>
+                I FATTI IN CASA APS
+            </strong>
+
+        </a>
+
+    </div>
+
+</header>
+
+
+<!-- =====================================================
+     NAVIGAZIONE
+     ===================================================== -->
+
+<nav class="main-nav">
+
+    <div class="nav-mobile-bar">
+
+        <span class="nav-mobile-title">
+            MENU
+        </span>
+
+        <button
+            class="menu-toggle"
+            type="button"
+            aria-label="Apri menu"
+            aria-expanded="false"
+            aria-controls="menu-principale"
+        >
+
+            <span></span>
+            <span></span>
+            <span></span>
+
+        </button>
+
+    </div>
+
+
+    <div
+        class="nav-inner"
+        id="menu-principale"
+    >
+
+        <a href="index.html">
+            Home
+        </a>
+
+        <a
+            href="notizie.html"
+            class="active"
+        >
+            Notizie
+        </a>
+
+        <a href="eventi.html">
+            Spettacoli
+        </a>
+
+        <a href="compagnie.html">
+            Compagnie
+        </a>
+
+        <a href="interviste.html">
+            Interviste
+        </a>
+
+        <a href="bacheca.html">
+            Bacheca
+        </a>
+
+        <a href="chi-siamo.html">
+            Chi siamo
+        </a>
+
+        <a
+            href="segnala.html"
+            class="segnala"
+        >
+            Segnala
+        </a>
+
+    </div>
+
+</nav>
+
+
+<!-- =====================================================
+     ARTICOLO
+     ===================================================== -->
+
+<main>
+
+    <article
+        id="notizia"
+        style="
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 50px 20px 80px;
+        "
+    >
+
+        <p style="color:#666;">
+            Caricamento dell'articolo...
+        </p>
+
+    </article>
+
+</main>
+
+
+<!-- =====================================================
+     FOOTER
+     ===================================================== -->
+
+<footer>
+
+    <div class="footer-inner">
+
+        <div>
+
+            <strong>
+                CORRIERE TEATRALE
+            </strong>
+
+            <p>
+                Il giornale del teatro
+                amatoriale romano.
+            </p>
+
+        </div>
+
+
+        <div>
+
+            <p>
+
+                Organo ufficiale di<br>
+
+                <a href="i-fatti-in-casa.html">
+
+                    <strong>
+                        I FATTI IN CASA APS
+                    </strong>
+
+                </a>
+
+            </p>
+
+        </div>
+
+    </div>
+
+</footer>
+
+
+<!-- =====================================================
+     JAVASCRIPT GENERALE
+     ===================================================== -->
+
+<script src="assets/js/app.js"></script>
+
+
+<!-- =====================================================
+     JAVASCRIPT ARTICOLO
+     ===================================================== -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const contenitore = document.getElementById("notizia");
+
+    const parametri = new URLSearchParams(window.location.search);
+
+    const idNotizia = parametri.get("id");
+
+
+    /* =====================================================
+       PROTEZIONE TESTO
+       ===================================================== */
+
+    function escapeHtml(testo) {
+
+        if (testo === null || testo === undefined) {
+            return "";
+        }
+
+        return String(testo)
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#039;");
+
+    }
+
+
+    /* =====================================================
+       DATA ITALIANA
+       ===================================================== */
+
+    function formattaData(dataStringa) {
+
+        if (!dataStringa) {
+            return "";
+        }
+
+        const parti = dataStringa.split("-");
+
+        if (parti.length !== 3) {
+            return dataStringa;
+        }
+
+        const data = new Date(
+            Number(parti[0]),
+            Number(parti[1]) - 1,
+            Number(parti[2])
+        );
+
+        return data.toLocaleDateString(
+            "it-IT",
+            {
+                day: "numeric",
+                month: "long",
+                year: "numeric"
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       IMMAGINI
+       ===================================================== */
+
+    function urlImmagine(valore) {
+
+        if (!valore) {
+            return "";
+        }
+
+        return valore;
+
+    }
+
+
+    /* =====================================================
+       MARKDOWN
+       ===================================================== */
+
+    function trasformaMarkdown(testo) {
+
+        if (!testo) {
+            return "";
+        }
+
+        if (window.marked) {
+
+            return marked.parse(testo);
+
+        }
+
+        return escapeHtml(testo)
+            .replace(/\n\n/g, "</p><p>")
+            .replace(/\n/g, "<br>");
+
+    }
+
+
+    /* =====================================================
+       NESSUN ID
+       ===================================================== */
+
+    if (!idNotizia) {
+
+        contenitore.innerHTML = `
+
+            <div
+                style="
+                    max-width: 760px;
+                    margin: 30px auto;
+                "
+            >
+
+                <div class="section-label">
+                    NOTIZIE
+                </div>
+
+                <h1
+                    style="
+                        font-family: Georgia, 'Times New Roman', serif;
+                        font-size: 42px;
+                    "
+                >
+                    Articolo non trovato
+                </h1>
+
+                <p>
+                    Non è stato indicato alcun articolo.
+                </p>
+
+                <a
+                    href="notizie.html"
+                    style="
+                        color: #b30000;
+                        font-weight: 700;
+                        text-decoration: none;
+                    "
+                >
+                    ← TORNA ALLE NOTIZIE
+                </a>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    /* =====================================================
+       CARICAMENTO
+       ===================================================== */
+
+    fetch("data/notizie.json?ts=" + Date.now())
+
+        .then(risposta => {
+
+            if (!risposta.ok) {
+                throw new Error("Impossibile caricare le notizie");
+            }
+
+            return risposta.json();
+
+        })
+
+        .then(notizie => {
+
+            if (!Array.isArray(notizie)) {
+                throw new Error("Formato archivio non valido");
+            }
+
+
+            const articolo = notizie.find(notizia => {
+
+                return String(notizia.id) === String(idNotizia)
+                    && notizia.pubblicato !== false;
+
+            });
+
+
+            if (!articolo) {
+                throw new Error("Articolo non trovato");
+            }
+
+
+            /* =================================================
+               DATI
+               ================================================= */
+
+            const titolo =
+                escapeHtml(articolo.titolo || "");
+
+            const categoria =
+                escapeHtml(articolo.categoria || "NOTIZIE");
+
+            const occhiello =
+                escapeHtml(articolo.occhiello || "");
+
+            const sommario =
+                escapeHtml(articolo.sommario || "");
+
+            const autore =
+                escapeHtml(
+                    articolo.autore ||
+                    "Redazione Corriere Teatrale"
+                );
+
+            const data =
+                formattaData(articolo.data_pubblicazione);
+
+            const immagine =
+                urlImmagine(articolo.immagine || "");
+
+            const didascalia =
+                escapeHtml(articolo.didascalia || "");
+
+            const corpo =
+                trasformaMarkdown(articolo.testo || "");
+
+
+            /* =================================================
+               TITLE DEL BROWSER
+               ================================================= */
+
+            document.title =
+                `${articolo.titolo} | Corriere Teatrale`;
+
+
+            /* =================================================
+               IMPAGINAZIONE
+               ================================================= */
+
+            contenitore.innerHTML = `
+
+                <div
+                    style="
+                        max-width: 900px;
+                        margin: 0 auto;
+                    "
+                >
+
+                    <div
+                        style="
+                            margin-bottom: 18px;
+                        "
+                    >
+
+                        <a
+                            href="notizie.html"
+                            style="
+                                font-size: 12px;
+                                font-weight: 700;
+                                letter-spacing: 1.4px;
+                                color: #777;
+                                text-decoration: none;
+                            "
+                        >
+                            ← NOTIZIE
+                        </a>
+
+                    </div>
+
+
+                    <div
+                        style="
+                            font-size: 12px;
+                            font-weight: 700;
+                            letter-spacing: 1.6px;
+                            color: #b30000;
+                            margin-bottom: 14px;
+                        "
+                    >
+                        ${categoria}
+                    </div>
+
+
+                    ${
+                        occhiello
+                        ?
+                        `
+                        <div
+                            style="
+                                font-family: Georgia, 'Times New Roman', serif;
+                                font-size: clamp(18px, 2.5vw, 23px);
+                                font-style: italic;
+                                color: #555;
+                                line-height: 1.4;
+                                margin-bottom: 12px;
+                            "
+                        >
+                            ${occhiello}
+                        </div>
+                        `
+                        :
+                        ""
+                    }
+
+
+                    <h1
+                        style="
+                            font-family: Georgia, 'Times New Roman', serif;
+                            font-size: clamp(40px, 7vw, 68px);
+                            line-height: 1.02;
+                            letter-spacing: -1.5px;
+                            margin: 0 0 20px;
+                        "
+                    >
+                        ${titolo}
+                    </h1>
+
+
+                    ${
+                        sommario
+                        ?
+                        `
+                        <p
+                            style="
+                                max-width: 820px;
+                                font-family: Georgia, 'Times New Roman', serif;
+                                font-size: clamp(20px, 3vw, 25px);
+                                line-height: 1.5;
+                                color: #555;
+                                margin: 0 0 25px;
+                            "
+                        >
+                            ${sommario}
+                        </p>
+                        `
+                        :
+                        ""
+                    }
+
+
+                    <div
+                        style="
+                            border-top: 1px solid #ccc;
+                            border-bottom: 1px solid #ccc;
+                            padding: 13px 0;
+                            margin-bottom: 32px;
+                            display: flex;
+                            flex-wrap: wrap;
+                            justify-content: space-between;
+                            gap: 8px 20px;
+                            font-size: 14px;
+                            color: #666;
+                        "
+                    >
+
+                        <span>
+                            di <strong style="color:#111;">${autore}</strong>
+                        </span>
+
+                        ${
+                            data
+                            ?
+                            `<span>${escapeHtml(data)}</span>`
+                            :
+                            ""
+                        }
+
+                    </div>
+
+
+                    ${
+                        immagine
+                        ?
+                        `
+                        <figure
+                            style="
+                                margin: 0 0 38px;
+                            "
+                        >
+
+                            <img
+                                src="${escapeHtml(immagine)}"
+                                alt="${titolo}"
+                                style="
+                                    display: block;
+                                    width: 100%;
+                                    max-height: 650px;
+                                    object-fit: cover;
+                                "
+                            >
+
+                            ${
+                                didascalia
+                                ?
+                                `
+                                <figcaption
+                                    style="
+                                        font-size: 13px;
+                                        line-height: 1.5;
+                                        color: #777;
+                                        padding-top: 8px;
+                                    "
+                                >
+                                    ${didascalia}
+                                </figcaption>
+                                `
+                                :
+                                ""
+                            }
+
+                        </figure>
+                        `
+                        :
+                        ""
+                    }
+
+
+                    <div
+                        class="corpo-articolo"
+                    >
+                        ${corpo}
+                    </div>
+
+
+                    <div
+                        style="
+                            border-top: 4px solid #111;
+                            margin-top: 55px;
+                            padding-top: 22px;
+                        "
+                    >
+
+                        <a
+                            href="notizie.html"
+                            style="
+                                color: #b30000;
+                                font-weight: 700;
+                                text-decoration: none;
+                            "
+                        >
+                            ← TORNA A TUTTE LE NOTIZIE
+                        </a>
+
+                    </div>
+
+                </div>
+
+            `;
+
+        })
+
+        .catch(errore => {
+
+            console.error(errore);
+
+            contenitore.innerHTML = `
+
+                <div
+                    style="
+                        max-width: 760px;
+                        margin: 30px auto;
+                    "
+                >
+
+                    <div class="section-label">
+                        NOTIZIE
+                    </div>
+
+                    <h1
+                        style="
+                            font-family: Georgia, 'Times New Roman', serif;
+                            font-size: 42px;
+                            margin-bottom: 15px;
+                        "
+                    >
+                        Articolo non trovato
+                    </h1>
+
+                    <p
+                        style="
+                            font-size: 17px;
+                            color: #666;
+                            line-height: 1.6;
+                        "
+                    >
+                        L'articolo che stai cercando non è disponibile
+                        oppure non è stato pubblicato.
+                    </p>
+
+                    <a
+                        href="notizie.html"
+                        style="
+                            color: #b30000;
+                            font-weight: 700;
+                            text-decoration: none;
+                        "
+                    >
+                        ← TORNA ALLE NOTIZIE
+                    </a>
+
+                </div>
+
+            `;
+
+        });
+
+});
+
+</script>
+
+
+<!-- =====================================================
+     STILE EDITORIALE DEL CORPO ARTICOLO
+     ===================================================== -->
+
+<style>
+
+.corpo-articolo {
+    max-width: 760px;
+    margin: 0 auto;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 19px;
+    line-height: 1.8;
+    color: #222;
+}
+
+.corpo-articolo p {
+    margin: 0 0 1.45em;
+}
+
+.corpo-articolo strong {
+    font-weight: 700;
+}
+
+.corpo-articolo em {
+    font-style: italic;
+}
+
+.corpo-articolo h2 {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(28px, 4vw, 38px);
+    line-height: 1.15;
+    margin: 1.6em 0 0.55em;
+}
+
+.corpo-articolo h3 {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(23px, 3vw, 29px);
+    line-height: 1.2;
+    margin: 1.5em 0 0.5em;
+}
+
+.corpo-articolo h4 {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 21px;
+    line-height: 1.3;
+    margin: 1.4em 0 0.5em;
+}
+
+.corpo-articolo blockquote {
+    margin: 2em 0;
+    padding: 5px 0 5px 25px;
+    border-left: 5px solid #b30000;
+    font-size: 24px;
+    line-height: 1.5;
+    font-style: italic;
+    color: #333;
+}
+
+.corpo-articolo blockquote p {
+    margin: 0;
+}
+
+.corpo-articolo ul,
+.corpo-articolo ol {
+    margin: 0 0 1.5em;
+    padding-left: 28px;
+}
+
+.corpo-articolo li {
+    margin-bottom: 8px;
+}
+
+.corpo-articolo a {
+    color: #b30000;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.corpo-articolo hr {
+    border: 0;
+    border-top: 1px solid #aaa;
+    margin: 2.5em auto;
+    width: 45%;
+}
+
+.corpo-articolo img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 2em auto;
+}
+
+@media (max-width: 768px) {
+
+    .corpo-articolo {
+        font-size: 18px;
+        line-height: 1.75;
+    }
+
+    .corpo-articolo blockquote {
+        font-size: 21px;
+        padding-left: 18px;
+    }
+
+}
+
+</style>
+
+
+</body>
+
+</html>
