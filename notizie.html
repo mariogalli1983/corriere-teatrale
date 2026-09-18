@@ -174,11 +174,15 @@
 
     <section
         style="
-            max-width: 1000px;
+            max-width: 1100px;
             margin: 0 auto;
             padding: 55px 20px 80px;
         "
     >
+
+        <!-- =================================================
+             TESTATA DELLA SEZIONE
+             ================================================= -->
 
         <div class="section-label">
             NOTIZIE
@@ -206,7 +210,7 @@
                 font-size: 21px;
                 line-height: 1.55;
                 color: #555;
-                margin-bottom: 45px;
+                margin-bottom: 50px;
             "
         >
             Notizie, storie e approfondimenti dal mondo
@@ -217,62 +221,37 @@
         </p>
 
 
+        <!-- =================================================
+             ELENCO DINAMICO NOTIZIE
+             ================================================= -->
+
         <div
+            id="elenco-notizie"
             style="
                 border-top: 4px solid #111;
-                border-bottom: 1px solid #ccc;
-                padding: 35px 0;
-                margin-top: 25px;
             "
         >
 
-            <div
-                style="
-                    font-size: 12px;
-                    font-weight: 700;
-                    letter-spacing: 1.5px;
-                    color: #b30000;
-                    margin-bottom: 12px;
-                "
-            >
-                REDAZIONE
-            </div>
-
-
-            <h2
-                style="
-                    font-family: Georgia, 'Times New Roman', serif;
-                    font-size: clamp(26px, 4vw, 36px);
-                    margin: 0 0 12px;
-                "
-            >
-                Stiamo preparando questa sezione
-            </h2>
-
-
             <p
                 style="
-                    max-width: 700px;
-                    font-size: 17px;
-                    line-height: 1.65;
-                    color: #555;
-                    margin: 0;
+                    padding: 35px 0;
+                    color: #666;
                 "
             >
-                Presto qui troverai notizie,
-                approfondimenti, storie dalle compagnie
-                e dal teatro amatoriale di Roma.
-                Corriere Teatrale è appena salito
-                sul palco. Il racconto comincia adesso.
+                Caricamento delle notizie...
             </p>
 
         </div>
 
 
+        <!-- =================================================
+             CTA
+             ================================================= -->
+
         <div
             style="
-                margin-top: 45px;
-                padding: 25px;
+                margin-top: 55px;
+                padding: 28px;
                 background: #f4f4f4;
                 border-left: 5px solid #b30000;
             "
@@ -282,7 +261,7 @@
                 style="
                     display: block;
                     font-family: Georgia, 'Times New Roman', serif;
-                    font-size: 22px;
+                    font-size: 24px;
                     margin-bottom: 8px;
                 "
             >
@@ -294,11 +273,13 @@
                 style="
                     margin: 0 0 15px;
                     line-height: 1.6;
+                    max-width: 700px;
                 "
             >
                 Una nuova produzione, un progetto,
                 un'iniziativa o una storia dal mondo
                 del teatro amatoriale?
+                Segnalala alla redazione di Corriere Teatrale.
             </p>
 
 
@@ -366,10 +347,648 @@
 
 
 <!-- =====================================================
-     JAVASCRIPT
+     JAVASCRIPT GENERALE
      ===================================================== -->
 
 <script src="assets/js/app.js"></script>
+
+
+<!-- =====================================================
+     JAVASCRIPT NOTIZIE
+     ===================================================== -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const contenitore = document.getElementById("elenco-notizie");
+
+    if (!contenitore) {
+        return;
+    }
+
+
+    /* =====================================================
+       FUNZIONE DATA ITALIANA
+       ===================================================== */
+
+    function formattaData(dataStringa) {
+
+        if (!dataStringa) {
+            return "";
+        }
+
+        const parti = dataStringa.split("-");
+
+        if (parti.length !== 3) {
+            return dataStringa;
+        }
+
+        const data = new Date(
+            Number(parti[0]),
+            Number(parti[1]) - 1,
+            Number(parti[2])
+        );
+
+        return data.toLocaleDateString(
+            "it-IT",
+            {
+                day: "numeric",
+                month: "long",
+                year: "numeric"
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       PROTEZIONE TESTO
+       ===================================================== */
+
+    function escapeHtml(testo) {
+
+        if (testo === null || testo === undefined) {
+            return "";
+        }
+
+        return String(testo)
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#039;");
+
+    }
+
+
+    /* =====================================================
+       URL IMMAGINE
+       ===================================================== */
+
+    function urlImmagine(valore) {
+
+        if (!valore) {
+            return "";
+        }
+
+        if (
+            valore.startsWith("http://") ||
+            valore.startsWith("https://") ||
+            valore.startsWith("/")
+        ) {
+            return valore;
+        }
+
+        return valore;
+
+    }
+
+
+    /* =====================================================
+       CARICAMENTO NOTIZIE
+       ===================================================== */
+
+    fetch("data/notizie.json?ts=" + Date.now())
+
+        .then(risposta => {
+
+            if (!risposta.ok) {
+                throw new Error("Impossibile caricare data/notizie.json");
+            }
+
+            return risposta.json();
+
+        })
+
+        .then(notizie => {
+
+            if (!Array.isArray(notizie)) {
+                notizie = [];
+            }
+
+
+            /* SOLO ARTICOLI PUBBLICATI */
+
+            notizie = notizie.filter(notizia => {
+                return notizia.pubblicato !== false;
+            });
+
+
+            /* ORDINE: PIÙ RECENTE PRIMA */
+
+            notizie.sort((a, b) => {
+
+                const dataA =
+                    a.data_pubblicazione || "0000-00-00";
+
+                const dataB =
+                    b.data_pubblicazione || "0000-00-00";
+
+                return dataB.localeCompare(dataA);
+
+            });
+
+
+            /* =================================================
+               NESSUNA NOTIZIA
+               ================================================= */
+
+            if (notizie.length === 0) {
+
+                contenitore.innerHTML = `
+
+                    <article
+                        style="
+                            padding: 35px 0;
+                            border-bottom: 1px solid #ccc;
+                        "
+                    >
+
+                        <div
+                            style="
+                                font-size: 12px;
+                                font-weight: 700;
+                                letter-spacing: 1.5px;
+                                color: #b30000;
+                                margin-bottom: 12px;
+                            "
+                        >
+                            REDAZIONE
+                        </div>
+
+                        <h2
+                            style="
+                                font-family: Georgia, 'Times New Roman', serif;
+                                font-size: clamp(26px, 4vw, 36px);
+                                margin: 0 0 12px;
+                            "
+                        >
+                            Le storie stanno per cominciare
+                        </h2>
+
+                        <p
+                            style="
+                                max-width: 700px;
+                                font-size: 17px;
+                                line-height: 1.65;
+                                color: #555;
+                                margin: 0;
+                            "
+                        >
+                            Presto qui troverai notizie,
+                            approfondimenti e storie dalle compagnie
+                            e dal teatro amatoriale di Roma.
+                        </p>
+
+                    </article>
+
+                `;
+
+                return;
+
+            }
+
+
+            /* =================================================
+               CREA ARTICOLI
+               ================================================= */
+
+            contenitore.innerHTML = notizie
+                .map((notizia, indice) => {
+
+                    const id =
+                        encodeURIComponent(notizia.id || "");
+
+                    const titolo =
+                        escapeHtml(notizia.titolo || "Senza titolo");
+
+                    const categoria =
+                        escapeHtml(notizia.categoria || "NOTIZIE");
+
+                    const occhiello =
+                        escapeHtml(notizia.occhiello || "");
+
+                    const sommario =
+                        escapeHtml(notizia.sommario || "");
+
+                    const autore =
+                        escapeHtml(
+                            notizia.autore ||
+                            "Redazione Corriere Teatrale"
+                        );
+
+                    const data =
+                        formattaData(notizia.data_pubblicazione);
+
+                    const immagine =
+                        urlImmagine(notizia.immagine || "");
+
+
+                    /* =========================================
+                       PRIMA NOTIZIA: APERTURA PRINCIPALE
+                       ========================================= */
+
+                    if (indice === 0) {
+
+                        return `
+
+                            <article
+                                style="
+                                    padding: 32px 0 42px;
+                                    border-bottom: 1px solid #bbb;
+                                "
+                            >
+
+                                ${
+                                    immagine
+                                    ?
+                                    `
+                                    <a
+                                        href="notizia.html?id=${id}"
+                                        style="
+                                            display: block;
+                                            margin-bottom: 25px;
+                                        "
+                                    >
+
+                                        <img
+                                            src="${escapeHtml(immagine)}"
+                                            alt="${titolo}"
+                                            style="
+                                                display: block;
+                                                width: 100%;
+                                                max-height: 520px;
+                                                object-fit: cover;
+                                            "
+                                        >
+
+                                    </a>
+                                    `
+                                    :
+                                    ""
+                                }
+
+
+                                <div
+                                    style="
+                                        display: flex;
+                                        flex-wrap: wrap;
+                                        gap: 10px 18px;
+                                        align-items: center;
+                                        margin-bottom: 12px;
+                                    "
+                                >
+
+                                    <span
+                                        style="
+                                            font-size: 12px;
+                                            font-weight: 700;
+                                            letter-spacing: 1.5px;
+                                            color: #b30000;
+                                        "
+                                    >
+                                        ${categoria}
+                                    </span>
+
+                                    ${
+                                        data
+                                        ?
+                                        `
+                                        <span
+                                            style="
+                                                font-size: 13px;
+                                                color: #777;
+                                            "
+                                        >
+                                            ${escapeHtml(data)}
+                                        </span>
+                                        `
+                                        :
+                                        ""
+                                    }
+
+                                </div>
+
+
+                                ${
+                                    occhiello
+                                    ?
+                                    `
+                                    <div
+                                        style="
+                                            font-family: Georgia, 'Times New Roman', serif;
+                                            font-size: 18px;
+                                            font-style: italic;
+                                            color: #555;
+                                            margin-bottom: 8px;
+                                        "
+                                    >
+                                        ${occhiello}
+                                    </div>
+                                    `
+                                    :
+                                    ""
+                                }
+
+
+                                <h2
+                                    style="
+                                        font-family: Georgia, 'Times New Roman', serif;
+                                        font-size: clamp(32px, 5vw, 50px);
+                                        line-height: 1.08;
+                                        margin: 0 0 15px;
+                                    "
+                                >
+
+                                    <a
+                                        href="notizia.html?id=${id}"
+                                        style="
+                                            color: #111;
+                                            text-decoration: none;
+                                        "
+                                    >
+                                        ${titolo}
+                                    </a>
+
+                                </h2>
+
+
+                                ${
+                                    sommario
+                                    ?
+                                    `
+                                    <p
+                                        style="
+                                            max-width: 850px;
+                                            font-family: Georgia, 'Times New Roman', serif;
+                                            font-size: 20px;
+                                            line-height: 1.55;
+                                            color: #555;
+                                            margin: 0 0 18px;
+                                        "
+                                    >
+                                        ${sommario}
+                                    </p>
+                                    `
+                                    :
+                                    ""
+                                }
+
+
+                                <div
+                                    style="
+                                        font-size: 13px;
+                                        color: #777;
+                                        margin-bottom: 18px;
+                                    "
+                                >
+                                    di ${autore}
+                                </div>
+
+
+                                <a
+                                    href="notizia.html?id=${id}"
+                                    style="
+                                        font-weight: 700;
+                                        color: #b30000;
+                                        text-decoration: none;
+                                    "
+                                >
+                                    LEGGI L'ARTICOLO →
+                                </a>
+
+                            </article>
+
+                        `;
+
+                    }
+
+
+                    /* =========================================
+                       NOTIZIE SUCCESSIVE
+                       ========================================= */
+
+                    return `
+
+                        <article
+                            style="
+                                display: grid;
+                                grid-template-columns:
+                                    ${immagine ? "minmax(180px, 280px) 1fr" : "1fr"};
+                                gap: 28px;
+                                padding: 32px 0;
+                                border-bottom: 1px solid #ccc;
+                                align-items: start;
+                            "
+                        >
+
+                            ${
+                                immagine
+                                ?
+                                `
+                                <a href="notizia.html?id=${id}">
+
+                                    <img
+                                        src="${escapeHtml(immagine)}"
+                                        alt="${titolo}"
+                                        style="
+                                            display: block;
+                                            width: 100%;
+                                            height: 190px;
+                                            object-fit: cover;
+                                        "
+                                    >
+
+                                </a>
+                                `
+                                :
+                                ""
+                            }
+
+
+                            <div>
+
+                                <div
+                                    style="
+                                        display: flex;
+                                        flex-wrap: wrap;
+                                        gap: 10px 18px;
+                                        align-items: center;
+                                        margin-bottom: 10px;
+                                    "
+                                >
+
+                                    <span
+                                        style="
+                                            font-size: 12px;
+                                            font-weight: 700;
+                                            letter-spacing: 1.4px;
+                                            color: #b30000;
+                                        "
+                                    >
+                                        ${categoria}
+                                    </span>
+
+                                    ${
+                                        data
+                                        ?
+                                        `
+                                        <span
+                                            style="
+                                                font-size: 13px;
+                                                color: #777;
+                                            "
+                                        >
+                                            ${escapeHtml(data)}
+                                        </span>
+                                        `
+                                        :
+                                        ""
+                                    }
+
+                                </div>
+
+
+                                ${
+                                    occhiello
+                                    ?
+                                    `
+                                    <div
+                                        style="
+                                            font-family: Georgia, 'Times New Roman', serif;
+                                            font-size: 16px;
+                                            font-style: italic;
+                                            color: #555;
+                                            margin-bottom: 6px;
+                                        "
+                                    >
+                                        ${occhiello}
+                                    </div>
+                                    `
+                                    :
+                                    ""
+                                }
+
+
+                                <h2
+                                    style="
+                                        font-family: Georgia, 'Times New Roman', serif;
+                                        font-size: clamp(25px, 3vw, 34px);
+                                        line-height: 1.15;
+                                        margin: 0 0 10px;
+                                    "
+                                >
+
+                                    <a
+                                        href="notizia.html?id=${id}"
+                                        style="
+                                            color: #111;
+                                            text-decoration: none;
+                                        "
+                                    >
+                                        ${titolo}
+                                    </a>
+
+                                </h2>
+
+
+                                ${
+                                    sommario
+                                    ?
+                                    `
+                                    <p
+                                        style="
+                                            font-size: 16px;
+                                            line-height: 1.6;
+                                            color: #555;
+                                            margin: 0 0 12px;
+                                        "
+                                    >
+                                        ${sommario}
+                                    </p>
+                                    `
+                                    :
+                                    ""
+                                }
+
+
+                                <div
+                                    style="
+                                        font-size: 13px;
+                                        color: #777;
+                                        margin-bottom: 12px;
+                                    "
+                                >
+                                    di ${autore}
+                                </div>
+
+
+                                <a
+                                    href="notizia.html?id=${id}"
+                                    style="
+                                        font-weight: 700;
+                                        color: #b30000;
+                                        text-decoration: none;
+                                    "
+                                >
+                                    LEGGI →
+                                </a>
+
+                            </div>
+
+                        </article>
+
+                    `;
+
+                })
+                .join("");
+
+        })
+
+        .catch(errore => {
+
+            console.error(errore);
+
+            contenitore.innerHTML = `
+
+                <div
+                    style="
+                        padding: 35px 0;
+                        border-bottom: 1px solid #ccc;
+                    "
+                >
+
+                    <strong
+                        style="
+                            display: block;
+                            font-family: Georgia, 'Times New Roman', serif;
+                            font-size: 24px;
+                            margin-bottom: 8px;
+                        "
+                    >
+                        Le storie stanno per cominciare
+                    </strong>
+
+                    <p
+                        style="
+                            color: #666;
+                            line-height: 1.6;
+                            margin: 0;
+                        "
+                    >
+                        Non ci sono ancora notizie pubblicate.
+                    </p>
+
+                </div>
+
+            `;
+
+        });
+
+});
+
+</script>
 
 
 </body>
